@@ -15,7 +15,7 @@ LONG_list create_list(int size) {
 }
 
 long get_list(LONG_list l, int index) {
-    return l->list[index]; 
+    return l->list[index];
 }
 
 void set_list(LONG_list l, int index, long value) {

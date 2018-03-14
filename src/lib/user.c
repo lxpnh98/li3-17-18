@@ -9,7 +9,7 @@ struct user {
 };
 
 USER create_user(char* bio, long* post_history) {
-  USER u = malloc(sizeof(struct user)); 
+  USER u = malloc(sizeof(struct user));
   u->bio = mystrdup(bio);
   memcpy(u->posts, post_history, sizeof(long) * 10);
   return u;

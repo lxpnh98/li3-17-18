@@ -50,7 +50,7 @@ struct long_pair {
 
 LONG_pair create_long_pair(long fst, long snd) {
   LONG_pair p = malloc(sizeof(struct long_pair));
-  p->fst = fst; 
+  p->fst = fst;
   p->snd = snd;
   return p;
 }
