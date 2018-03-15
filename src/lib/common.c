@@ -3,17 +3,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-enum dump_type {
-    BADGES,
-    COMMENTS,
-    POST_HISTORY,
-    POST_LINKS,
-    POSTS,
-    TAGS,
-    USERS,
-    VOTES,
-};
-
 char *dump_file_name[] = {
     "Badges.xml",
     "Comments.xml",
@@ -37,7 +26,7 @@ char * mystrdup (const char *s) {
 /*
  * Função que cria um path completo dado uma diretoria e um tipo de ficheiro de dump. (TODO: ativar JAVADOC_AUTOBRIEF no Doxygen)
  *
- * \param dir diretoria (TODO: remover limitação de ter de acabar com o carater '/')
+ * \param dir diretoria
  *
  * \param t tipo de ficheiro de dump (escolhido do enum Dump_type)
  *

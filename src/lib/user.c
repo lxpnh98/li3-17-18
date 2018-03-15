@@ -4,15 +4,21 @@
 #include "common.h"
 
 struct user {
-  char* bio;
-  long posts[10];
+    long id;
+    char* bio;
+    long posts[10];
 };
 
-USER create_user(char* bio, long* post_history) {
+USER create_user(long id, char* bio, long* post_history) {
   USER u = malloc(sizeof(struct user));
+  u->id = id;
   u->bio = mystrdup(bio);
-  memcpy(u->posts, post_history, sizeof(long) * 10);
+  //memcpy(u->posts, post_history, sizeof(long) * 10);
   return u;
+}
+
+long get_id(USER u) {
+    return u->id;
 }
 
 char* get_bio(USER u) {
