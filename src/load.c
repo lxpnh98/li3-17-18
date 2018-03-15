@@ -62,5 +62,4 @@ TAD_community load(TAD_community com, char* dump_path) //diretoria onde estarão
     xmlCleanupParser();
 
     return com;
-
 }
