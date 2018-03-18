@@ -4,14 +4,18 @@
 #include "common.h"
 
 struct user {
-    long id;
-    char* bio;
-    long posts[10];
+    long id;            /** Id do utilizador */
+    long rep;           /** Reputação do utilizador */
+    char* display_name; /** Nome de ecrãn do utilizador */
+    char* bio;          /** Biografia do utilizador */
+    long posts[10];     /** Últimos 10 posts do utilizador */
 };
 
-USER create_user(long id, char* bio, long* post_history) {
+USER create_user(long id, char *display_name, long rep,  char* bio, long* post_history) {
   USER u = malloc(sizeof(struct user));
   u->id = id;
+  u->rep = rep;
+  u->display_name = mystrdup(display_name);
   u->bio = mystrdup(bio);
   //memcpy(u->posts, post_history, sizeof(long) * 10);
   return u;

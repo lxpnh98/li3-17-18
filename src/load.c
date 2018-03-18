@@ -19,17 +19,14 @@ void processar_users(TAD_community com, xmlDoc *doc)
     for (node = node->children; node != NULL; node = node->next) {
 
         if (node->properties == NULL) continue;
-        char *id_str = (char *)xmlGetProp(node, (const xmlChar *)"id");
-        if (id_str == NULL) {
-            id_str = (char *)xmlGetProp(node, (const xmlChar *)"Id"); // TODO: fazer isto de maneira dinâmica
-        }
+        long id            = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
+        long reputation    = atol((char *)xmlGetProp(node, (const xmlChar *)"Reputation"));
+        char *display_name =      (char *)xmlGetProp(node, (const xmlChar *)"DisplayName");
+        char *short_bio    =      (char *)xmlGetProp(node, (const xmlChar *)"AboutMe");
 
-        printf("%s\n", id_str);
+        USER user = create_user(id, display_name, reputation, short_bio, NULL);
 
-        long id = atol(id_str);
-        USER user = create_user(id, "", NULL);
-
-        printf("%ld\n", get_id(user));
+        printf("%ld %s\n", get_id(user), display_name);
         add_user(com, user);
     }
 }
