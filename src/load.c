@@ -1,16 +1,12 @@
 #include <stdlib.h> // atoi
 #include <libxml/parser.h>
-#include <libxml/hash.h>
 #include "interface.h"
 #include "common.h"
 #include "user.h"
+#include "community.h"
 
-struct TCD_community {
-    xmlHashTable *users;
-    xmlHashTable *posts;
-};
-
-void add_user(TAD_community com, USER user) {
+TAD_community init() {
+    return init_community();
 }
 
 void processar_users(TAD_community com, xmlDoc *doc)
@@ -20,13 +16,14 @@ void processar_users(TAD_community com, xmlDoc *doc)
 
         if (node->properties == NULL) continue;
         long id            = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
+        if (id < 0) continue;
         long reputation    = atol((char *)xmlGetProp(node, (const xmlChar *)"Reputation"));
         char *display_name =      (char *)xmlGetProp(node, (const xmlChar *)"DisplayName");
         char *short_bio    =      (char *)xmlGetProp(node, (const xmlChar *)"AboutMe");
 
         USER user = create_user(id, display_name, reputation, short_bio, NULL);
 
-        printf("%ld %s\n", get_id(user), display_name);
+        //printf("%ld %s\n", get_id(user), display_name);
         add_user(com, user);
     }
 }

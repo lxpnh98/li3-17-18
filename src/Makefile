@@ -16,10 +16,10 @@ LIBS = `pkg-config --libs libxml-2.0` `pkg-config --libs glib-2.0`
 print-% : ; @echo $* = $($*)
 
 $(ODIR)/%.o : %.c $(DEPS)
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $< -lm
 
 program: $(SOURCES_OBJ) $(MY_LIBS_OBJ)
-	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o program $(LIBS)
+	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o)  $(wildcard $(OLDIR)/*.o) -o program $(LIBS) -lm
 
 clean:
 	rm obj/*.o
