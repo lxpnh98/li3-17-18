@@ -1,13 +1,15 @@
 #include <date.h>
 #include <stdio.h>
 #include <interface.h>
+#include <stdlib.h>
 
-int main(){
-    Date d = createDate(1,2,2017);
-    printf("Dia: %i\n", get_day(d));
-
+int main(int argc, char *argv[]){
     TAD_community c = init();
-    load(c, "../../libxml/");
+    if(argc < 2){
+    	perror("Missing argument");
+    	return -1;
+    }
+    load(c, argv[1]);
 
     return 0;
 }

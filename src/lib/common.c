@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 
 char *dump_file_name[] = {
     "Badges.xml",
@@ -38,3 +39,4 @@ char *make_path(const char *dir, enum dump_type t) {
     sprintf(r, "%s%s", dir, d);
     return r;
 }
+
