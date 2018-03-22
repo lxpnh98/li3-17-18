@@ -4,6 +4,7 @@
 #include "common.h"
 #include "user.h"
 #include "community.h"
+#include "tag.h"
 
 TAD_community init() {
     return init_community();
@@ -30,6 +31,20 @@ void processar_users(TAD_community com, xmlDoc *doc)
 
 void processar_posts(TAD_community com, xmlDoc *doc)
 {
+}
+
+void processar_tags(TAD_community com, xmlDoc *doc)
+{
+    xmlNode *node = xmlDocGetRootElement(doc);
+    for (node = node->children; node != NULL; node = node->next) {
+
+        if (node->properties == NULL) continue;
+        char *tagName = (char *)xmlGetProp(node, (const xmlChar *)"TagName");
+
+        TAG tag = create_tag(tagName);
+
+        add_tag(com, tag);
+    }
 }
 
 TAD_community load(TAD_community com, char* dump_path) //diretoria onde estarão os ficheiros do dump
