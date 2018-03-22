@@ -31,7 +31,7 @@ void processar_users(TAD_community com, xmlDoc *doc)
 
 void processar_posts(TAD_community com, xmlDoc *doc)
 {
-	xmlNode *node = xmlDocGetRootElement(doc);
+    xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
     	long AcceptedAnswer = -1;
         if (node->properties == NULL) continue;
@@ -42,7 +42,8 @@ void processar_posts(TAD_community com, xmlDoc *doc)
         	AcceptedAnswer = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
         }
 
-    POST post = create_post(id,type,AcceptedAnswer);
+        POST post = create_post(id,type,AcceptedAnswer);
+        add_post(com, post);
     }
 }
 

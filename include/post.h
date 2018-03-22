@@ -9,4 +9,8 @@ enum post_type {
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer);
 
+char *get_title();
+
+char *get_author_name();
+
 #endif
