@@ -12,6 +12,8 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
 
 char *get_title(POST p);
 
+long get_post_id(POST p);
+
 long get_user_id(POST p);
 
 char *get_user_display_name(POST p);

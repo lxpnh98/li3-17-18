@@ -7,8 +7,8 @@
 #include "pair.h"
 #include "list.h"
 #include "post.h"
-#include "community.h"
 #include "tag.h"
+#include "community.h"
 
 enum {
     INIT_USERS = 10,
@@ -42,6 +42,10 @@ void add_tag(TAD_community com, TAG tag) {
 }
 
 void add_post(TAD_community com, POST post) {
+    int id_len = floor(log10((double)get_post_id(post))) + 1; //TODO: implementar função para não repetir este código sempre
+    char id_str[id_len];
+    sprintf(id_str, "%ld", get_post_id(post));
+    xmlHashAddEntry(com->posts, (const xmlChar *)id_str, post);
 }
 
 char *get_author_name(TAD_community com, POST p) {
@@ -65,7 +69,7 @@ char *get_question_title(TAD_community com, POST p) {
         char id_str[id_len];
         sprintf(id_str, "%d", parentId);
         POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
-        title = get_title(p);   
+        title = get_title(p);
     }
     return title;
 }
@@ -79,6 +83,7 @@ STR_pair info_from_post(TAD_community com, int id) {
     char id_str[id_len];
     sprintf(id_str, "%d", id);
     POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
+    if (p == NULL) return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
     return pair;
 }
