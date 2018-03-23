@@ -13,7 +13,7 @@
 enum {
     INIT_USERS = 10,
     INIT_POSTS = 10,
-    INIT_TAGS  = 10
+    INIT_TAGS  = 10,
 };
 
 struct TCD_community {
@@ -44,6 +44,19 @@ void add_tag(TAD_community com, TAG tag) {
 void add_post(TAD_community com, POST post) {
 }
 
+char *get_author_name(TAD_community com, POST p) {
+    int id = (int)(get_user_id(p)); // TODO: converter todos os ids para long
+    if(id == -1) {
+        return get_user_display_name(p);
+    } else {
+        int id_len = floor(log10(id)) + 1;
+        char id_str[id_len];
+        sprintf(id_str, "%d", id);
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)id_str);
+        return get_display_name(u);
+    }
+}
+
 /* Interrogação 1: Dado o identificador de um post, a função deve retor-
  * nar o tı́tulo do post e o nome (não o ID) de utilizador do autor. Se o post
  * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
@@ -54,7 +67,7 @@ STR_pair info_from_post(TAD_community com, int id) {
     char id_str[id_len];
     sprintf(id_str, "%d", id);
     POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
-    STR_pair pair = create_str_pair(get_title(p), get_author_name(p));
+    STR_pair pair = create_str_pair(get_title(p), get_author_name(com, p));
     return pair;
 }
 

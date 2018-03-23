@@ -7,10 +7,12 @@ enum post_type {
     ANSWER = 2
 };
 
-POST create_post(long id, enum post_type type, long AcceptedAnswer);
+POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId, char *userDisplayName);
 
-char *get_title();
+char *get_title(POST p);
 
-char *get_author_name();
+long get_user_id(POST p);
+
+char *get_user_display_name(POST p);
 
 #endif
