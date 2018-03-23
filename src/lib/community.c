@@ -57,6 +57,18 @@ char *get_author_name(TAD_community com, POST p) {
     }
 }
 
+char *get_question_title(TAD_community com, POST p) {
+    char *title = get_title(p);
+    if(title == NULL) {
+        int parentId = (int)(get_parent_id(p));
+        int id_len = floor(log10(parentId)) + 1;
+        char id_str[id_len];
+        sprintf(id_str, "%d", parentId);
+        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
+        title = get_title(p);   
+    }
+    return title;
+}
 /* Interrogação 1: Dado o identificador de um post, a função deve retor-
  * nar o tı́tulo do post e o nome (não o ID) de utilizador do autor. Se o post
  * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
@@ -67,7 +79,7 @@ STR_pair info_from_post(TAD_community com, int id) {
     char id_str[id_len];
     sprintf(id_str, "%d", id);
     POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
-    STR_pair pair = create_str_pair(get_title(p), get_author_name(com, p));
+    STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
     return pair;
 }
 

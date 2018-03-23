@@ -17,4 +17,6 @@ void add_post(TAD_community com, POST post);
 
 char *get_author_name(TAD_community com, POST p);
 
+char *get_question_title(TAD_community com, POST p);
+
 #endif
