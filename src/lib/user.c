@@ -37,6 +37,10 @@ long* get_10_latest_posts(USER u) {
   return r;
 }
 
+char* get_display_name(USER u){
+    return mystrdup(u->display_name);
+} 
+
 void free_user(USER u) {
   if(u) {
     free(u->bio);
