@@ -1,6 +1,7 @@
 #include <stdlib.h> // atoi
 #include <libxml/parser.h>
 #include "interface.h"
+#include "date.h"
 #include "common.h"
 #include "user.h"
 #include "community.h"

@@ -8,6 +8,7 @@
 #include "list.h"
 #include "post.h"
 #include "tag.h"
+#include "date.h"
 #include "community.h"
 
 enum {
@@ -95,5 +96,13 @@ STR_pair info_from_post(TAD_community com, int id) {
 LONG_list top_most_active(TAD_community com, int N) {
     LONG_list list = create_list(N);
     return list;
+}
+
+/* Interrogação 3: Dado um intervalo de tempo arbitrário, obter o número
+ * total de posts (identificando perguntas e respostas separadamente) neste
+ * perı́odo;
+ */
+LONG_pair total_posts(TAD_community com, Date begin, Date end) {
+   return 0;
 }
 
