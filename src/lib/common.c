@@ -39,4 +39,3 @@ char *make_path(const char *dir, enum dump_type t) {
     sprintf(r, "%s%s", dir, d);
     return r;
 }
-

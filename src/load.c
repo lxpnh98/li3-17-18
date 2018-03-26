@@ -6,6 +6,7 @@
 #include "user.h"
 #include "community.h"
 #include "tag.h"
+#include "post.h"
 
 TAD_community init() {
     return init_community();
@@ -15,7 +16,6 @@ void processar_users(TAD_community com, xmlDoc *doc)
 {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
-
         if (node->properties == NULL) continue;
         long id            = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
         if (id < 0) continue;
@@ -60,15 +60,16 @@ void processar_posts(TAD_community com, xmlDoc *doc)
             // TODO: processar outros tipos de posts (3,4,5,6,7)
             continue;
         }
+       	char *CreationDate      = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
 
-        POST post = create_post(id,type,AcceptedAnswer,userId,userDisplayName,title,parentId);
+        POST post = create_post(id,type,AcceptedAnswer,userId,userDisplayName,title,parentId,CreationDate);
         add_post(com, post);
     }
 }
 
 void processar_tags(TAD_community com, xmlDoc *doc)
-
-{    xmlNode *node = xmlDocGetRootElement(doc);
+{
+    xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
 
         if (node->properties == NULL) continue;

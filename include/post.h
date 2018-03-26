@@ -1,7 +1,8 @@
-#include "date.h"
-
 #ifndef __POST__
 #define __POST__
+
+#include "date.h"
+
 typedef struct post* POST;
 
 enum post_type {
@@ -9,8 +10,8 @@ enum post_type {
     ANSWER = 2
 };
 
-POST create_post(long id, enum post_type type, long AcceptedAnswer, Date d, long userId,
-				 char *userDisplayName, char *title, long parentId);
+POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
+                 char *userDisplayName, char *title, long parentId, char *CreationDate);
 
 char *get_title(POST p);
 

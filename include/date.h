@@ -1,5 +1,5 @@
-#ifndef __DATE_H__
-#define __DATE_H__
+#ifndef __DATE_H_
+#define __DATE_H_
 
 typedef struct date* Date;
 
@@ -11,4 +11,5 @@ void free_date(Date d);
 Date cloneDate(Date d);
 int isBefore (Date d1, Date d2);
 int isAfter (Date d1, Date d2);
+
 #endif
