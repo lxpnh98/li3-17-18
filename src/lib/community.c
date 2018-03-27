@@ -6,9 +6,11 @@
 #include "user.h"
 #include "pair.h"
 #include "list.h"
+#include "linked_list.h"
 #include "post.h"
 #include "tag.h"
 #include "date.h"
+#include "common.h"
 #include "community.h"
 
 enum {
@@ -19,14 +21,18 @@ enum {
 
 struct TCD_community {
     xmlHashTable *users;
+    LINKED_LIST user_list;
     xmlHashTable *tags;
     xmlHashTable *posts;
+    LINKED_LIST post_list;
 };
 
 TAD_community init_community() {
     TAD_community new = malloc(sizeof(struct TCD_community));
     new->users = xmlHashCreate(INIT_USERS);
+    new->user_list = init_linked_list();
     new->posts = xmlHashCreate(INIT_POSTS);
+    new->post_list = init_linked_list();
     new->tags  = xmlHashCreate(INIT_TAGS);
     return new;
 }
@@ -36,6 +42,7 @@ void add_user(TAD_community com, USER user) {
     char id_str[id_len];
     sprintf(id_str, "%ld", get_id(user));
     xmlHashAddEntry(com->users, (const xmlChar *)id_str, user);
+    com->user_list = add(com->user_list, user);
 }
 
 void add_tag(TAD_community com, TAG tag) {
@@ -43,10 +50,17 @@ void add_tag(TAD_community com, TAG tag) {
 }
 
 void add_post(TAD_community com, POST post) {
-    int id_len = floor(log10((double)get_post_id(post))) + 1; //TODO: implementar função para não repetir este código sempre
-    char id_str[id_len];
-    sprintf(id_str, "%ld", get_post_id(post));
-    xmlHashAddEntry(com->posts, (const xmlChar *)id_str, post);
+    int user_id = get_user_id(post);
+    if (user_id > 0) {
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+        set_post_count(u, get_post_count(u) + 1);
+    }
+    xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
+    com->post_list = add(com->post_list, post);
+}
+
+USER get_user(TAD_community com, long id) {
+    return xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
 }
 
 char *get_author_name(TAD_community com, POST p) {
@@ -54,10 +68,7 @@ char *get_author_name(TAD_community com, POST p) {
     if(id == -1) {
         return get_user_display_name(p);
     } else {
-        int id_len = floor(log10(id)) + 1;
-        char id_str[id_len];
-        sprintf(id_str, "%d", id);
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)id_str);
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(id));
         return get_display_name(u);
     }
 }
@@ -66,24 +77,19 @@ char *get_question_title(TAD_community com, POST p) {
     char *title = get_title(p);
     if(title == NULL) {
         int parentId = (int)(get_parent_id(p));
-        int id_len = floor(log10(parentId)) + 1;
-        char id_str[id_len];
-        sprintf(id_str, "%d", parentId);
-        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
+        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
         title = get_title(p);
     }
     return title;
 }
+
 /* Interrogação 1: Dado o identificador de um post, a função deve retor-
  * nar o tı́tulo do post e o nome (não o ID) de utilizador do autor. Se o post
  * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
  * da pergunta correspondente;
  */
 STR_pair info_from_post(TAD_community com, int id) {
-    int id_len = floor(log10(id)) + 1;
-    char id_str[id_len];
-    sprintf(id_str, "%d", id);
-    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
+    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(id));
     if (p == NULL) return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
     return pair;
@@ -93,9 +99,34 @@ STR_pair info_from_post(TAD_community com, int id) {
  * de posts de sempre. Para isto, devem ser considerados tanto perguntas
  * quanto respostas dadas pelo respectivo utilizador;
  */
+
+void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n);
+
 LONG_list top_most_active(TAD_community com, int N) {
-    LONG_list list = create_list(N);
+    LONG_list list = create_list(N); //TODO: melhorar nomes das variáveis
+    LINKED_LIST l = com->user_list;
+    USER u;
+    int n = 0;
+    while (next(l) != NULL) {
+        u = (USER)get_data(l);
+        insert_by_post_count(com, list, u, MIN2(n, N), N);
+        l = next(l);
+        n++;
+    }
     return list;
+}
+
+void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n) {
+    int i;
+    int post_count = get_post_count(u);
+    USER u2;
+    for (i = 0; i < n; i++) {
+        u2 = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
+        if (get_post_count(u2) < post_count) {
+            break;
+        }
+    }
+    if (i < max_n) push_insert(l, i, get_id(u));
 }
 
 /* Interrogação 3: Dado um intervalo de tempo arbitrário, obter o número

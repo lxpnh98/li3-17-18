@@ -39,3 +39,23 @@ char *make_path(const char *dir, enum dump_type t) {
     sprintf(r, "%s%s", dir, d);
     return r;
 }
+
+/*
+ * Função que retorna a representação de um int num string (em base decimal)
+ */
+char *itoa(int x) {
+    int len = floor(log10((double)x)) + 1;
+    char *str = malloc(sizeof(char) * (len + 1));
+    sprintf(str, "%d", x);
+    return str;
+}
+
+/*
+ * Função que retorna a representação de um long num string (em base decimal)
+ */
+char *ltoa(long x) {
+    long len = floor(log10((double)x)) + 1;
+    char *str = malloc(sizeof(char) * (len + 1));
+    sprintf(str, "%ld", x);
+    return str;
+}

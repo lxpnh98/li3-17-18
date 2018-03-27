@@ -39,7 +39,7 @@ long get_post_id(POST p) {
     return p->id;
 }
 
-long get_user_id(POST p) {  
+long get_user_id(POST p) {
     return p->userId;
 }
 
