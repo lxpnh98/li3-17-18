@@ -70,6 +70,11 @@ USER get_user(TAD_community com, long id)
     return xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
 }
 
+POST get_post(TAD_community com, long id)
+{
+    return xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
+}
+
 char *get_author_name(TAD_community com, POST p)
 {
     int id = (int)(get_user_id(p)); // TODO: converter todos os ids para long
@@ -131,8 +136,7 @@ LONG_list top_most_active(TAD_community com, int N)
     return list;
 }
 
-void
-insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n)
+void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n)
 {
     int i;
     int post_count = get_post_count(u);
@@ -167,14 +171,67 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end)
             && (isBefore(get_CreationDate(p), end))) {
             if (get_type(p) == QUESTION) {
                 questions++;
-            } else
+            } else {
                 answers++;
+            }
         }
         x = next(x);
-
     }
 
     set_fst_long(l, questions);
     set_snd_long(l, answers);
     return l;
+}
+
+/* Interrogação 4: Dado um intervalo de tempo arbitrário, retornar todas
+ * as perguntas contendo uma determinada tag. O retorno da função deverá ser
+ * uma lista com os IDs das perguntas ordenadas em cronologia inversa.
+ */
+
+void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
+
+LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
+{
+    LINKED_LIST l = init_linked_list();
+    LINKED_LIST x = com->post_list;
+    POST p;
+    int post_count = 0;
+
+    while (next(x)) {
+        p = (POST) get_data(x);
+        if ((isAfter(get_CreationDate(p), begin))
+            && (isBefore(get_CreationDate(p), end))) {
+            if (get_type(p) == QUESTION && has_tag(p, tag)) {
+                l = add(l, p);
+                post_count++;
+            }
+        }
+        x = next(x);
+    }
+
+    LONG_list r = create_list(post_count);
+    int n = 0;
+    while (next(l) != NULL) {
+        p = (POST) get_data(l);
+        insert_by_date(com, r, p, MIN2(n, post_count), post_count);
+        l = next(l);
+        n++;
+    }
+    return r;
+}
+
+void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n)
+{
+    int i;
+    Date post_date = get_CreationDate(p);
+    POST p2;
+    for (i = 0; i < n; i++) {
+        p2 = (POST)xmlHashLookup(com->posts,
+                                  (const xmlChar *)ltoa(get_list(l, i)));
+        if (isBefore(get_CreationDate(p2), post_date)) {
+            break;
+        }
+    }
+    if (i < max_n)
+        push_insert(l, i, get_post_id(p));
 }

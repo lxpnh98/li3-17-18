@@ -38,5 +38,14 @@ int main(int argc, char *argv[])
     l = (total_posts(c, d1, d2));
     printf("%li %li\n", get_fst_long(l), get_snd_long(l));
 
+    // Query 4
+    LONG_list ll = questions_with_tag(c, "ai", d1, d2);
+    if (ll != NULL) { // mais que 0 elementos
+        for (i = 0; i < get_list_size(ll); i++) {
+            POST p = get_post(c, get_list(ll, i));
+            printf("%ld - %s\n", get_post_id(p), get_title(p));
+        }
+    }
+
     return 0;
 }

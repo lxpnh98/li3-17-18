@@ -26,6 +26,11 @@ void set_list(LONG_list l, int index, long value)
     l->list[index] = value;
 }
 
+int get_list_size(LONG_list l)
+{
+    return l->size;
+}
+
 void push_insert(LONG_list l, int index, long value)
 {
     int i;
