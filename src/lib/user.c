@@ -12,9 +12,7 @@ struct user {
     int post_count; /** Número de posts submetidos */
 };
 
-USER
-create_user(long id, char *display_name, long rep, char *bio,
-            long *post_history)
+USER create_user(long id, char *display_name, long rep, char *bio, long *post_history)
 {
     USER u = malloc(sizeof(struct user));
     u->id = id;

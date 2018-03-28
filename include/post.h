@@ -11,9 +11,7 @@ enum post_type {
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer,
-                 long userId, char *userDisplayName, char *title,
-                 long parentId, long score, char *CreationDate,
-                 int ntags, char *tags[]);
+                 long userId, char *userDisplayName, char *title, long parentId, long score, char *CreationDate, int ntags, char *tags[]);
 
 long get_post_id(POST p);
 

@@ -22,22 +22,19 @@ void processar_users(TAD_community com, xmlDoc * doc)
         long id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
         if (id < 0)
             continue;
-        long reputation =
-            atol((char *)xmlGetProp(node, (const xmlChar *)"Reputation"));
-        char *display_name =
-            (char *)xmlGetProp(node, (const xmlChar *)"DisplayName");
-        char *short_bio =
-            (char *)xmlGetProp(node, (const xmlChar *)"AboutMe");
+        long reputation = atol((char *)xmlGetProp(node, (const xmlChar *)"Reputation"));
+        char *display_name = (char *)xmlGetProp(node, (const xmlChar *)"DisplayName");
+        char *short_bio = (char *)xmlGetProp(node, (const xmlChar *)"AboutMe");
 
-        USER user =
-            create_user(id, display_name, reputation, short_bio, NULL);
+        USER user = create_user(id, display_name, reputation, short_bio, NULL);
 
         //printf("%ld %s\n", get_id(user), display_name);
         add_user(com, user);
     }
 }
 
-void processar_posts(TAD_community com, xmlDoc * doc) {
+void processar_posts(TAD_community com, xmlDoc * doc)
+{
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
         long AcceptedAnswer = -1;
@@ -46,15 +43,17 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         char *userDisplayName = NULL;
         char *title = NULL;
         int ntags = 0;
-        char *tags[] = {};
+        char *tags[] = { };
         long score = 0;
 
-        if (node->properties == NULL) continue;
+        if (node->properties == NULL)
+            continue;
         long id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
-        if (id < 0) continue;
+        if (id < 0)
+            continue;
         enum post_type type = atoi((char *)xmlGetProp(node, (const xmlChar *)"PostTypeId"));
         if (type == QUESTION && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
-            AcceptedAnswer  = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
+            AcceptedAnswer = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
         }
         if (xmlGetProp(node, (const xmlChar *)"OwnerUserId")) {
             userId = atol((char *)xmlGetProp(node, (const xmlChar *)"OwnerUserId"));
@@ -63,7 +62,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         }
         if (type == QUESTION) {
             title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
-            char *tags_str  = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
+            char *tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
             // TODO: fazer parsing da tags_str
 
         } else if (type == ANSWER) {
@@ -104,8 +103,7 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
 
     full_path = make_path(dump_path, USERS);
     if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
-        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n",
-                full_path);
+        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
     processar_users(com, doc);
@@ -113,8 +111,7 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
 
     full_path = make_path(dump_path, POSTS);
     if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
-        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n",
-                full_path);
+        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
     processar_posts(com, doc);
@@ -122,8 +119,7 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
 
     full_path = make_path(dump_path, TAGS);
     if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
-        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n",
-                full_path);
+        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
     processar_tags(com, doc);

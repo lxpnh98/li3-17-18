@@ -3,8 +3,7 @@
 
 typedef struct user *USER;
 
-USER create_user(long id, char *display_name, long rep, char *bio,
-                 long *post_history);
+USER create_user(long id, char *display_name, long rep, char *bio, long *post_history);
 
 char *get_bio(USER u);
 

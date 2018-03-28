@@ -14,6 +14,7 @@ indent include/* src/*.c src/lib/*.c src/test/*.c \
     --no-space-after-parentheses \
     --dont-break-procedure-type \
     --leave-optional-blank-lines \
+    --line-length140 \
     --no-tabs \
     --space-after-for \
     --space-after-if \

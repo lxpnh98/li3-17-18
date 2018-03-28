@@ -20,8 +20,7 @@ LONG_list top_most_active(TAD_community com, int N);
 LONG_pair total_posts(TAD_community com, Date begin, Date end);
 
 // query 4
-LONG_list questions_with_tag(TAD_community com, char *tag, Date begin,
-                             Date end);
+LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end);
 
 // query 5
 USER get_user_info(TAD_community com, long id);
@@ -30,8 +29,7 @@ USER get_user_info(TAD_community com, long id);
 LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end);
 
 // query 7
-LONG_list most_answered_questions(TAD_community com, int N, Date begin,
-                                  Date end);
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end);
 
 // query 8
 LONG_list contains_word(TAD_community com, char *word, int N);
