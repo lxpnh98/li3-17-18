@@ -1,6 +1,6 @@
-#include <stdio.h> // printf
-#include <stdlib.h> // random
-#include <time.h> // time
+#include <stdio.h>              // printf
+#include <stdlib.h>             // random
+#include <time.h>               // time
 #include "linked_list.h"
 
 enum {
@@ -8,7 +8,8 @@ enum {
     DATA_MAX_VALUE = 100,
 };
 
-int main() {
+int main()
+{
     int i;
     int *d;
     int test_data[DATA_SIZE];

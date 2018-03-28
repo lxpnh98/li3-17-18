@@ -1,7 +1,7 @@
 #ifndef __LONG_LIST__
 #define __LONG_LIST__
 
-typedef struct llist * LONG_list;
+typedef struct llist *LONG_list;
 
 LONG_list create_list(int size);
 
