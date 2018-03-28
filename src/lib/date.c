@@ -39,23 +39,34 @@ Date cloneDate(Date d){
     return c; 
 }
 
+int isAfter (Date d1, Date d2) {
+    int r = 1;
+
+    if(get_year(d1) < get_year(d2)) return 0;
+    if(get_year(d1) > get_year(d2)) return 1;
+    else {
+        if(get_month(d1) < get_month(d2)) return 0;
+        if(get_month(d1) > get_month(d2)) return 1;
+        else {
+            if(get_day(d1) < get_day(d2)) return 0;
+            if(get_day(d1) > get_day(d2)) return 1;
+        }
+    }
+    return r;
+}
+
 int isBefore (Date d1, Date d2){
-    int r;
-    if      (get_year(d1)  <= get_year(d2))  r = 0;
-    else if (get_month(d1) <= get_month(d2)) r = 0;
-    else if (get_day (d1)  <= get_day(d2))   r = 0;
-    else r = -1;
-
+    int r = 1;
+    
+    if (get_year(d1) > get_year(d2)) return 0;
+    if (get_year(d1) < get_year(d2)) return 1;
+    else {
+        if(get_month(d1) > get_month(d2)) return 0;
+        if(get_month(d1) < get_month(d2)) return 1;
+        else {
+            if(get_day(d1) > get_day(d2)) return 0;
+            if(get_day(d1) < get_day(d2)) return 1;
+        }
+    }
     return r;
 }
-
-int isAfter (Date d1, Date d2){
-    int r;
-    if      (get_year(d1)  >= get_year(d2))  r = 0;
-    else if (get_month(d1) >= get_month(d2)) r = 0;
-    else if (get_day (d1)  >= get_day(d2))   r = 0;
-    else r = -1;
-
-    return r;
-}
-

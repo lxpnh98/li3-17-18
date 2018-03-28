@@ -25,4 +25,6 @@ long get_parent_id(POST p);
 
 Date get_CreationDate(POST p);
 
+int get_type(POST p);
+
 #endif

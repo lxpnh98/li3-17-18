@@ -54,7 +54,11 @@ long get_parent_id(POST p) {
 Date get_CreationDate(POST p){
     int dia, mes, ano;
     char *CreationDate = p->CreationDate;
-    sscanf(CreationDate, "%d-%d-%dT%*d:%*d:%*d.%*d",&ano ,&mes,&dia);
+    sscanf(CreationDate, "%d-%d-%d",&ano ,&mes,&dia);
     Date d = createDate(dia, mes, ano);
     return d;
+}
+
+int get_type(POST p) {
+    return p->type;
 }

@@ -129,29 +129,32 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
     if (i < max_n) push_insert(l, i, get_id(u));
 }
 
+
 /* Interrogação 3: Dado um intervalo de tempo arbitrário, obter o número
  * total de posts (identificando perguntas e respostas separadamente) neste
  * perı́odo;
  */
 
-/*
 LONG_pair total_posts(TAD_community com, Date begin, Date end) {
-    long questions, answers;
+    long questions = 0;
+    long answers = 0;
     LONG_pair l;
-    POST p;
     LINKED_LIST x = com->post_list;
+    POST p;
 
     while (next(x)){
-        p = get_data(x);
-        if ((isAfter(begin, get_CreationDate(p))) && (isBefore(get_CreationDate(p), end))){
-            if (p->type == QUESTION) questions++;
+        p = (POST)get_data(x);
+        if ((isAfter(get_CreationDate(p), begin)) && (isBefore(get_CreationDate(p), end))){
+            if (get_type(p) == QUESTION) {
+                questions++;
+            }
             else answers++;
         }
         x = next(x);
+
     }
     
     set_fst_long(l, questions);
     set_snd_long(l, answers);
-    return 0;
+    return l;
 }
-*/
