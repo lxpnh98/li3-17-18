@@ -3,7 +3,7 @@
 
 struct llist {
   int size;
-  long *list;
+  long * list;
 };
 
 LONG_list create_list(int size) {
@@ -15,21 +15,12 @@ LONG_list create_list(int size) {
 }
 
 long get_list(LONG_list l, int index) {
-    return l->list[index];
+    return l->list[index]; 
 }
 
 void set_list(LONG_list l, int index, long value) {
     l->list[index] = value;
 }
-
-void push_insert(LONG_list l, int index, long value) {
-    int i;
-    for (i = l->size - 1; i > index; i--) {
-        l->list[i] = l->list[i - 1];
-    }
-    l->list[i] = value;
-}
-
 void free_list(LONG_list l) {
     if(l) {
         free(l->list);
