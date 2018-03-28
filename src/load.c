@@ -37,8 +37,7 @@ void processar_users(TAD_community com, xmlDoc * doc)
     }
 }
 
-void processar_posts(TAD_community com, xmlDoc * doc)
-{
+void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
         long AcceptedAnswer = -1;
@@ -46,44 +45,34 @@ void processar_posts(TAD_community com, xmlDoc * doc)
         long parentId = -1;
         char *userDisplayName = NULL;
         char *title = NULL;
+        long score = 0;
 
-        if (node->properties == NULL)
-            continue;
+        if (node->properties == NULL) continue;
         long id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
-        if (id < 0)
-            continue;
-        enum post_type type =
-            atoi((char *)xmlGetProp(node, (const xmlChar *)"PostTypeId"));
-        if (type == QUESTION
-            && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
-            AcceptedAnswer = atol((char *)
-                                  xmlGetProp(node, (const xmlChar *)
-                                             "AcceptedAnswerId"));
+        if (id < 0) continue;
+        enum post_type type = atoi((char *)xmlGetProp(node, (const xmlChar *)"PostTypeId"));
+        if (type == QUESTION && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
+            AcceptedAnswer  = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
         }
         if (xmlGetProp(node, (const xmlChar *)"OwnerUserId")) {
-            userId = atol((char *)
-                          xmlGetProp(node, (const xmlChar *)"OwnerUserId"));
+            userId = atol((char *)xmlGetProp(node, (const xmlChar *)"OwnerUserId"));
         } else {
-            userDisplayName = ((char *)
-                               xmlGetProp(node, (const xmlChar *)
-                                          "OwnerDisplayName"));
+            userDisplayName = ((char *)xmlGetProp(node, (const xmlChar *)"OwnerDisplayName"));
         }
         if (type == QUESTION) {
             title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
         } else if (type == ANSWER) {
-            parentId =
-                atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
+            parentId = atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
         } else {
             // TODO: processar outros tipos de posts (3,4,5,6,7)
             continue;
         }
-        char *CreationDate =
-            ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
 
-        POST post =
-            create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                        title,
-                        parentId, CreationDate);
+        score = atol((char *)xmlGetProp(node, (const xmlChar *)"Score")); 
+        char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
+
+        POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
+                                title, parentId, score, CreationDate);
         add_post(com, post);
     }
 }
