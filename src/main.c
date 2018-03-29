@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     printf("%li %li\n", get_fst_long(l), get_snd_long(l));
 
     // Query 4
-    LONG_list ll = questions_with_tag(c, "ai", d1, d2);
+    LONG_list ll = questions_with_tag(c, "root-access", d1, d2);
     if (ll != NULL) {           // mais que 0 elementos
         for (i = 0; i < get_list_size(ll); i++) {
             POST p = get_post(c, get_list(ll, i));
