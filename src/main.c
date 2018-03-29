@@ -47,5 +47,14 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Query 6
+    ll = most_voted_answers(c, 15, d1, d2);
+    if (ll != NULL) {           // mais que 0 elementos
+        for (i = 0; i < get_list_size(ll); i++) {
+            POST p = get_post(c, get_list(ll, i));
+            printf("%ld - %i\n", get_post_id(p), get_score(p));
+        }
+    }
+
     return 0;
 }
