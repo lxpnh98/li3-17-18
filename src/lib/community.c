@@ -56,7 +56,7 @@ void add_post(TAD_community com, POST post)
 {
     int user_id = get_user_id(post);
     if (user_id > 0) {
-        USER u = (USER) xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
         set_post_count(u, get_post_count(u) + 1);
     }
     xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
@@ -79,7 +79,7 @@ char *get_author_name(TAD_community com, POST p)
     if (id == -1) {
         return get_user_display_name(p);
     } else {
-        USER u = (USER) xmlHashLookup(com->users, (const xmlChar *)itoa(id));
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(id));
         return get_display_name(u);
     }
 }
@@ -89,7 +89,7 @@ char *get_question_title(TAD_community com, POST p)
     char *title = get_title(p);
     if (title == NULL) {
         int parentId = (int)(get_parent_id(p));
-        POST p = (POST) xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
+        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
         title = get_title(p);
     }
     return title;
@@ -102,7 +102,7 @@ char *get_question_title(TAD_community com, POST p)
  */
 STR_pair info_from_post(TAD_community com, int id)
 {
-    POST p = (POST) xmlHashLookup(com->posts, (const xmlChar *)itoa(id));
+    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(id));
     if (p == NULL)
         return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
@@ -123,7 +123,7 @@ LONG_list top_most_active(TAD_community com, int N)
     USER u;
     int n = 0;
     while (next(l) != NULL) {
-        u = (USER) get_data(l);
+        u = (USER)get_data(l);
         insert_by_post_count(com, list, u, MIN2(n, N), N);
         l = next(l);
         n++;
@@ -137,7 +137,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
     int post_count = get_post_count(u);
     USER u2;
     for (i = 0; i < n; i++) {
-        u2 = (USER) xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
+        u2 = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
         if (get_post_count(u2) < post_count) {
             break;
         }
@@ -159,7 +159,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end)
     POST p;
 
     while (next(x)) {
-        p = (POST) get_data(x);
+        p = (POST)get_data(x);
         if ((isAfter(get_CreationDate(p), begin))
             && (isBefore(get_CreationDate(p), end))) {
             if (get_type(p) == QUESTION) {
@@ -191,7 +191,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
     int post_count = 0;
 
     while (next(x)) {
-        p = (POST) get_data(x);
+        p = (POST)get_data(x);
         if ((isAfter(get_CreationDate(p), begin))
             && (isBefore(get_CreationDate(p), end))) {
             if (get_type(p) == QUESTION && has_tag(p, tag)) {
@@ -205,7 +205,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
     LONG_list r = create_list(post_count);
     int n = 0;
     while (next(l) != NULL) {
-        p = (POST) get_data(l);
+        p = (POST)get_data(l);
         insert_by_date(com, r, p, MIN2(n, post_count), post_count);
         l = next(l);
         n++;
@@ -219,7 +219,7 @@ void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n)
     Date post_date = get_CreationDate(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
         if (isBefore(get_CreationDate(p2), post_date)) {
             break;
         }
@@ -254,7 +254,7 @@ void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n)
     int post_score = get_score(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
         if (post_score > get_score(p2)) {
             break;
         }
@@ -262,3 +262,46 @@ void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n)
     if (i < max_n)
         push_insert(l, i, get_post_id(p));
 }
+
+/* Interrogação 7: Dado um intervalo de tempo arbitrário, devolver as
+ * IDs das N perguntas com mais respostas, em ordem decrescente do número
+ * de votos; */
+
+void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int max_n);
+
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end)
+{
+    LONG_list list = create_list(N);
+    LINKED_LIST l = com->post_list;
+    POST p;
+    int n = 0;
+    while (next(l) != NULL) {
+        p = (POST)get_data(l);
+        printf("%ld ", get_post_id(p));
+        if (get_type(p) == QUESTION &&
+                (isAfter(get_CreationDate(p), begin)) &&
+                (isBefore(get_CreationDate(p), end))) {
+            insert_by_answer_count(com, list, p, MIN2(n, N), N);
+            n++;
+        }
+        l = next(l);
+    }
+    return list;
+}
+
+void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int max_n)
+{
+    int i;
+    int post_count = get_answer_count(p);
+    POST p2;
+    for (i = 0; i < n; i++) {
+        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        if (get_answer_count(p2) > post_count) {
+            break;
+        }
+    }
+    if (i < max_n) {
+        push_insert(l, i, get_post_id(p));
+    }
+}
+

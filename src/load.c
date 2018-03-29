@@ -40,6 +40,7 @@ void processar_posts(TAD_community com, xmlDoc * doc)
         long AcceptedAnswer = -1;
         long userId = -1;
         long parentId = -1;
+        int answer_count = 0;
         char *userDisplayName = NULL;
         char *title = NULL;
         int ntags = 0;
@@ -64,7 +65,7 @@ void processar_posts(TAD_community com, xmlDoc * doc)
             title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
             char *tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
             // TODO: fazer parsing da tags_str
-
+            answer_count = atol((char *)xmlGetProp(node, (const xmlChar *)"AnswerCount"));
         } else if (type == ANSWER) {
             parentId = atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
         } else {
@@ -76,7 +77,7 @@ void processar_posts(TAD_community com, xmlDoc * doc)
         char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, score, CreationDate, ntags, tags);
+                                title, parentId, answer_count, score, CreationDate, ntags, tags);
         add_post(com, post);
     }
 }

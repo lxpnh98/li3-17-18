@@ -14,6 +14,7 @@ struct post {
     char *userDisplayName; /** Nomde do utilizador, caso não tenha user Id */
     char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
     long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
+    int answer_count;      /** Número de responstas, caso seja pergunta */
     long score;             /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
     int ntags;             /** Número de tags do post */
@@ -21,7 +22,7 @@ struct post {
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, long score, char *CreationDate, int ntags, char *tags[])
+                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags, char *tags[])
 {
     int i;
     POST p = malloc(sizeof(struct post));
@@ -32,6 +33,7 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     p->userDisplayName = userDisplayName;
     p->title = title;
     p->parentId = parentId;
+    p->answer_count = answer_count;
     p->score = score;
     p->CreationDate = CreationDate;
     p->ntags = ntags;
@@ -70,6 +72,11 @@ long get_parent_id(POST p)
 long get_score(POST p)
 {
     return p->score;
+}
+
+int get_answer_count(POST p)
+{
+    return p->answer_count;
 }
 
 Date get_CreationDate(POST p)
