@@ -43,14 +43,19 @@ int main(int argc, char *argv[])
 
     printf("Query 4:\n");
     // Query 4
-    LONG_list ll = questions_with_tag(c, "ai", d1, d2);
+    LONG_list ll = questions_with_tag(c, "root-access", d1, d2);
     if (ll != NULL) {           // mais que 0 elementos
         for (i = 0; i < get_list_size(ll); i++) {
             POST p = get_post(c, get_list(ll, i));
             printf("%ld - %s\n", get_post_id(p), get_title(p));
         }
     }
+
     printf("Query 5:\n");
+    // Query 5
+    USER u2;
+    u2 = get_user_info(c, 10);
+    printf("%ld - %s\n",get_id(u2), get_bio(u2));
 
     printf("Query 6:\n");
     // Query 6

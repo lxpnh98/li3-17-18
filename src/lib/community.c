@@ -52,12 +52,21 @@ void add_tag(TAD_community com, TAG tag)
     xmlHashAddEntry(com->tags, (const xmlChar *)get_tagName(tag), tag);
 }
 
+void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
+
 void add_post(TAD_community com, POST post)
 {
+    LONG_list l;
     int user_id = get_user_id(post);
     if (user_id > 0) {
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+        USER u = (USER) xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+        // Adicionar post aos 10 últimos posts
+        l = get_posts_long_list(u);
+        insert_by_date(com, l, post, MIN2(get_post_count(u), 10), 10);
+        set_post_list(u, l);
+
         set_post_count(u, get_post_count(u) + 1);
+
     }
     xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
     com->post_list = add(com->post_list, post);
@@ -100,9 +109,9 @@ char *get_question_title(TAD_community com, POST p)
  * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
  * da pergunta correspondente;
  */
-STR_pair info_from_post(TAD_community com, int id)
+STR_pair info_from_post(TAD_community com, long id)
 {
-    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(id));
+    POST p = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
     if (p == NULL)
         return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
@@ -181,8 +190,6 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end)
  * uma lista com os IDs das perguntas ordenadas em cronologia inversa.
  */
 
-void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
-
 LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
 {
     LINKED_LIST l = init_linked_list();
@@ -226,6 +233,28 @@ void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n)
     }
     if (i < max_n)
         push_insert(l, i, get_post_id(p));
+}
+
+/* Interrogação 5: Dado um ID de utilizador, devolver a informação do
+ * seu perfil (short bio) e os IDs dos seus 10 últimos posts (perguntas ou res-
+ * postas), ordenados por cronologia inversa;
+ */
+USER get_user_info(TAD_community com, long id){
+    USER user;
+    char *bio;
+    LONG_list l;
+
+    USER u = get_user(com, id);
+    if (u == NULL)
+        return NULL;
+
+    bio = get_bio(u);
+    l = get_posts_long_list(u);
+
+    user = create_user(id, "", 0, bio, NULL);
+    set_post_list(user, l);
+
+    return user;
 }
 
 /* Interrogação 6: Dado um intervalo de tempo arbitrário, devolver os IDs
@@ -277,7 +306,6 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        printf("%ld ", get_post_id(p));
         if (get_type(p) == QUESTION &&
                 (isAfter(get_CreationDate(p), begin)) &&
                 (isBefore(get_CreationDate(p), end))) {
@@ -304,4 +332,3 @@ void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int m
         push_insert(l, i, get_post_id(p));
     }
 }
-
