@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     printf("%li %li\n", get_fst_long(l), get_snd_long(l));
 
     // Query 4
-    LONG_list ll = questions_with_tag(c, "ai", d1, d2);
+    LONG_list ll = questions_with_tag(c, "root-access", d1, d2);
     if (ll != NULL) {           // mais que 0 elementos
         for (i = 0; i < get_list_size(ll); i++) {
             POST p = get_post(c, get_list(ll, i));
@@ -52,6 +52,14 @@ int main(int argc, char *argv[])
     u2 = get_user_info(c, 10);
     printf("%ld - %s\n",get_id(u2), get_bio(u2));
 
+    // Query 6
+    ll = most_voted_answers(c, 15, d1, d2);
+    if (ll != NULL) {           // mais que 0 elementos
+        for (i = 0; i < get_list_size(ll); i++) {
+            POST p = get_post(c, get_list(ll, i));
+            printf("%ld - %i\n", get_post_id(p), get_score(p));
+        }
+    }
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <stdlib.h>             // atoi
 #include <libxml/parser.h>
+#include <string.h>
 #include "interface.h"
 #include "date.h"
 #include "common.h"
@@ -7,6 +8,7 @@
 #include "community.h"
 #include "tag.h"
 #include "post.h"
+#include "linked_list.h"
 
 TAD_community init()
 {
@@ -33,6 +35,8 @@ void processar_users(TAD_community com, xmlDoc * doc)
     }
 }
 
+char **processa_tags(char *tags_str, int *ntags);
+
 void processar_posts(TAD_community com, xmlDoc * doc)
 {
     xmlNode *node = xmlDocGetRootElement(doc);
@@ -42,8 +46,9 @@ void processar_posts(TAD_community com, xmlDoc * doc)
         long parentId = -1;
         char *userDisplayName = NULL;
         char *title = NULL;
+        char *tags_str = NULL;
         int ntags = 0;
-        char *tags[] = { };
+        char **tags = NULL;
         long score = 0;
 
         if (node->properties == NULL)
@@ -62,9 +67,8 @@ void processar_posts(TAD_community com, xmlDoc * doc)
         }
         if (type == QUESTION) {
             title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
-            char *tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
-            // TODO: fazer parsing da tags_str
-
+            tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
+            tags = processa_tags(tags_str, &ntags);
         } else if (type == ANSWER) {
             parentId = atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
         } else {
@@ -79,6 +83,33 @@ void processar_posts(TAD_community com, xmlDoc * doc)
                                 title, parentId, score, CreationDate, ntags, tags);
         add_post(com, post);
     }
+}
+
+char **processa_tags(char *tags_str, int *ntags) {
+    int n = 0;
+    int i = 0;
+    int j,k;
+    LINKED_LIST l = init_linked_list();
+    char tag[1024];
+    char **tags = NULL;
+    for(j = 0; tags_str[j] != '\0'; j++) {
+        if(tags_str[j] == '<') {
+            for(k = 0; tags_str[j+1] != '>'; k++, j++) {
+                tag[k] = tags_str[j+1];
+            }
+            tag[k+1] = '\0';
+            l = add(l, tag);
+            n++;
+        }
+    }
+    *ntags = n;
+    tags = malloc(sizeof(char *) * n);
+    while(next(l)) {
+        tags[i] = get_data(l);
+        i++;
+        l = next(l);
+    }
+    return tags;
 }
 
 void processar_tags(TAD_community com, xmlDoc * doc)

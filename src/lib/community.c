@@ -256,3 +256,39 @@ USER get_user_info(TAD_community com, long id){
 
     return user;
 }
+
+/* Interrogação 6: Dado um intervalo de tempo arbitrário, devolver os IDs
+ * das N respostas com mais votos, em ordem decrescente do número de votos; */
+
+void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n);
+
+LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end)
+{
+    LONG_list list = create_list(N);
+    LINKED_LIST l = com->post_list;
+    POST p;
+    int n = 0;
+    while (next(l) != NULL) {
+        p = (POST)get_data(l);
+        insert_by_score(com, list, p, MIN2(n, N), N);
+        l = next(l);
+        n++;
+    }
+    return list;
+}
+
+void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n)
+{
+    int i;
+    int post_score = get_score(p);
+    POST p2;
+    for (i = 0; i < n; i++) {
+        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        if (post_score > get_score(p2)) {
+            break;
+        }
+    }
+    if (i < max_n)
+        push_insert(l, i, get_post_id(p));
+}
+
