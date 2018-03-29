@@ -1,3 +1,5 @@
+#include "list.h"
+
 #ifndef __USER__
 #define __USER__
 
@@ -15,7 +17,13 @@ char *get_display_name(USER u);
 
 int get_post_count(USER u);
 
+LONG_list get_posts_long_list(USER u);
+
 void set_post_count(USER u, int new_count);
+
+void set_bio(USER u, char *bio);
+
+void set_post_list(USER u, LONG_list l);
 
 void free_user(USER u);
 

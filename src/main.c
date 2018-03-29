@@ -47,5 +47,11 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Query 5
+    USER u2;
+    u2 = get_user_info(c, 10);
+    printf("%ld - %s\n",get_id(u2), get_bio(u2));
+
+
     return 0;
 }
