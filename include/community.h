@@ -17,6 +17,8 @@ void add_post(TAD_community com, POST post);
 
 USER get_user(TAD_community com, long id);
 
+POST get_post(TAD_community com, long id);
+
 char *get_author_name(TAD_community com, POST p);
 
 char *get_question_title(TAD_community com, POST p);

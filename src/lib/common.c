@@ -16,11 +16,14 @@ char *dump_file_name[] = {
 };
 
 // definido par nao dar warnings ao usar a funcao da GNU
-char * mystrdup (const char *s) {
-    if(s == NULL) return NULL;
-    char *d = malloc (strlen (s) + 1);
-    if (d == NULL) return NULL;
-    strcpy (d,s);
+char *mystrdup(const char *s)
+{
+    if (s == NULL)
+        return NULL;
+    char *d = malloc(strlen(s) + 1);
+    if (d == NULL)
+        return NULL;
+    strcpy(d, s);
     return d;
 }
 
@@ -33,7 +36,8 @@ char * mystrdup (const char *s) {
  *
  * \return novo string com o path completo
  */
-char *make_path(const char *dir, enum dump_type t) {
+char *make_path(const char *dir, enum dump_type t)
+{
     char *d = dump_file_name[t];
     char *r = malloc(strlen(dir) + strlen(d) + 1);
     sprintf(r, "%s%s", dir, d);
@@ -43,7 +47,8 @@ char *make_path(const char *dir, enum dump_type t) {
 /*
  * Função que retorna a representação de um int num string (em base decimal)
  */
-char *itoa(int x) {
+char *itoa(int x)
+{
     int len = floor(log10((double)x)) + 1;
     char *str = malloc(sizeof(char) * (len + 1));
     sprintf(str, "%d", x);
@@ -53,7 +58,8 @@ char *itoa(int x) {
 /*
  * Função que retorna a representação de um long num string (em base decimal)
  */
-char *ltoa(long x) {
+char *ltoa(long x)
+{
     long len = floor(log10((double)x)) + 1;
     char *str = malloc(sizeof(char) * (len + 1));
     sprintf(str, "%ld", x);

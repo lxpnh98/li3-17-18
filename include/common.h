@@ -5,7 +5,7 @@
 
 #define MIN2(x,y) ((x)<(y) ? (x) : (y))
 
-char * mystrdup (const char *s);
+char *mystrdup(const char *s);
 
 enum dump_type {
     BADGES,
