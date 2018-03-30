@@ -76,5 +76,17 @@ int main(int argc, char *argv[])
             printf("%ld - %s\n", get_post_id(p), get_title(p));
         }
     }
+
+    printf("Query 8:\n");
+    // Query 8
+    Date d3;
+    LONG_list l8 = contains_word(c, "Java" , 20);
+    if (l8 != NULL) {
+        for (i = 0; i < get_list_size(l8); i++) {
+            POST p = get_post(c, get_list(l8, i));
+            d3 = get_CreationDate(p);
+            printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3),get_month(d3),get_year(d3));
+        }
+    }
     return 0;
 }

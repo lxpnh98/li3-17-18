@@ -332,3 +332,76 @@ void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int m
         push_insert(l, i, get_post_id(p));
     }
 }
+
+/* Interrogação 8: Dado uma palavra, devolver uma lista com os IDs de N
+ * perguntas cujos títulos a contenham, ordenados por cronologia inversa;
+ */
+
+LINKED_LIST separate_title(char *title);
+int find_word(LINKED_LIST title, char *word);
+
+LONG_list contains_word(TAD_community com, char *word, int N)
+{
+    LINKED_LIST l = init_linked_list();
+    LINKED_LIST titulo = init_linked_list();
+    LINKED_LIST x = com->post_list;
+    POST p;
+    int post_count = 0;
+    while(next(x) != NULL) {
+        p = (POST)get_data(x);
+        if(get_type(p) == QUESTION) {
+            titulo = separate_title(get_title(p));
+            if (find_word(titulo, word)) {
+                l = add(l,p);
+                post_count++;
+            }
+        }
+        x = next(x);
+    }
+
+    LONG_list r = create_list(post_count);
+    int n = 0;
+    while (next(l) != NULL) {
+        p = (POST)get_data(l);
+        insert_by_date(com, r, p, MIN2(n, post_count), post_count);
+        l = next(l);
+        n++;
+    }
+    return r;
+}
+
+LINKED_LIST separate_title(char *title) {
+    int i = 0;
+    int r = 0;
+    int tam = strlen(title);
+    char word[1024];
+    LINKED_LIST titulo = init_linked_list();
+    while(i <= tam) {
+        if(title[i] == ' ' || title[i] == '.' || title[i] == ',' ||
+           title[i] == '!' || title[i] == '?' || title[i] == ';' ||
+           title[i] == ';' || title[i] == ':' || title[i] == '\0') {
+            word[r]= '\0';
+            titulo = add(titulo, mystrdup(word));
+            i++;
+            r = 0;
+        } else {
+            word[r] = title[i];
+            r++;
+            i++;
+        }
+    }
+    return titulo;
+}
+
+int find_word(LINKED_LIST title, char *word){
+    char *titulo;
+    while(next(title)) {
+        titulo = get_data(title);
+        if(strcmp(titulo,word) == 0) {
+            return 1;
+        } else {
+            title = next(title);
+        }
+    }
+    return 0;
+}
