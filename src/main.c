@@ -81,7 +81,12 @@ int main(int argc, char *argv[]) {
     LONG_list l8 = contains_word(c, "Java", 20);
     if (l8 != NULL) {
         for (i = 0; i < get_list_size(l8); i++) {
-            POST p = get_post(c, get_list(l8, i));
+            long post_id = get_list(l8, i);
+            if (post_id == -1) {
+                printf("No more posts.\n");
+                break;
+            }
+            POST p = get_post(c, post_id);
             d3 = get_CreationDate(p);
             printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
         }
@@ -93,7 +98,7 @@ int main(int argc, char *argv[]) {
         for (i = 0; i < get_list_size(l9); i++) {
             long post_id = get_list(l9, i);
             if (post_id == -1) {
-                printf("No more common posts.\n");
+                printf("No more posts.\n");
                 break;
             }
             POST p = get_post(c, post_id);

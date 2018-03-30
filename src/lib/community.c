@@ -329,31 +329,26 @@ LINKED_LIST separate_title(char *title);
 int find_word(LINKED_LIST title, char *word);
 
 LONG_list contains_word(TAD_community com, char *word, int N) {
-    LINKED_LIST l = init_linked_list();
     LINKED_LIST titulo = init_linked_list();
     LINKED_LIST x = com->post_list;
+    LONG_list r = create_list(N);
+    int i;
+    for (i = 0; i < N; i++)
+        set_list(r, i, -1);
     POST p;
-    int post_count = 0;
+    int n = 0;
     while (next(x) != NULL) {
         p = (POST) get_data(x);
         if (get_type(p) == QUESTION) {
             titulo = separate_title(get_title(p));
             if (find_word(titulo, word)) {
-                l = add(l, p);
-                post_count++;
+                insert_by_date(com, r, p, MIN2(n, N), N);
+                n++;
             }
         }
         x = next(x);
     }
 
-    LONG_list r = create_list(post_count);
-    int n = 0;
-    while (next(l) != NULL) {
-        p = (POST) get_data(l);
-        insert_by_date(com, r, p, MIN2(n, post_count), post_count);
-        l = next(l);
-        n++;
-    }
     return r;
 }
 
@@ -432,17 +427,15 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
     answer_count = get_answer_count(p);
     for (i = 0; i < answer_count; i++) {
         long post_id = get_list(answer_ids, i);
-        if (post_id < 0)
+        if (post_id < 0)       // Nem todas as questões estão a ser introduzidas na lista, assim os ids não são de nenhum utilizador.
             continue;
         p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(post_id));
-        if (p2 != NULL) {       // Nem todas as questões estão a ser introduzidas na lista, assim os ids não são de nenhum utilizador.
+        if (p2 != NULL) {
             int user_id = get_user_id(p2);
             if (user_id == id1)
                 match_id1 = 1;
             if (user_id == id2)
                 match_id2 = 1;
-        } else {
-            printf("unreachable\n");
         }
     }
     return match_id1 && match_id2;
