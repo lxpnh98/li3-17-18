@@ -2,7 +2,7 @@
 
 indent include/* src/*.c src/lib/*.c src/test/*.c \
     --blank-lines-after-procedures \
-    --braces-after-func-def-line \
+    --braces-on-func-def-line \
     --braces-on-if-line \
     --braces-on-struct-decl-line \
     --cuddle-do-while \

@@ -6,8 +6,7 @@ struct llist {
     long *list;
 };
 
-LONG_list create_list(int size)
-{
+LONG_list create_list(int size) {
     if (size <= 0)
         return NULL;
     LONG_list l = malloc(sizeof(struct llist));
@@ -16,23 +15,19 @@ LONG_list create_list(int size)
     return l;
 }
 
-long get_list(LONG_list l, int index)
-{
+long get_list(LONG_list l, int index) {
     return l->list[index];
 }
 
-void set_list(LONG_list l, int index, long value)
-{
+void set_list(LONG_list l, int index, long value) {
     l->list[index] = value;
 }
 
-int get_list_size(LONG_list l)
-{
+int get_list_size(LONG_list l) {
     return l->size;
 }
 
-void push_insert(LONG_list l, int index, long value)
-{
+void push_insert(LONG_list l, int index, long value) {
     int i;
     for (i = l->size - 1; i > index; i--) {
         l->list[i] = l->list[i - 1];
@@ -40,8 +35,7 @@ void push_insert(LONG_list l, int index, long value)
     l->list[i] = value;
 }
 
-void free_list(LONG_list l)
-{
+void free_list(LONG_list l) {
     if (l) {
         free(l->list);
         free(l);

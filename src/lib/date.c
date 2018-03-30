@@ -7,8 +7,7 @@ struct date {
     int year;
 };
 
-Date createDate(int day, int month, int year)
-{
+Date createDate(int day, int month, int year) {
     Date d = malloc(sizeof(struct date));
     d->day = day;
     d->month = month;
@@ -16,28 +15,23 @@ Date createDate(int day, int month, int year)
     return d;
 }
 
-int get_day(Date d)
-{
+int get_day(Date d) {
     return d->day;
 }
 
-int get_month(Date d)
-{
+int get_month(Date d) {
     return d->month;            //change to enum? (Acho que sim. Desta forma já garantimos a limitação necessária)
 }
 
-int get_year(Date d)
-{
+int get_year(Date d) {
     return d->year;
 }
 
-void free_date(Date d)
-{
+void free_date(Date d) {
     free(d);
 }
 
-Date cloneDate(Date d)
-{
+Date cloneDate(Date d) {
     Date c = malloc(sizeof(struct date));
     c->year = get_year(d);
     c->month = get_month(d);
@@ -45,8 +39,7 @@ Date cloneDate(Date d)
     return c;
 }
 
-int isAfter(Date d1, Date d2)
-{
+int isAfter(Date d1, Date d2) {
     int r = 1;
 
     if (get_year(d1) < get_year(d2))
@@ -68,8 +61,7 @@ int isAfter(Date d1, Date d2)
     return r;
 }
 
-int isBefore(Date d1, Date d2)
-{
+int isBefore(Date d1, Date d2) {
     int r = 1;
 
     if (get_year(d1) > get_year(d2))

@@ -3,6 +3,7 @@
 #include <math.h>               // floor, log10
 #include <libxml/hash.h>
 #include <string.h>
+#include <assert.h>
 #include "user.h"
 #include "pair.h"
 #include "list.h"
@@ -27,8 +28,7 @@ struct TCD_community {
     LINKED_LIST post_list;
 };
 
-TAD_community init_community()
-{
+TAD_community init_community() {
     TAD_community new = malloc(sizeof(struct TCD_community));
     new->users = xmlHashCreate(INIT_USERS);
     new->user_list = init_linked_list();
@@ -38,8 +38,7 @@ TAD_community init_community()
     return new;
 }
 
-void add_user(TAD_community com, USER user)
-{
+void add_user(TAD_community com, USER user) {
     int id_len = floor(log10((double)get_id(user))) + 1;
     char id_str[id_len];
     sprintf(id_str, "%ld", get_id(user));
@@ -47,19 +46,18 @@ void add_user(TAD_community com, USER user)
     com->user_list = add(com->user_list, user);
 }
 
-void add_tag(TAD_community com, TAG tag)
-{
+void add_tag(TAD_community com, TAG tag) {
     xmlHashAddEntry(com->tags, (const xmlChar *)get_tagName(tag), tag);
 }
 
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
 
-void add_post(TAD_community com, POST post)
-{
+void add_post(TAD_community com, POST post) {
     LONG_list l;
     int user_id = get_user_id(post);
     if (user_id > 0) {
         USER u = (USER) xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+
         // Adicionar post aos 10 últimos posts
         l = get_posts_long_list(u);
         insert_by_date(com, l, post, MIN2(get_post_count(u), 10), 10);
@@ -67,38 +65,39 @@ void add_post(TAD_community com, POST post)
 
         set_post_count(u, get_post_count(u) + 1);
 
+        // Se for resposta, adicionar à lista de respostas da respetiva pergunta
+        if (get_type(post) == ANSWER) {
+            POST parent_post = get_post(com, get_parent_id(post));
+            add_answer(parent_post, get_post_id(post));
+        }
     }
     xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
     com->post_list = add(com->post_list, post);
 }
 
-USER get_user(TAD_community com, long id)
-{
+USER get_user(TAD_community com, long id) {
     return xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
 }
 
-POST get_post(TAD_community com, long id)
-{
+POST get_post(TAD_community com, long id) {
     return xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
 }
 
-char *get_author_name(TAD_community com, POST p)
-{
+char *get_author_name(TAD_community com, POST p) {
     int id = (int)(get_user_id(p)); // TODO: converter todos os ids para long
     if (id == -1) {
         return get_user_display_name(p);
     } else {
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(id));
+        USER u = (USER) xmlHashLookup(com->users, (const xmlChar *)itoa(id));
         return get_display_name(u);
     }
 }
 
-char *get_question_title(TAD_community com, POST p)
-{
+char *get_question_title(TAD_community com, POST p) {
     char *title = get_title(p);
     if (title == NULL) {
         int parentId = (int)(get_parent_id(p));
-        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
+        POST p = (POST) xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
         title = get_title(p);
     }
     return title;
@@ -109,8 +108,7 @@ char *get_question_title(TAD_community com, POST p)
  * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
  * da pergunta correspondente;
  */
-STR_pair info_from_post(TAD_community com, long id)
-{
+STR_pair info_from_post(TAD_community com, long id) {
     POST p = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
     if (p == NULL)
         return NULL;
@@ -125,14 +123,13 @@ STR_pair info_from_post(TAD_community com, long id)
 
 void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n);
 
-LONG_list top_most_active(TAD_community com, int N)
-{
+LONG_list top_most_active(TAD_community com, int N) {
     LONG_list list = create_list(N);    //TODO: melhorar nomes das variáveis
     LINKED_LIST l = com->user_list;
     USER u;
     int n = 0;
     while (next(l) != NULL) {
-        u = (USER)get_data(l);
+        u = (USER) get_data(l);
         insert_by_post_count(com, list, u, MIN2(n, N), N);
         l = next(l);
         n++;
@@ -140,13 +137,12 @@ LONG_list top_most_active(TAD_community com, int N)
     return list;
 }
 
-void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n)
-{
+void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max_n) {
     int i;
     int post_count = get_post_count(u);
     USER u2;
     for (i = 0; i < n; i++) {
-        u2 = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
+        u2 = (USER) xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
         if (get_post_count(u2) < post_count) {
             break;
         }
@@ -159,8 +155,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
  * total de posts (identificando perguntas e respostas separadamente) neste
  * perı́odo;
  */
-LONG_pair total_posts(TAD_community com, Date begin, Date end)
-{
+LONG_pair total_posts(TAD_community com, Date begin, Date end) {
     long questions = 0;
     long answers = 0;
     LONG_pair l;
@@ -168,7 +163,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end)
     POST p;
 
     while (next(x)) {
-        p = (POST)get_data(x);
+        p = (POST) get_data(x);
         if ((isAfter(get_CreationDate(p), begin))
             && (isBefore(get_CreationDate(p), end))) {
             if (get_type(p) == QUESTION) {
@@ -190,15 +185,14 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end)
  * uma lista com os IDs das perguntas ordenadas em cronologia inversa.
  */
 
-LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
-{
+LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end) {
     LINKED_LIST l = init_linked_list();
     LINKED_LIST x = com->post_list;
     POST p;
     int post_count = 0;
 
     while (next(x)) {
-        p = (POST)get_data(x);
+        p = (POST) get_data(x);
         if ((isAfter(get_CreationDate(p), begin))
             && (isBefore(get_CreationDate(p), end))) {
             if (get_type(p) == QUESTION && has_tag(p, tag)) {
@@ -212,7 +206,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
     LONG_list r = create_list(post_count);
     int n = 0;
     while (next(l) != NULL) {
-        p = (POST)get_data(l);
+        p = (POST) get_data(l);
         insert_by_date(com, r, p, MIN2(n, post_count), post_count);
         l = next(l);
         n++;
@@ -220,13 +214,12 @@ LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end)
     return r;
 }
 
-void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n)
-{
+void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int i;
     Date post_date = get_CreationDate(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
         if (isBefore(get_CreationDate(p2), post_date)) {
             break;
         }
@@ -239,7 +232,7 @@ void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n)
  * seu perfil (short bio) e os IDs dos seus 10 últimos posts (perguntas ou res-
  * postas), ordenados por cronologia inversa;
  */
-USER get_user_info(TAD_community com, long id){
+USER get_user_info(TAD_community com, long id) {
     USER user;
     char *bio;
     LONG_list l;
@@ -262,14 +255,13 @@ USER get_user_info(TAD_community com, long id){
 
 void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n);
 
-LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end)
-{
+LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end) {
     LONG_list list = create_list(N);
     LINKED_LIST l = com->post_list;
     POST p;
     int n = 0;
     while (next(l) != NULL) {
-        p = (POST)get_data(l);
+        p = (POST) get_data(l);
         insert_by_score(com, list, p, MIN2(n, N), N);
         l = next(l);
         n++;
@@ -277,13 +269,12 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end)
     return list;
 }
 
-void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n)
-{
+void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int i;
     int post_score = get_score(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
         if (post_score > get_score(p2)) {
             break;
         }
@@ -298,17 +289,14 @@ void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n)
 
 void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int max_n);
 
-LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end)
-{
+LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end) {
     LONG_list list = create_list(N);
     LINKED_LIST l = com->post_list;
     POST p;
     int n = 0;
     while (next(l) != NULL) {
-        p = (POST)get_data(l);
-        if (get_type(p) == QUESTION &&
-                (isAfter(get_CreationDate(p), begin)) &&
-                (isBefore(get_CreationDate(p), end))) {
+        p = (POST) get_data(l);
+        if (get_type(p) == QUESTION && (isAfter(get_CreationDate(p), begin)) && (isBefore(get_CreationDate(p), end))) {
             insert_by_answer_count(com, list, p, MIN2(n, N), N);
             n++;
         }
@@ -317,13 +305,12 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     return list;
 }
 
-void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int max_n)
-{
+void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int i;
     int post_count = get_answer_count(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
         if (get_answer_count(p2) > post_count) {
             break;
         }
@@ -338,21 +325,21 @@ void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int m
  */
 
 LINKED_LIST separate_title(char *title);
+
 int find_word(LINKED_LIST title, char *word);
 
-LONG_list contains_word(TAD_community com, char *word, int N)
-{
+LONG_list contains_word(TAD_community com, char *word, int N) {
     LINKED_LIST l = init_linked_list();
     LINKED_LIST titulo = init_linked_list();
     LINKED_LIST x = com->post_list;
     POST p;
     int post_count = 0;
-    while(next(x) != NULL) {
-        p = (POST)get_data(x);
-        if(get_type(p) == QUESTION) {
+    while (next(x) != NULL) {
+        p = (POST) get_data(x);
+        if (get_type(p) == QUESTION) {
             titulo = separate_title(get_title(p));
             if (find_word(titulo, word)) {
-                l = add(l,p);
+                l = add(l, p);
                 post_count++;
             }
         }
@@ -362,7 +349,7 @@ LONG_list contains_word(TAD_community com, char *word, int N)
     LONG_list r = create_list(post_count);
     int n = 0;
     while (next(l) != NULL) {
-        p = (POST)get_data(l);
+        p = (POST) get_data(l);
         insert_by_date(com, r, p, MIN2(n, post_count), post_count);
         l = next(l);
         n++;
@@ -376,11 +363,10 @@ LINKED_LIST separate_title(char *title) {
     int tam = strlen(title);
     char word[1024];
     LINKED_LIST titulo = init_linked_list();
-    while(i <= tam) {
-        if(title[i] == ' ' || title[i] == '.' || title[i] == ',' ||
-           title[i] == '!' || title[i] == '?' || title[i] == ';' ||
-           title[i] == ';' || title[i] == ':' || title[i] == '\0') {
-            word[r]= '\0';
+    while (i <= tam) {
+        if (title[i] == ' ' || title[i] == '.' || title[i] == ',' ||
+            title[i] == '!' || title[i] == '?' || title[i] == ';' || title[i] == ';' || title[i] == ':' || title[i] == '\0') {
+            word[r] = '\0';
             titulo = add(titulo, mystrdup(word));
             i++;
             r = 0;
@@ -393,15 +379,71 @@ LINKED_LIST separate_title(char *title) {
     return titulo;
 }
 
-int find_word(LINKED_LIST title, char *word){
+int find_word(LINKED_LIST title, char *word) {
     char *titulo;
-    while(next(title)) {
+    while (next(title)) {
         titulo = get_data(title);
-        if(strcmp(titulo,word) == 0) {
+        if (strcmp(titulo, word) == 0) {
             return 1;
         } else {
             title = next(title);
         }
     }
     return 0;
+}
+
+/* Interrogação 9: Dados os IDs de dois utilizadores, devolver as últimas
+ * N perguntas (cronologia inversa) em que participaram dois utilizadores es-
+ * pecı́ficos. Note que os utilizadores podem ter participado via pergunta ou
+ * respostas; */
+
+int both_users_participate(TAD_community com, POST p, long id1, long id2);
+
+LONG_list both_participated(TAD_community com, long id1, long id2, int N) {
+    LINKED_LIST x = com->post_list;
+    POST p;
+    LONG_list r = create_list(N);
+    int i;
+    for (i = 0; i < N; i++)
+        set_list(r, i, -1);
+    int n = 0;
+    while (next(x)) {
+        p = (POST) get_data(x);
+        if (get_type(p) == QUESTION && both_users_participate(com, p, id1, id2)) {
+            insert_by_date(com, r, p, MIN2(n, N), N);
+            n++;
+        }
+        x = next(x);
+    }
+    return r;
+}
+
+int both_users_participate(TAD_community com, POST p, long id1, long id2) {
+    assert(get_type(p) == QUESTION);
+    int i, answer_count;
+    POST p2;
+    int match_id1 = 0, match_id2 = 0;
+    long question_user_id = get_user_id(p);
+    if (question_user_id == id1)
+        match_id1 = 1;
+    if (question_user_id == id2)
+        match_id2 = 1;
+    LONG_list answer_ids = get_answers(p);
+    answer_count = get_answer_count(p);
+    for (i = 0; i < answer_count; i++) {
+        long post_id = get_list(answer_ids, i);
+        if (post_id < 0)
+            continue;
+        p2 = (POST) xmlHashLookup(com->posts, (const xmlChar *)ltoa(post_id));
+        if (p2 != NULL) {       // Nem todas as questões estão a ser introduzidas na lista, assim os ids não são de nenhum utilizador.
+            int user_id = get_user_id(p2);
+            if (user_id == id1)
+                match_id1 = 1;
+            if (user_id == id2)
+                match_id2 = 1;
+        } else {
+            printf("unreachable\n");
+        }
+    }
+    return match_id1 && match_id2;
 }

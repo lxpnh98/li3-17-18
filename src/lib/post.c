@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "post.h"
 #include "date.h"
+#include "list.h"
 #include "common.h"
 #include "community.h"
 
@@ -15,6 +16,7 @@ struct post {
     char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
     long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
     int answer_count;      /** Número de responstas, caso seja pergunta */
+    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */
     long score;            /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
     int ntags;             /** Número de tags do post */
@@ -22,8 +24,8 @@ struct post {
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags, char *tags[])
-{
+                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags,
+                 char *tags[]) {
     int i;
     POST p = malloc(sizeof(struct post));
     p->id = id;
@@ -34,6 +36,9 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     p->title = title;
     p->parentId = parentId;
     p->answer_count = answer_count;
+    p->answers = create_list(answer_count);
+    for (i = 0; i < answer_count; i++)
+        set_list(p->answers, i, -1);    // para não conter um id válido ao acaso
     p->score = score;
     p->CreationDate = CreationDate;
     p->ntags = ntags;
@@ -72,9 +77,16 @@ long get_score(POST p) {
     return p->score;
 }
 
-int get_answer_count(POST p)
-{
+int get_answer_count(POST p) {
     return p->answer_count;
+}
+
+void add_answer(POST p, long id) {
+    push_insert(p->answers, 0, id);
+}
+
+LONG_list get_answers(POST p) {
+    return p->answers;
 }
 
 Date get_CreationDate(POST p) {

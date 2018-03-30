@@ -2,6 +2,7 @@
 #define __POST__
 
 #include "date.h"
+#include "list.h"
 
 typedef struct post *POST;
 
@@ -11,7 +12,8 @@ enum post_type {
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags, char *tags[]);
+                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags,
+                 char *tags[]);
 
 long get_post_id(POST p);
 
@@ -28,6 +30,10 @@ long get_parent_id(POST p);
 long get_score(POST p);
 
 int get_answer_count(POST p);
+
+void add_answer(POST p, long id);
+
+LONG_list get_answers(POST p);
 
 int has_tag(POST p, char *tag);
 

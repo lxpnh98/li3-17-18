@@ -8,23 +8,20 @@ struct tag {
     char *tagName;
 };
 
-TAG create_tag(char *tagName)
-{
+TAG create_tag(char *tagName) {
     TAG t = malloc(sizeof(struct tag));
     t->tagName = mystrdup(tagName);
 
     return t;
 }
 
-char *get_tagName(TAG t)
-{
+char *get_tagName(TAG t) {
     if (t)
         return t->tagName;
     return NULL;
 }
 
-void free_tag(TAG t)
-{
+void free_tag(TAG t) {
     if (t)
         free(t);
 }

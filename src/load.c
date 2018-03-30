@@ -10,13 +10,11 @@
 #include "post.h"
 #include "linked_list.h"
 
-TAD_community init()
-{
+TAD_community init() {
     return init_community();
 }
 
-void processar_users(TAD_community com, xmlDoc * doc)
-{
+void processar_users(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
         if (node->properties == NULL)
@@ -37,8 +35,7 @@ void processar_users(TAD_community com, xmlDoc * doc)
 
 char **processa_tags(char *tags_str, int *ntags);
 
-void processar_posts(TAD_community com, xmlDoc * doc)
-{
+void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
         long AcceptedAnswer = -1;
@@ -90,23 +87,23 @@ void processar_posts(TAD_community com, xmlDoc * doc)
 char **processa_tags(char *tags_str, int *ntags) {
     int n = 0;
     int i = 0;
-    int j,k;
+    int j, k;
     LINKED_LIST l = init_linked_list();
     char tag[1024];
     char **tags = NULL;
-    for(j = 0; tags_str[j] != '\0'; j++) {
-        if(tags_str[j] == '<') {
-            for(k = 0; tags_str[j+1] != '>'; k++, j++) {
-                tag[k] = tags_str[j+1];
+    for (j = 0; tags_str[j] != '\0'; j++) {
+        if (tags_str[j] == '<') {
+            for (k = 0; tags_str[j + 1] != '>'; k++, j++) {
+                tag[k] = tags_str[j + 1];
             }
-            tag[k+1] = '\0';
+            tag[k + 1] = '\0';
             l = add(l, tag);
             n++;
         }
     }
     *ntags = n;
     tags = malloc(sizeof(char *) * n);
-    while(next(l)) {
+    while (next(l)) {
         tags[i] = get_data(l);
         i++;
         l = next(l);
@@ -114,8 +111,7 @@ char **processa_tags(char *tags_str, int *ntags) {
     return tags;
 }
 
-void processar_tags(TAD_community com, xmlDoc * doc)
-{
+void processar_tags(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
 

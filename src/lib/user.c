@@ -13,8 +13,7 @@ struct user {
     int post_count; /** Número de posts submetidos */
 };
 
-USER create_user(long id, char *display_name, long rep, char *bio, long *post_history)
-{
+USER create_user(long id, char *display_name, long rep, char *bio, long *post_history) {
     USER u = malloc(sizeof(struct user));
     u->id = id;
     u->rep = rep;
@@ -25,37 +24,31 @@ USER create_user(long id, char *display_name, long rep, char *bio, long *post_hi
     return u;
 }
 
-long get_id(USER u)
-{
+long get_id(USER u) {
     return u->id;
 }
 
-char *get_bio(USER u)
-{
+char *get_bio(USER u) {
     if (u)
         return u->bio;
     return NULL;
 }
 
-long *get_10_latest_posts(USER u)
-{
+long *get_10_latest_posts(USER u) {
     long *r = malloc(sizeof(long) * 10);
     memcpy(r, u->posts, sizeof(long) * 10);
     return r;
 }
 
-char *get_display_name(USER u)
-{
+char *get_display_name(USER u) {
     return mystrdup(u->display_name);
 }
 
-int get_post_count(USER u)
-{
+int get_post_count(USER u) {
     return u->post_count;
 }
 
-LONG_list get_posts_long_list(USER u)
-{
+LONG_list get_posts_long_list(USER u) {
     int i;
     LONG_list l = create_list(10);
     long *posts = get_10_latest_posts(u);
@@ -64,27 +57,24 @@ LONG_list get_posts_long_list(USER u)
     return l;
 }
 
-void set_post_count(USER u, int new_count)
-{
+void set_post_count(USER u, int new_count) {
     u->post_count = new_count;
 }
 
-void set_bio(USER u, char *bio)
-{
-    if(u->bio) free(u->bio);
+void set_bio(USER u, char *bio) {
+    if (u->bio)
+        free(u->bio);
     u->bio = mystrdup(bio);
 }
 
-void set_post_list(USER u, LONG_list l)
-{
+void set_post_list(USER u, LONG_list l) {
     int i;
     int n = get_list_size(l);
     for (i = 0; i < n; i++)
         u->posts[i] = get_list(l, i);
 }
 
-void free_user(USER u)
-{
+void free_user(USER u) {
     if (u) {
         free(u->bio);
         free(u);

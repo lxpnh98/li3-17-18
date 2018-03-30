@@ -8,8 +8,7 @@ enum {
     DATA_MAX_VALUE = 100,
 };
 
-int main()
-{
+int main() {
     int i;
     int *d;
     int test_data[DATA_SIZE];
