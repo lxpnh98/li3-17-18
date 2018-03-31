@@ -3,21 +3,25 @@
 #include "tag.h"
 #include "common.h"
 
-// O Id das tags não está na struct porque ele n é necessário nas querries;
 struct tag {
-    char *tagName;
+    long id;
+    char *name;
 };
 
-TAG create_tag(char *tagName) {
+TAG create_tag(long id, char *tagName) {
     TAG t = malloc(sizeof(struct tag));
-    t->tagName = mystrdup(tagName);
-
+    t->id = id;
+    t->name = mystrdup(tagName);
     return t;
+}
+
+long get_tag_id(TAG t) {
+    return t->id;
 }
 
 char *get_tagName(TAG t) {
     if (t)
-        return t->tagName;
+        return t->name;
     return NULL;
 }
 

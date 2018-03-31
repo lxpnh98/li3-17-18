@@ -33,7 +33,22 @@ void processar_users(TAD_community com, xmlDoc * doc) {
     }
 }
 
-char **processa_tags(char *tags_str, int *ntags);
+void processar_tags(TAD_community com, xmlDoc * doc) {
+    xmlNode *node = xmlDocGetRootElement(doc);
+    for (node = node->children; node != NULL; node = node->next) {
+
+        if (node->properties == NULL)
+            continue;
+        long tag_id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
+        char *tagName = (char *)xmlGetProp(node, (const xmlChar *)"TagName");
+
+        TAG tag = create_tag(tag_id, tagName);
+
+        add_tag(com, tag);
+    }
+}
+
+LONG_list processa_tags(TAD_community com, char *tags_str);
 
 void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
@@ -45,8 +60,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         char *userDisplayName = NULL;
         char *title = NULL;
         char *tags_str = NULL;
-        int ntags = 0;
-        char **tags = NULL;
+        LONG_list tags = NULL;
         long score = 0;
 
         if (node->properties == NULL)
@@ -67,7 +81,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
             title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
             answer_count = atol((char *)xmlGetProp(node, (const xmlChar *)"AnswerCount"));
             tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
-            tags = processa_tags(tags_str, &ntags);
+            tags = processa_tags(com, tags_str);
         } else if (type == ANSWER) {
             parentId = atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
         } else {
@@ -79,50 +93,34 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, answer_count, score, CreationDate, ntags, tags);
+                                title, parentId, answer_count, score, CreationDate, tags);
         add_post(com, post);
     }
 }
 
-char **processa_tags(char *tags_str, int *ntags) {
+LONG_list processa_tags(TAD_community com, char *tags_str) {
     int n = 0;
     int i = 0;
     int j, k;
     LINKED_LIST l = init_linked_list();
     char tag[1024];
-    char **tags = NULL;
     for (j = 0; tags_str[j] != '\0'; j++) {
         if (tags_str[j] == '<') {
             for (k = 0; tags_str[j + 1] != '>'; k++, j++) {
                 tag[k] = tags_str[j + 1];
             }
-            tag[k + 1] = '\0';
+            tag[k /*+ 1*/] = '\0';
             l = add(l, tag);
             n++;
         }
     }
-    *ntags = n;
-    tags = malloc(sizeof(char *) * n);
+    LONG_list r = create_list(n);
     while (next(l)) {
-        tags[i] = get_data(l);
+        set_list(r, i, get_tag_id(get_tag_from_name(com, get_data(l))));
         i++;
         l = next(l);
     }
-    return tags;
-}
-
-void processar_tags(TAD_community com, xmlDoc * doc) {
-    xmlNode *node = xmlDocGetRootElement(doc);
-    for (node = node->children; node != NULL; node = node->next) {
-
-        if (node->properties == NULL)
-            continue;
-        char *tagName = (char *)xmlGetProp(node, (const xmlChar *)"TagName");
-
-        TAG tag = create_tag(tagName);
-
-        add_tag(com, tag);
-    }
+    return r;
 }
 
 TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarão os ficheiros do dump
@@ -138,20 +136,20 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
     processar_users(com, doc);
     xmlFreeDoc(doc);
 
-    full_path = make_path(dump_path, POSTS);
-    if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
-        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
-        exit(-1);
-    }
-    processar_posts(com, doc);
-    xmlFreeDoc(doc);
-
     full_path = make_path(dump_path, TAGS);
     if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
         fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
     processar_tags(com, doc);
+    xmlFreeDoc(doc);
+
+    full_path = make_path(dump_path, POSTS);
+    if ((doc = xmlReadFile(full_path, NULL, 0)) == NULL) {
+        fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
+        exit(-1);
+    }
+    processar_posts(com, doc);
     xmlFreeDoc(doc);
 
     xmlCleanupParser();

@@ -16,16 +16,14 @@ struct post {
     char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
     long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
     int answer_count;      /** Número de responstas, caso seja pergunta */
-    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */
+    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */ // TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     long score;            /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
-    int ntags;             /** Número de tags do post */
-    char **tags;           /** Vetor de tags do post */
+    LONG_list tags;        /** Vetor de tags do post */                           // TODO: tornar a lista de tags numa lista ligada (e incluir tamanho na lista ligada)
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags,
-                 char *tags[]) {
+                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, LONG_list tags) {
     int i;
     POST p = malloc(sizeof(struct post));
     p->id = id;
@@ -41,10 +39,10 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
         set_list(p->answers, i, -1);    // para não conter um id válido ao acaso
     p->score = score;
     p->CreationDate = CreationDate;
-    p->ntags = ntags;
-    p->tags = malloc(sizeof(char *) * ntags);
-    for (i = 0; i < ntags; i++) {
-        p->tags[i] = mystrdup(tags[i]);
+    if (tags != NULL) {
+        p->tags = clone_list(tags);
+    } else {
+        p->tags = NULL;
     }
     return p;
 }
@@ -97,11 +95,24 @@ Date get_CreationDate(POST p) {
     return d;
 }
 
-int has_tag(POST p, char *tag) {
+int has_tag(POST p, long tag_id) {
     int i;
-    for (i = 0; i < p->ntags; i++) {
-        if (strcmp(p->tags[i], tag) == 0)
+    int size = get_ntags(p);
+    for (i = 0; i < size; i++) {
+        if (get_list(p->tags, i) == tag_id)
             return 1;
     }
     return 0;
+}
+
+int get_ntags(POST p) {
+    if (p->tags) {
+        return get_list_size(p->tags);
+    } else return 0;
+}
+
+LONG_list get_tags(POST p) {
+    if (p->tags) {
+        return clone_list(p->tags);
+    } else return NULL;
 }

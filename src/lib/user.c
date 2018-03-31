@@ -40,6 +40,10 @@ long *get_10_latest_posts(USER u) {
     return r;
 }
 
+long get_rep(USER u) {
+    return u->rep;
+}
+
 char *get_display_name(USER u) {
     return mystrdup(u->display_name);
 }

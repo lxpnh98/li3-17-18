@@ -7,11 +7,13 @@ typedef struct user *USER;
 
 USER create_user(long id, char *display_name, long rep, char *bio, long *post_history);
 
+long get_id(USER u);
+
 char *get_bio(USER u);
 
 long *get_10_latest_posts(USER u);  // caso um utilizador tenha menos de 10 posts, por -1 como padding
 
-long get_id(USER u);
+long get_rep(USER u);
 
 char *get_display_name(USER u);
 

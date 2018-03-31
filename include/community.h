@@ -19,6 +19,10 @@ USER get_user(TAD_community com, long id);
 
 POST get_post(TAD_community com, long id);
 
+TAG get_tag_from_id(TAD_community com, long id);
+
+TAG get_tag_from_name(TAD_community com, char *name);
+
 char *get_author_name(TAD_community com, POST p);
 
 char *get_question_title(TAD_community com, POST p);

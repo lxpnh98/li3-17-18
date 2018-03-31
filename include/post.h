@@ -12,8 +12,7 @@ enum post_type {
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, int ntags,
-                 char *tags[]);
+                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, LONG_list tags);
 
 long get_post_id(POST p);
 
@@ -35,10 +34,14 @@ void add_answer(POST p, long id);
 
 LONG_list get_answers(POST p);
 
-int has_tag(POST p, char *tag);
+int has_tag(POST p, long tag_id);
 
 int get_type(POST p);
 
 Date get_CreationDate(POST p);
+
+int get_ntags(POST p);
+
+LONG_list get_tags(POST p);
 
 #endif

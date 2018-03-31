@@ -23,7 +23,8 @@ enum {
 struct TCD_community {
     xmlHashTable *users;
     LINKED_LIST user_list;
-    xmlHashTable *tags;
+    xmlHashTable *tags_from_id;
+    xmlHashTable *tags_from_name;
     xmlHashTable *posts;
     LINKED_LIST post_list;
 };
@@ -34,7 +35,8 @@ TAD_community init_community() {
     new->user_list = init_linked_list();
     new->posts = xmlHashCreate(INIT_POSTS);
     new->post_list = init_linked_list();
-    new->tags = xmlHashCreate(INIT_TAGS);
+    new->tags_from_id = xmlHashCreate(INIT_TAGS);
+    new->tags_from_name = xmlHashCreate(INIT_TAGS);
     return new;
 }
 
@@ -47,7 +49,8 @@ void add_user(TAD_community com, USER user) {
 }
 
 void add_tag(TAD_community com, TAG tag) {
-    xmlHashAddEntry(com->tags, (const xmlChar *)get_tagName(tag), tag);
+    xmlHashAddEntry(com->tags_from_id, (const xmlChar *)ltoa(get_tag_id(tag)), tag);
+    xmlHashAddEntry(com->tags_from_name, (const xmlChar *)get_tagName(tag), tag);
 }
 
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
@@ -68,7 +71,10 @@ void add_post(TAD_community com, POST post) {
         // Se for resposta, adicionar à lista de respostas da respetiva pergunta
         if (get_type(post) == ANSWER) {
             POST parent_post = get_post(com, get_parent_id(post));
-            add_answer(parent_post, get_post_id(post));
+            if (parent_post) {
+                add_answer(parent_post, get_post_id(post));
+            }
+            // TODO: lidar com posts cujas respetivas questões têm um id maior que o próprio, o que significa que não estão na hash table ainda.
         }
     }
     xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
@@ -81,6 +87,14 @@ USER get_user(TAD_community com, long id) {
 
 POST get_post(TAD_community com, long id) {
     return xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
+}
+
+TAG get_tag_from_id(TAD_community com, long id) {
+    return xmlHashLookup(com->tags_from_id, (const xmlChar *)ltoa(id));
+}
+
+TAG get_tag_from_name(TAD_community com, char *name) {
+    return xmlHashLookup(com->tags_from_name, (const xmlChar *)name);
 }
 
 char *get_author_name(TAD_community com, POST p) {
@@ -158,7 +172,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
 LONG_pair total_posts(TAD_community com, Date begin, Date end) {
     long questions = 0;
     long answers = 0;
-    LONG_pair l;
+    LONG_pair l = create_long_pair(questions, answers);
     LINKED_LIST x = com->post_list;
     POST p;
 
@@ -185,17 +199,20 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
  * uma lista com os IDs das perguntas ordenadas em cronologia inversa.
  */
 
-LONG_list questions_with_tag(TAD_community com, char *tag, Date begin, Date end) {
+LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date end) {
     LINKED_LIST l = init_linked_list();
     LINKED_LIST x = com->post_list;
     POST p;
     int post_count = 0;
+    TAG tag = get_tag_from_name(com, tag_name);
+    if (tag == NULL) return NULL;
+    long tag_id = get_tag_id(tag);
 
     while (next(x)) {
         p = (POST) get_data(x);
         if ((isAfter(get_CreationDate(p), begin))
             && (isBefore(get_CreationDate(p), end))) {
-            if (get_type(p) == QUESTION && has_tag(p, tag)) {
+            if (get_type(p) == QUESTION && has_tag(p, tag_id)) {
                 l = add(l, p);
                 post_count++;
             }
@@ -439,4 +456,128 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
         }
     }
     return match_id1 && match_id2;
+}
+
+/* Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
+ * identificadores das N tags mais usadas pelos N utilizadores com melhor re-
+ * putação. Em ordem decrescente do número de vezes em que a tag foi usada. */
+
+LONG_list best_rep_users(TAD_community com, int N);
+
+void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n);
+
+LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begin, Date end);
+
+int posted_by_users(POST p, int N, LONG_list best_rep);
+
+typedef struct tag_count {
+    long id;
+    char *name;
+    int count;
+} *TAG_COUNT;
+
+void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t, int n, int max_n);
+
+LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
+    LONG_list best_rep = best_rep_users(com, N);
+    LONG_list most_used = most_used_tags(com, N, best_rep, begin, end);
+    return most_used;
+}
+
+LONG_list best_rep_users(TAD_community com, int N) {
+    LONG_list result = create_list(N);
+    LINKED_LIST l = com->user_list;
+    int n = 0;
+    while (next(l)) {
+        USER u = get_data(l);
+        insert_by_rep(com, result, u, MIN2(n, N), N);
+        n++;
+        l = next(l);
+    }
+    return result;
+}
+
+void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
+    int i;
+    int rep = get_rep(u);
+    USER u2;
+    for (i = 0; i < n; i++) {
+        u2 = get_user(com, get_list(l, i));
+        if (get_rep(u2) > rep) {
+            break;
+        }
+    }
+    if (i < max_n) {
+        push_insert(l, i, get_id(u));
+    }
+}
+
+LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begin, Date end) {
+    LINKED_LIST l = com->post_list;
+    xmlHashTable *tag_count_hash = xmlHashCreate(INIT_TAGS);
+    LINKED_LIST tag_count_list = init_linked_list();
+    int i;
+
+    // Contar tags
+    while(next(l)) {
+        POST p = get_data(l);
+        Date creation_date = get_CreationDate(p);
+        if (is_between(creation_date, begin, end) && posted_by_users(p, N, best_rep)) {
+            int ntags = get_ntags(p);
+            LONG_list tags = get_tags(p);
+            TAG_COUNT t;
+            for (i = 0; i < ntags; i++) {
+                t = (TAG_COUNT)xmlHashLookup(tag_count_hash, (const xmlChar *)ltoa(get_list(tags, i)));
+                if (t == NULL) {
+                    t = malloc(sizeof(struct tag_count));
+                    t->id = get_list(tags, i);
+                    t->name = mystrdup(get_tagName(get_tag_from_id(com, get_list(tags, i))));
+                    t->count = 0;
+                    xmlHashAddEntry(tag_count_hash, (const xmlChar *)ltoa(get_list(tags, i)), t);
+                    tag_count_list = add(tag_count_list, t);
+                }
+                t->count++;
+            }
+        }
+        l = next(l);
+    }
+
+    // Inserir por ordem
+    int n = 0;
+    LONG_list r = create_list(N);
+    for (i = 0; i < N; i++) set_list(r, i, -1);
+    while (next(tag_count_list)) {
+        TAG_COUNT t = get_data(tag_count_list);
+        insert_by_tag_count(tag_count_hash, r, t, MIN2(n, N), N);
+        n++;
+        tag_count_list = next(tag_count_list);
+    }
+
+    return r;
+}
+
+int posted_by_users(POST p, int N, LONG_list best_rep) {
+    long user_id = get_user_id(p);
+    int i;
+    for (i = 0; i < N; i++) {
+        if (user_id == get_list(best_rep, i)) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t, int n, int max_n) {
+    int i;
+    int count = t->count;
+    TAG_COUNT t2;
+    for (i = 0; i < n; i++) {
+        t2 = xmlHashLookup(tag_count_hash, (const xmlChar *)ltoa(get_list(l, i)));
+        if (t2->count > count) {
+            break;
+        }
+    }
+    if (i < max_n) {
+        push_insert(l, i, t->id);
+    }
 }

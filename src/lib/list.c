@@ -35,6 +35,15 @@ void push_insert(LONG_list l, int index, long value) {
     l->list[i] = value;
 }
 
+LONG_list clone_list(LONG_list l) {
+    LONG_list r = create_list(l->size);
+    int i;
+    for (i = 0; i < l->size; i++) {
+        set_list(r, i, get_list(l, i));
+    }
+    return r;
+}
+
 void free_list(LONG_list l) {
     if (l) {
         free(l->list);
