@@ -1,0 +1,1 @@
+Determinar a complexidade das funções que implementam os queries para depois melhorar se possível.
