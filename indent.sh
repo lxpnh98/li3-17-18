@@ -21,4 +21,8 @@ indent include/* src/*.c src/lib/*.c src/test/*.c \
     --space-after-while \
     --start-left-side-of-comments \
     --swallow-optional-blank-lines \
-    --tab-size4
+    --tab-size4 \
+    -T USER \
+    -T POST \
+    -T TAG_COUNT \
+    -T xmlHashTable

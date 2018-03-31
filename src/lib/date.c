@@ -84,6 +84,5 @@ int isBefore(Date d1, Date d2) {
 }
 
 int is_between(Date d, Date begin, Date end) {
-    return isAfter(d, begin) && isBefore(d, end); // TODO: substituir todas as ocorrências destas condições por esta função
+    return isAfter(d, begin) && isBefore(d, end);   // TODO: substituir todas as ocorrências destas condições por esta função
 }
-

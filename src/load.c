@@ -109,7 +109,7 @@ LONG_list processa_tags(TAD_community com, char *tags_str) {
             for (k = 0; tags_str[j + 1] != '>'; k++, j++) {
                 tag[k] = tags_str[j + 1];
             }
-            tag[k /*+ 1*/] = '\0';
+            tag[k /*+ 1 */ ] = '\0';
             l = add(l, tag);
             n++;
         }

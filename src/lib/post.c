@@ -16,10 +16,10 @@ struct post {
     char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
     long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
     int answer_count;      /** Número de responstas, caso seja pergunta */
-    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */ // TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
+    LONG_list answers;          /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     long score;            /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
-    LONG_list tags;        /** Vetor de tags do post */                           // TODO: tornar a lista de tags numa lista ligada (e incluir tamanho na lista ligada)
+    LONG_list tags;             /** Vetor de tags do post */// TODO: tornar a lista de tags numa lista ligada (e incluir tamanho na lista ligada)
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
@@ -108,11 +108,13 @@ int has_tag(POST p, long tag_id) {
 int get_ntags(POST p) {
     if (p->tags) {
         return get_list_size(p->tags);
-    } else return 0;
+    } else
+        return 0;
 }
 
 LONG_list get_tags(POST p) {
     if (p->tags) {
         return clone_list(p->tags);
-    } else return NULL;
+    } else
+        return NULL;
 }

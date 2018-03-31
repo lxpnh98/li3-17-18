@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) {
             printf("%ld - %ld\n", get_post_id(p), get_score(p));
         }
     }
-
     // Query 7
     printf("Query 7:\n");
     ll = most_answered_questions(c, 15, d1, d2);
@@ -76,7 +75,6 @@ int main(int argc, char *argv[]) {
             printf("%ld - %s\n", get_post_id(p), get_title(p));
         }
     }
-
     // Query 8
     printf("Query 8:\n");
     Date d3;
@@ -93,7 +91,6 @@ int main(int argc, char *argv[]) {
             printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
         }
     }
-
     // Query 9
     printf("Query 9:\n");
     LONG_list l9 = both_participated(c, 29, 7, 20);
@@ -109,7 +106,6 @@ int main(int argc, char *argv[]) {
             printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d4), get_month(d4), get_year(d4));
         }
     }
-
     // Query 11
     printf("Query 11:\n");
     LONG_list l11 = most_used_best_rep(c, 100, d1, d2);
