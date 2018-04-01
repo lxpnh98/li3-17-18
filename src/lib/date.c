@@ -31,7 +31,7 @@ void free_date(Date d) {
     free(d);
 }
 
-Date cloneDate(Date d) {
+Date cloneDate(Date d) { // TODO: tornar nomes de funções e campos consistentes (sempre 'com_underscores')
     Date c = malloc(sizeof(struct date));
     c->year = get_year(d);
     c->month = get_month(d);

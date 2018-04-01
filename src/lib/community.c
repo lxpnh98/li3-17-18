@@ -41,10 +41,7 @@ TAD_community init_community() {
 }
 
 void add_user(TAD_community com, USER user) {
-    int id_len = floor(log10((double)get_id(user))) + 1;
-    char id_str[id_len];
-    sprintf(id_str, "%ld", get_id(user));
-    xmlHashAddEntry(com->users, (const xmlChar *)id_str, user);
+    xmlHashAddEntry(com->users, (const xmlChar *)ltoa(get_id(user)), user);
     com->user_list = add(com->user_list, user);
 }
 
@@ -98,11 +95,11 @@ TAG get_tag_from_name(TAD_community com, char *name) {
 }
 
 char *get_author_name(TAD_community com, POST p) {
-    int id = (int)(get_user_id(p)); // TODO: converter todos os ids para long
+    long id = get_user_id(p); // TODO: converter todos os ids para long
     if (id == -1) {
         return get_user_display_name(p);
     } else {
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(id));
+        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
         return get_display_name(u);
     }
 }
@@ -124,7 +121,7 @@ char *get_question_title(TAD_community com, POST p) {
  */
 STR_pair info_from_post(TAD_community com, long id) {
     POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
-    if (p == NULL)
+    if (p == NULL)      // TODO: fazer logging de erros (post == NULL, user == NULL, etc.)
         return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
     return pair;
@@ -169,6 +166,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
  * total de posts (identificando perguntas e respostas separadamente) neste
  * perı́odo;
  */
+
 LONG_pair total_posts(TAD_community com, Date begin, Date end) {
     long questions = 0;
     long answers = 0;

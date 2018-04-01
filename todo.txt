@@ -1,1 +1,5 @@
 Determinar a complexidade das funções que implementam os queries para depois melhorar se possível.
+Fazer documentação Doxygen.
+Fazer relatório:
+    - Descrever estrutura de dados;
+    - Descrever algoritmos de resposta às queries;

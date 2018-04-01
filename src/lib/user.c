@@ -30,7 +30,7 @@ long get_id(USER u) {
 
 char *get_bio(USER u) {
     if (u)
-        return u->bio;
+        return mystrdup(u->bio);
     return NULL;
 }
 

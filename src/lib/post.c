@@ -19,7 +19,7 @@ struct post {
     LONG_list answers;          /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     long score;            /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
-    LONG_list tags;             /** Vetor de tags do post */// TODO: tornar a lista de tags numa lista ligada (e incluir tamanho na lista ligada)
+    LONG_list tags;             /** Vetor de tags do post *///
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
@@ -118,3 +118,5 @@ LONG_list get_tags(POST p) {
     } else
         return NULL;
 }
+
+// TODO: implementar free_post()

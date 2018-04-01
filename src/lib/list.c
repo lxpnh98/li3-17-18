@@ -29,7 +29,7 @@ int get_list_size(LONG_list l) {
 
 void push_insert(LONG_list l, int index, long value) {
     int i;
-    for (i = l->size - 1; i > index; i--) {
+    for (i = l->size - 1; i > index; i--) { // TODO: usar memcpy() para copiar elementos
         l->list[i] = l->list[i - 1];
     }
     l->list[i] = value;
