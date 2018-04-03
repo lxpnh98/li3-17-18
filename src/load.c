@@ -156,3 +156,8 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
 
     return com;
 }
+
+TAD_community clean(TAD_community com) {
+    return clean_community(com);
+}
+

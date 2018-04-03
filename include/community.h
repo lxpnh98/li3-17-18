@@ -27,4 +27,6 @@ char *get_author_name(TAD_community com, POST p);
 
 char *get_question_title(TAD_community com, POST p);
 
+TAD_community clean_community(TAD_community com);
+
 #endif

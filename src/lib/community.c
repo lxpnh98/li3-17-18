@@ -581,3 +581,13 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
         push_insert(l, i, t->id);
     }
 }
+
+TAD_community clean_community(TAD_community com) {
+    free_linked_list(com->user_list);
+    free_linked_list(com->post_list);
+    xmlHashFree(com->users, NULL);
+    xmlHashFree(com->tags_from_id, NULL);
+    xmlHashFree(com->tags_from_name, NULL);
+    xmlHashFree(com->posts, NULL);
+    return com;
+}

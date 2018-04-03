@@ -121,5 +121,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    clean(c);
+
     return 0;
 }
