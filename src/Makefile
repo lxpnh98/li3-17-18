@@ -25,3 +25,10 @@ clean:
 	rm obj/*.o
 	rm obj/lib/*.o
 	rm program
+	rm -rf ../doc/html ../doc/latex ../doc/Doxyfile
+
+doc:
+	doxygen -g
+	doxygen
+	mv Doxyfile html/ latex/ ../doc/
+	touch doc

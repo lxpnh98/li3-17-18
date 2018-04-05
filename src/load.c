@@ -1,3 +1,8 @@
+/**
+@file load.c
+Funções que carregam e processam os dados nos ficheiros XML.
+*/
+
 #include <stdlib.h>             // atoi
 #include <libxml/parser.h>
 #include <string.h>
@@ -10,10 +15,19 @@
 #include "post.h"
 #include "linked_list.h"
 
+/**
+\brief Função que inicializa uma variável do tipo TAD_community.
+@returns TAD_community Nova inicialização.
+*/
 TAD_community init() {
     return init_community();
 }
 
+/**
+\brief Função que processa os dados do ficheiro Users.xml.
+@param com Estrutura onde vai ser guardada a informação.
+@param doc Árvore que representa o ficheiro XML.
+*/
 void processar_users(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
@@ -33,6 +47,11 @@ void processar_users(TAD_community com, xmlDoc * doc) {
     }
 }
 
+/**
+\brief Função que processa os dados do ficheiro Tags.xml.
+@param com Estrutura onde vai ser guardada a informação.
+@param doc Árvore que representa o ficheiro XML.
+*/
 void processar_tags(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
@@ -50,6 +69,11 @@ void processar_tags(TAD_community com, xmlDoc * doc) {
 
 LONG_list processa_tags(TAD_community com, char *tags_str);
 
+/**
+\brief Função que processa os dados do ficheiro Posts.xml.
+@param com Estrutura onde vai ser guardada a informação.
+@param doc Árvore que representa o ficheiro XML.
+*/
 void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
@@ -98,6 +122,12 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
     }
 }
 
+/**
+\brief Função que separa a tag String numa lista de tags.
+@param com Estrutura onde está guardada a informação.
+@param tags_str String contendo tags de um certo post.
+@returns LONG_list Lista dos ids das respetivas tags.
+*/
 LONG_list processa_tags(TAD_community com, char *tags_str) {
     int n = 0;
     int i = 0;
@@ -123,7 +153,13 @@ LONG_list processa_tags(TAD_community com, char *tags_str) {
     return r;
 }
 
-TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarão os ficheiros do dump
+/**
+\brief Função que carrega toda a informação necessária.
+@param com Estrutura onde vai ser guardada a informação.
+@param dump_path Diretoria onde estão guardados os ficheiros do dump.
+@returns TAD_community Estrutura com a informação já armazenada.
+*/
+TAD_community load(TAD_community com, char *dump_path)
 {
     xmlDoc *doc = NULL;
     char *full_path;
@@ -157,6 +193,11 @@ TAD_community load(TAD_community com, char *dump_path)  //diretoria onde estarã
     return com;
 }
 
+/**
+\brief Função que liberta a memória ocupada pela estrutura de dados.
+@param com Estrutura onde está guardada a informação.
+@returns TAD_community Estrutura passada como argumento.
+*/
 TAD_community clean(TAD_community com) {
     return clean_community(com);
 }
