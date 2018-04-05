@@ -1,5 +1,6 @@
 #ifndef __PAIR_H__
 #define __PAIR_H__
+
 typedef struct str_pair *STR_pair;
 
 // STR_pair definitions

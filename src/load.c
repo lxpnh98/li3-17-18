@@ -72,7 +72,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         if (type == QUESTION && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
             AcceptedAnswer = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
         }
-        if (xmlGetProp(node, (const xmlChar *)"OwnerUserId")) {
+        if (xmlGetProp(node, (const xmlChar *)"OwnerUserId")) { // TODO: condição redundante nos ficheiros backup dos professores (fazer download)
             userId = atol((char *)xmlGetProp(node, (const xmlChar *)"OwnerUserId"));
         } else {
             userDisplayName = ((char *)xmlGetProp(node, (const xmlChar *)"OwnerDisplayName"));

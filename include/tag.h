@@ -1,5 +1,6 @@
 #ifndef __TAG__
 #define __TAG__
+
 typedef struct tag *TAG;
 
 TAG create_tag(long id, char *tagName);
