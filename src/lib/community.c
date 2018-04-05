@@ -590,6 +590,51 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
     return match_id1 && match_id2;
 }
 
+/* Interrogação 10: Dado o ID de uma pergunta, obter a melhor resposta. Para isso
+ * deverá usar a função de média ponderada abaixo:
+ * (Scr*0.45) + (Rep*0.25) + (Fav*0.2) + (Comt*0.1); */
+
+long get_reputation(TAD_community com, long id);
+
+long better_answer(TAD_community com, long parent_id) {
+    LINKED_LIST x = com->post_list;
+    POST p;
+    long media,scr,rep,fav,comt;
+    long best_media = 0;
+    long best_answer = -1;
+    while (next(x)) {
+        p = (POST)get_data(x);
+        if (get_type(p) == ANSWER && get_parent_id(p)==parent_id) {
+            scr = get_score(p);
+            rep = get_reputation(com, get_user_id(p));
+            fav = 0; //TODO: contar este campo, depois de esclacer o conteudo;
+            comt = get_comment_count(p);
+            media = ((scr*0.45) + (rep*0.25) + (fav*0.2) + (comt*0.1));
+            
+            if(media > best_media) {
+                best_media = media;
+                best_answer = get_post_id(p);
+            }
+        }
+        x = next(x);
+    }
+    return best_answer;
+}
+
+long get_reputation(TAD_community com, long id) {
+    LINKED_LIST x = com->user_list;
+    USER u;
+    long rep = 0;
+    while(next(x)) {
+        u = (USER)get_data(x);
+        if(get_id(u) == id) {
+            rep = get_rep(u);
+            return rep;
+        }
+        x = next(x);
+    }
+}
+
 /* Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
  * identificadores das N tags mais usadas pelos N utilizadores com melhor re-
  * putação. Em ordem decrescente do número de vezes em que a tag foi usada. */
