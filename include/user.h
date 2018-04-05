@@ -1,7 +1,7 @@
-#include "list.h"
-
 #ifndef __USER__
 #define __USER__
+
+#include "list.h"
 
 typedef struct user *USER;
 
