@@ -592,47 +592,41 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
 
 /* Interrogação 10: Dado o ID de uma pergunta, obter a melhor resposta. Para isso
  * deverá usar a função de média ponderada abaixo:
- * (Scr*0.45) + (Rep*0.25) + (Fav*0.2) + (Comt*0.1); */
+ * (Scr*0.45) + (Rep*0.25) + (Vot*0.2) + (Comt*0.1); */
 
 long get_reputation(TAD_community com, long id);
 
-long better_answer(TAD_community com, long parent_id) {
-    LINKED_LIST x = com->post_list;
-    POST p;
-    long media,scr,rep,fav,comt;
+long better_answer(TAD_community com, long id) {
+    POST p,a;
+    int i,answer_count;
+    long media,scr,rep,vot,comt;
     long best_media = 0;
     long best_answer = -1;
-    while (next(x)) {
-        p = (POST)get_data(x);
-        if (get_type(p) == ANSWER && get_parent_id(p)==parent_id) {
-            scr = get_score(p);
-            rep = get_reputation(com, get_user_id(p));
-            fav = 0; //TODO: contar este campo, depois de esclacer o conteudo;
-            comt = get_comment_count(p);
-            media = ((scr*0.45) + (rep*0.25) + (fav*0.2) + (comt*0.1));
+    p = get_post(com, id);
+    answer_count = get_answer_count(p);
+    LONG_list x = get_answers(p);
+    for(i = 0; i < answer_count && (get_list(x,i) != -1); i++) {
+        a = get_post(com, get_list(x,i));
+        scr = get_score(a);
+        rep = get_reputation(com, get_user_id(a));
+        vot = 0; //TODO: contar este campo, depois de esclacer o conteudo;
+        comt = get_comment_count(a);
+        media = ((scr*0.45) + (rep*0.25) + (vot*0.2) + (comt*0.1));
             
-            if(media > best_media) {
+        if(media > best_media) {
                 best_media = media;
-                best_answer = get_post_id(p);
-            }
+                best_answer = get_post_id(a);
         }
-        x = next(x);
     }
     return best_answer;
 }
 
 long get_reputation(TAD_community com, long id) {
-    LINKED_LIST x = com->user_list;
     USER u;
     long rep = 0;
-    while(next(x)) {
-        u = (USER)get_data(x);
-        if(get_id(u) == id) {
-            rep = get_rep(u);
-            return rep;
-        }
-        x = next(x);
-    }
+    u = get_user(com,id);
+    rep = get_rep(u);
+    return rep;
 }
 
 /* Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
