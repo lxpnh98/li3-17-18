@@ -8,19 +8,32 @@
 #include "community.h"
 
 struct post {
-    long id;               /** Id do post */
-    enum post_type type;   /** Id pergunta = 1; Id resposta = 2 */
-    long AcceptedAnswer;   /** Id da resposta aceite; -1 em caso de ser uma pergunta */
-    long userId;           /** Id do User criador da pergunta/resposta */
-    char *userDisplayName; /** Nomde do utilizador, caso não tenha user Id */
-    char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
-    long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
-    int answer_count;      /** Número de responstas, caso seja pergunta */
-    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
-    long score;            /** Score dos posts */
-    char *CreationDate;    /** String da data criação do post */
-    LONG_list tags;        /** Vetor de tags do post */
-    long comment_count;	   /** Número de comentários */
+    /** \brief Id do post */
+    long id;
+    /** \brief Id pergunta = 1; Id resposta = 2 */
+    enum post_type type;
+    /** \brief Id da resposta aceite; -1 em caso de ser uma pergunta */
+    long AcceptedAnswer;
+    /** \brief Id do User criador da pergunta/resposta */
+    long userId;
+    /** \brief Nomde do utilizador, caso não tenha user Id */
+    char *userDisplayName;
+    /** \brief Titulo da pergunta, em caso de ser resposta é NULL */
+    char *title;
+    /** \brief No caso de ser resposta, id do pai, caso contrário -1 */
+    long parentId;
+    /** \brief Número de responstas, caso seja pergunta */
+    int answer_count;
+    /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (\brief e incluir tamanho na lista ligada)
+    LONG_list answers;
+    /** \brief Score dos posts */
+    long score;
+    /** \brief String da data criação do post */
+    char *CreationDate;
+    /** \brief Vetor de tags do post */
+    LONG_list tags;
+    /** \brief Número de comentários */
+    long comment_count;
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
@@ -123,7 +136,7 @@ LONG_list get_tags(POST p) {
 }
 
 long get_comment_count(POST p) {
-	return p->comment_count;
+    return p->comment_count;
 }
 
 // TODO: implementar free_post()

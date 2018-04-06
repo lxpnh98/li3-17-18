@@ -10,7 +10,7 @@ Funções que operam sobre as Tags.
 
 /** \brief Estrutura que armazena a informação da tag */
 struct tag {
-	/** \brief Id da tag */
+    /** \brief Id da tag */
     long id;
     /** \brief String do Nome da tag */
     char *name;

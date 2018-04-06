@@ -113,7 +113,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
             // TODO: processar outros tipos de posts (3,4,5,6,7)
             continue;
         }
-        
+
         score = atol((char *)xmlGetProp(node, (const xmlChar *)"Score"));
         char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
         comment_count = atol((char *)xmlGetProp(node, (const xmlChar *)"CommentCount"));
@@ -162,8 +162,7 @@ LONG_list processa_tags(TAD_community com, char *tags_str) {
 @param dump_path Diretoria onde estão guardados os ficheiros do dump.
 @returns TAD_community Estrutura com a informação já armazenada.
 */
-TAD_community load(TAD_community com, char *dump_path)
-{
+TAD_community load(TAD_community com, char *dump_path) {
     xmlDoc *doc = NULL;
     char *full_path;
 
@@ -204,4 +203,3 @@ TAD_community load(TAD_community com, char *dump_path)
 TAD_community clean(TAD_community com) {
     return clean_community(com);
 }
-

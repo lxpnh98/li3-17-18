@@ -54,6 +54,7 @@ TAD_community init_community() {
     new->tags_from_name = xmlHashCreate(INIT_TAGS);
     return new;
 }
+
 /**
 \brief Função que adiciona um utilizador.
 @param com Estrutura onde vai ser guardada a informação.
@@ -154,7 +155,7 @@ TAG get_tag_from_name(TAD_community com, char *name) {
 @returns char String do nome do autor.
 */
 char *get_author_name(TAD_community com, POST p) {
-    long id = get_user_id(p); // TODO: converter todos os ids para long
+    long id = get_user_id(p);   // TODO: converter todos os ids para long
     if (id == -1) {
         return get_user_display_name(p);
     } else {
@@ -190,7 +191,7 @@ char *get_question_title(TAD_community com, POST p) {
 */
 STR_pair info_from_post(TAD_community com, long id) {
     POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
-    if (p == NULL)      // TODO: fazer logging de erros (post == NULL, user == NULL, etc.)
+    if (p == NULL)              // TODO: fazer logging de erros (post == NULL, user == NULL, etc.)
         return NULL;
     STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
     return pair;
@@ -220,7 +221,6 @@ LONG_list top_most_active(TAD_community com, int N) {
     return list;
 }
 
-
 /**
 \brief Função que insere o id de um utilizador, por ordem decrescente do número de posts, numa lista.
 @param com Estrutura onde está guardada a informação.
@@ -244,7 +244,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
 }
 
 /**
-\brief Função que responde à interrogação 3: Dado um intervalo de tempo arbitrário, 
+\brief Função que responde à interrogação 3: Dado um intervalo de tempo arbitrário,
  * obter o número total de posts (identificando perguntas e respostas separadamente) neste perı́odo.
 @param com Estrutura onde está guardada a informação.
 @param begin Data de início da contagem.
@@ -557,7 +557,7 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2);
 @param com Estrutura onde está guardada a informação.
 @param id1 Id de um utilizador.
 @param id2 Id de um utilizador.
-@param N Número pretendido de perguntas. 
+@param N Número pretendido de perguntas.
 @returns LONG_list Lista com os ids das N perguntas em que os dois utilizadores participaram.
 */
 LONG_list both_participated(TAD_community com, long id1, long id2, int N) {
@@ -582,7 +582,7 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N) {
 /**
 \brief Função que verifica se dois dados utilizadores participam num dado post.
 @param com Estrutura onde está guardada a informação.
-@param p Post. 
+@param p Post.
 @param id1 Id de um utilizador.
 @param id2 Id de um utilizador.
 @returns int Inteiro com valor boleano.
@@ -626,25 +626,25 @@ long get_reputation(TAD_community com, long id);
 @returns long Id da melhor resposta à pergunta.
 */
 long better_answer(TAD_community com, long id) {
-    POST p,a;
-    int i,answer_count;
-    long media,scr,rep,vot,comt;
+    POST p, a;
+    int i, answer_count;
+    long media, scr, rep, vot, comt;
     long best_media = 0;
     long best_answer = -1;
     p = get_post(com, id);
     answer_count = get_answer_count(p);
     LONG_list x = get_answers(p);
-    for(i = 0; i < answer_count && (get_list(x,i) != -1); i++) {
-        a = get_post(com, get_list(x,i));
+    for (i = 0; i < answer_count && (get_list(x, i) != -1); i++) {
+        a = get_post(com, get_list(x, i));
         scr = get_score(a);
         rep = get_reputation(com, get_user_id(a));
-        vot = 0; //TODO: contar este campo, depois de esclacer o conteudo;
+        vot = 0;                //TODO: contar este campo, depois de esclacer o conteudo;
         comt = get_comment_count(a);
-        media = ((scr*0.45) + (rep*0.25) + (vot*0.2) + (comt*0.1));
-            
-        if(media > best_media) {
-                best_media = media;
-                best_answer = get_post_id(a);
+        media = ((scr * 0.45) + (rep * 0.25) + (vot * 0.2) + (comt * 0.1));
+
+        if (media > best_media) {
+            best_media = media;
+            best_answer = get_post_id(a);
         }
     }
     return best_answer;
@@ -659,7 +659,7 @@ long better_answer(TAD_community com, long id) {
 long get_reputation(TAD_community com, long id) {
     USER u;
     long rep = 0;
-    u = get_user(com,id);
+    u = get_user(com, id);
     rep = get_rep(u);
     return rep;
 }
@@ -701,7 +701,7 @@ LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
 }
 
 /**
-\brief Função que retorna uma lista dos N utilizadores com melhor reputação. 
+\brief Função que retorna uma lista dos N utilizadores com melhor reputação.
 @param com Estrutura onde está guardada a informação.
 @param N Número pretendido de utilizadores.
 @returns LONG_list Lista com os ids dos N utilizadores com melhor reputação.
@@ -743,7 +743,7 @@ void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
 }
 
 /**
-\brief Função que retorna uma lista das N tags mais usadas pelos utilizadores com melhor reputação. 
+\brief Função que retorna uma lista das N tags mais usadas pelos utilizadores com melhor reputação.
 @param com Estrutura onde está guardada a informação.
 @param N Número pretendido de tags.
 @param best_rep Lista dos ids dos N utilizadores com melhor reputação.
