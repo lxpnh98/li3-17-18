@@ -1,3 +1,8 @@
+/**
+@file tag.h
+Definição de funções acesso à estrutura de dados TAG.
+*/
+
 #ifndef __TAG__
 #define __TAG__
 

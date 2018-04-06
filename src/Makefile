@@ -25,7 +25,7 @@ clean:
 	rm obj/*.o
 	rm obj/lib/*.o
 	rm program
-	rm -rf ../doc/html ../doc/latex ../doc/Doxyfile
+	rm -rf ../doc/html ../doc/latex ../doc/Doxyfile doc
 
 doc:
 	doxygen -g

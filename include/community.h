@@ -1,3 +1,8 @@
+/**
+@file community.h
+Definição de funções acesso à estrutura de dados principal.
+*/
+
 #ifndef __COMMUNITY__
 #define __COMMUNITY__
 

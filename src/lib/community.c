@@ -24,7 +24,7 @@ enum {
     INIT_POSTS = 10,
     INIT_TAGS = 10,
 };
-/** \brief Estrutura que armazena uma posição */
+/** \brief Estrutura que armazena a informação */
 struct TCD_community {
     /** \brief Tabela de hash dos utilizadores */
     xmlHashTable *users;
@@ -501,6 +501,11 @@ LONG_list contains_word(TAD_community com, char *word, int N) {
     return r;
 }
 
+/**
+\brief Função que separa a String do título numa lista ligada.
+@param title Título de uma pergunta.
+@returns LINKED_LIST Lista ligada com os caracteres do título passado como argumento.
+*/
 LINKED_LIST separate_title(char *title) {
     int i = 0;
     int r = 0;
@@ -523,6 +528,12 @@ LINKED_LIST separate_title(char *title) {
     return titulo;
 }
 
+/**
+\brief Função que separa a String do título numa lista ligada.
+@param LINKED_LIST Lista ligada com o título de uma pergunta.
+@param word Palavra a procurar.
+@returns int Inteiro com valor boleano.
+*/
 int find_word(LINKED_LIST title, char *word) {
     char *titulo;
     while (next(title)) {
@@ -536,13 +547,19 @@ int find_word(LINKED_LIST title, char *word) {
     return 0;
 }
 
-/* Interrogação 9: Dados os IDs de dois utilizadores, devolver as últimas
- * N perguntas (cronologia inversa) em que participaram dois utilizadores es-
- * pecı́ficos. Note que os utilizadores podem ter participado via pergunta ou
- * respostas; */
-
 int both_users_participate(TAD_community com, POST p, long id1, long id2);
 
+/**
+\brief Função que responde à Interrogação 9: Dados os IDs de dois utilizadores, devolver as últimas
+ * N perguntas (cronologia inversa) em que participaram dois utilizadores es-
+ * pecı́ficos. Note que os utilizadores podem ter participado via pergunta ou
+ * respostas.
+@param com Estrutura onde está guardada a informação.
+@param id1 Id de um utilizador.
+@param id2 Id de um utilizador.
+@param N Número pretendido de perguntas. 
+@returns LONG_list Lista com os ids das N perguntas em que os dois utilizadores participaram.
+*/
 LONG_list both_participated(TAD_community com, long id1, long id2, int N) {
     LINKED_LIST x = com->post_list;
     POST p;
@@ -562,6 +579,14 @@ LONG_list both_participated(TAD_community com, long id1, long id2, int N) {
     return r;
 }
 
+/**
+\brief Função que verifica se dois dados utilizadores participam num dado post.
+@param com Estrutura onde está guardada a informação.
+@param p Post. 
+@param id1 Id de um utilizador.
+@param id2 Id de um utilizador.
+@returns int Inteiro com valor boleano.
+*/
 int both_users_participate(TAD_community com, POST p, long id1, long id2) {
     assert(get_type(p) == QUESTION);
     int i, answer_count;
@@ -590,10 +615,6 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
     return match_id1 && match_id2;
 }
 
-/* Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
- * identificadores das N tags mais usadas pelos N utilizadores com melhor re-
- * putação. Em ordem decrescente do número de vezes em que a tag foi usada. */
-
 LONG_list best_rep_users(TAD_community com, int N);
 
 void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n);
@@ -602,20 +623,40 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
 
 int posted_by_users(POST p, int N, LONG_list best_rep);
 
+/** \brief Estrutura que armazena a informação de uma tag e as vezes que esta foi usada */
 typedef struct tag_count {
+    /** \brief Id da tag */
     long id;
+    /** \brief String do Nome da tag */
     char *name;
+    /** \brief Número de vezes que a tag foi usada */
     int count;
 } *TAG_COUNT;
 
 void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t, int n, int max_n);
 
+/**
+\brief Função que responde à Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
+ * identificadores das N tags mais usadas pelos N utilizadores com melhor reputação.
+ * Em ordem decrescente do número de vezes em que a tag foi usada.
+@param com Estrutura onde está guardada a informação.
+@param N Número pretendido de perguntas.
+@param begin Data de início da contagem.
+@param end Data do fim da contagem.
+@returns LONG_list Lista com os ids das N tags mais usadas pelos N utilizadores com melhor reputação.
+*/
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
     LONG_list best_rep = best_rep_users(com, N);
     LONG_list most_used = most_used_tags(com, N, best_rep, begin, end);
     return most_used;
 }
 
+/**
+\brief Função que retorna uma lista dos N utilizadores com melhor reputação. 
+@param com Estrutura onde está guardada a informação.
+@param N Número pretendido de utilizadores.
+@returns LONG_list Lista com os ids dos N utilizadores com melhor reputação.
+*/
 LONG_list best_rep_users(TAD_community com, int N) {
     LONG_list result = create_list(N);
     LINKED_LIST l = com->user_list;
@@ -629,6 +670,14 @@ LONG_list best_rep_users(TAD_community com, int N) {
     return result;
 }
 
+/**
+\brief Função que insere um utilizador numa lista por ordem decrescente de reputação.
+@param com Estrutura onde está guardada a informação.
+@param l Lista onde o id do post será inserido.
+@param u Utilizador.
+@param n Atual número de elementos na lista.
+@param max_n Número máximo de elementos na lista.
+*/
 void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
     int i;
     int rep = get_rep(u);
@@ -644,6 +693,15 @@ void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
     }
 }
 
+/**
+\brief Função que retorna uma lista das N tags mais usadas pelos utilizadores com melhor reputação. 
+@param com Estrutura onde está guardada a informação.
+@param N Número pretendido de tags.
+@param best_rep Lista dos ids dos N utilizadores com melhor reputação.
+@param begin Data de início da contagem.
+@param end Data do fim da contagem.
+@returns LONG_list Lista com os ids dos N utilizadores com melhor reputação.
+*/
 LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begin, Date end) {
     LINKED_LIST l = com->post_list;
     xmlHashTable *tag_count_hash = xmlHashCreate(INIT_TAGS);
@@ -689,6 +747,13 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
     return r;
 }
 
+/**
+\brief Função que verifica se um dado post foi publicado por algum dos N utilizadores com melhor reputação.
+@param p Post.
+@param N Número de elementos da lista.
+@param best_rep Lista dos ids dos N utilizadores com melhor reputação.
+@returns int Inteiro com valor boleano.
+*/
 int posted_by_users(POST p, int N, LONG_list best_rep) {
     long user_id = get_user_id(p);
     int i;
@@ -700,6 +765,14 @@ int posted_by_users(POST p, int N, LONG_list best_rep) {
     return 0;
 }
 
+/**
+\brief Função que insere uma tag numa lista por ordem decrescente de utilização.
+@param tag_count_hash Tabela de hash com os ids das tags.
+@param l Lista onde o id da tag será inserido.
+@param t Estrutura de uma tag com contagem.
+@param n Atual número de elementos na lista.
+@param max_n Número máximo de elementos na lista.
+*/
 void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t, int n, int max_n) {
     int i;
     int count = t->count;
@@ -715,6 +788,11 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
     }
 }
 
+/**
+\brief Função que liberta a memória ocupada pela estrutura de dados.
+@param com Estrutura onde está guardada a informação.
+@returns TAD_community Estrutura passada como argumento.
+*/
 TAD_community clean_community(TAD_community com) {
     free_linked_list(com->user_list);
     free_linked_list(com->post_list);

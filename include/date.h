@@ -1,3 +1,8 @@
+/**
+@file date.h
+Definição de funções acesso à estrutura de dados Date.
+*/
+
 #ifndef __DATE_H_
 #define __DATE_H_
 
