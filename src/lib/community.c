@@ -615,6 +615,55 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
     return match_id1 && match_id2;
 }
 
+long get_reputation(TAD_community com, long id);
+
+/**
+\brief Função que responde à Interrogação 10: Dado o ID de uma pergunta, obter a melhor resposta. Para isso
+ * deverá usar a função de média ponderada abaixo:
+ * (Scr*0.45) + (Rep*0.25) + (Vot*0.2) + (Comt*0.1).
+@param com Estrutura onde está guardada a informação.
+@param id Id da pergunta.
+@returns long Id da melhor resposta à pergunta.
+*/
+long better_answer(TAD_community com, long id) {
+    POST p,a;
+    int i,answer_count;
+    long media,scr,rep,vot,comt;
+    long best_media = 0;
+    long best_answer = -1;
+    p = get_post(com, id);
+    answer_count = get_answer_count(p);
+    LONG_list x = get_answers(p);
+    for(i = 0; i < answer_count && (get_list(x,i) != -1); i++) {
+        a = get_post(com, get_list(x,i));
+        scr = get_score(a);
+        rep = get_reputation(com, get_user_id(a));
+        vot = 0; //TODO: contar este campo, depois de esclacer o conteudo;
+        comt = get_comment_count(a);
+        media = ((scr*0.45) + (rep*0.25) + (vot*0.2) + (comt*0.1));
+            
+        if(media > best_media) {
+                best_media = media;
+                best_answer = get_post_id(a);
+        }
+    }
+    return best_answer;
+}
+
+/**
+\brief Função que retorna a reputação de um dado utilizador.
+@param com Estrutura onde está guardada a informação.
+@param id Id do Utilizador.
+@returns long Reputação do utilizador.
+*/
+long get_reputation(TAD_community com, long id) {
+    USER u;
+    long rep = 0;
+    u = get_user(com,id);
+    rep = get_rep(u);
+    return rep;
+}
+
 LONG_list best_rep_users(TAD_community com, int N);
 
 void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n);

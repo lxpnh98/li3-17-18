@@ -5,12 +5,12 @@
 #include "common.h"
 
 struct user {
-    long id;    /** Id do utilizador */
-    long rep;   /** Reputação do utilizador */
+    long id;            /** Id do utilizador */
+    long rep;           /** Reputação do utilizador */
     char *display_name; /** Nome de ecrãn do utilizador */
-    char *bio;      /** Biografia do utilizador */
-    long posts[10]; /** Últimos 10 posts do utilizador */
-    int post_count; /** Número de posts submetidos */
+    char *bio;          /** Biografia do utilizador */
+    long posts[10];     /** Últimos 10 posts do utilizador */
+    int post_count;     /** Número de posts submetidos */
 };
 
 USER create_user(long id, char *display_name, long rep, char *bio, long *post_history) {

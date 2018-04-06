@@ -16,14 +16,16 @@ struct post {
     char *title;           /** Titulo da pergunta, em caso de ser resposta é NULL */
     long parentId;         /** No caso de ser resposta, id do pai, caso contrário -1 */
     int answer_count;      /** Número de responstas, caso seja pergunta */
-    LONG_list answers;          /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
+    LONG_list answers;     /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     long score;            /** Score dos posts */
     char *CreationDate;    /** String da data criação do post */
-    LONG_list tags;             /** Vetor de tags do post *///
+    LONG_list tags;        /** Vetor de tags do post */
+    long comment_count;	   /** Número de comentários */
 };
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
-                 char *userDisplayName, char *title, long parentId, int answer_count, long score, char *CreationDate, LONG_list tags) {
+                 char *userDisplayName, char *title, long parentId, int answer_count,
+                 long score, char *CreationDate, LONG_list tags, long comment_count) {
     int i;
     POST p = malloc(sizeof(struct post));
     p->id = id;
@@ -44,6 +46,7 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     } else {
         p->tags = NULL;
     }
+    p->comment_count = comment_count;
     return p;
 }
 
@@ -117,6 +120,10 @@ LONG_list get_tags(POST p) {
         return clone_list(p->tags);
     } else
         return NULL;
+}
+
+long get_comment_count(POST p) {
+	return p->comment_count;
 }
 
 // TODO: implementar free_post()

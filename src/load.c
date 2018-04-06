@@ -86,6 +86,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         char *tags_str = NULL;
         LONG_list tags = NULL;
         long score = 0;
+        long comment_count;
 
         if (node->properties == NULL)
             continue;
@@ -112,12 +113,14 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
             // TODO: processar outros tipos de posts (3,4,5,6,7)
             continue;
         }
-
+        
         score = atol((char *)xmlGetProp(node, (const xmlChar *)"Score"));
         char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
+        comment_count = atol((char *)xmlGetProp(node, (const xmlChar *)"CommentCount"));
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, answer_count, score, CreationDate, tags);
+                                title, parentId, answer_count, score, CreationDate, tags,
+                                comment_count);
         add_post(com, post);
     }
 }
