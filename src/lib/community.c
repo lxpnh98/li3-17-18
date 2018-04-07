@@ -638,7 +638,7 @@ long better_answer(TAD_community com, long id) {
         a = get_post(com, get_list(x, i));
         scr = get_score(a);
         rep = get_reputation(com, get_user_id(a));
-        vot = 0;                //TODO: contar este campo, depois de esclacer o conteudo;
+        vot = scr;
         comt = get_comment_count(a);
         media = ((scr * 0.45) + (rep * 0.25) + (vot * 0.2) + (comt * 0.1));
 
