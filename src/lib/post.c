@@ -24,7 +24,7 @@ struct post {
     long parentId;
     /** \brief Número de responstas, caso seja pergunta */
     int answer_count;
-    /** Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (\brief e incluir tamanho na lista ligada)
+    /** \brief Lista dos ids das respostas, caso seja pergunta */// TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     LONG_list answers;
     /** \brief Score dos posts */
     long score;

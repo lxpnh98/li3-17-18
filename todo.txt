@@ -3,3 +3,5 @@ Fazer documentação Doxygen.
 Fazer relatório:
     - Descrever estrutura de dados;
     - Descrever algoritmos de resposta às queries;
+    - Descrever ferramentas utlizadas e resultados da sua utilização (indent, valgrind, doxygen)
+Corrigir problemas de memória (verificar com o valgrind)
