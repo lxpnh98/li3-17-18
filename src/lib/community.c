@@ -78,11 +78,15 @@ void add_tag(TAD_community com, TAG tag) {
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
 
 /**
-\brief Função que adiciona um post.
+\brief Função que adiciona um post à estrutura de dados, atualizando a
+ * informação do respetivo utilizador e pergunta, se for resposta. Neste último
+ * caso, se a pergunta não for encontrada na estrutura de dados, a resposta é
+ * adicionada a uma lista para ser adicionada posteriormente.
 @param com Estrutura onde vai ser guardada a informação.
 @param post Post a adicionar.
+@param answers_to_add Posts cujas respetivas questões têm um id maior que o próprio - respostas têm que ser adicionadas no fim
 */
-void add_post(TAD_community com, POST post) {
+void add_post(TAD_community com, POST post, LINKED_LIST *answers_to_add) {
     LONG_list l;
     int user_id = get_user_id(post);
     if (user_id > 0) {
@@ -100,8 +104,9 @@ void add_post(TAD_community com, POST post) {
             POST parent_post = get_post(com, get_parent_id(post));
             if (parent_post) {
                 add_answer(parent_post, get_post_id(post));
+            } else {
+                *answers_to_add = add(*answers_to_add, post);
             }
-            // TODO: lidar com posts cujas respetivas questões têm um id maior que o próprio, o que significa que não estão na hash table ainda.
         }
     }
     xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);

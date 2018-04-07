@@ -76,6 +76,7 @@ LONG_list processa_tags(TAD_community com, char *tags_str);
 */
 void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
+    LINKED_LIST answers_to_add = init_linked_list();
     for (node = node->children; node != NULL; node = node->next) {
         long AcceptedAnswer = -1;
         long userId = -1;
@@ -121,7 +122,15 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
                                 title, parentId, answer_count, score, CreationDate, tags,
                                 comment_count);
-        add_post(com, post);
+        add_post(com, post, &answers_to_add);
+    }
+
+    // adicionar respostas cuja pergunta tem um id maior que o seu
+    while(next(answers_to_add)) {
+        POST p = get_data(answers_to_add);
+        POST parent_post = get_post(com, get_parent_id(p));
+        add_answer(parent_post, get_post_id(p));
+        answers_to_add = next(answers_to_add);
     }
 }
 
