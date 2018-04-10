@@ -26,3 +26,6 @@ indent include/* src/*.c src/lib/*.c src/test/*.c \
     -T POST \
     -T TAG_COUNT \
     -T xmlHashTable
+
+# Remove trailing whitespace
+sed -i 's/[ \t]*$//' include/* src/*.c src/lib/*.c src/test/*.c

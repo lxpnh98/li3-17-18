@@ -9,6 +9,7 @@ Definição de funções acesso à estrutura de dados principal.
 #include "user.h"
 #include "tag.h"
 #include "post.h"
+#include "linked_list.h"
 
 typedef struct TCD_community *TAD_community;
 
@@ -18,7 +19,7 @@ void add_user(TAD_community com, USER user);
 
 void add_tag(TAD_community com, TAG tag);
 
-void add_post(TAD_community com, POST post);
+void add_post(TAD_community com, POST post, LINKED_LIST *answers_to_add);
 
 USER get_user(TAD_community com, long id);
 

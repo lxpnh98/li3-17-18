@@ -35,7 +35,7 @@ char *mystrdup(const char *s) {
  *
  * \return novo string com o path completo
  */
-char *make_path(const char *dir, enum dump_type t) { // TODO: fazer make_path() funcionar com um path sem '/' no fim.
+char *make_path(const char *dir, enum dump_type t) {    // TODO: fazer make_path() funcionar com um path sem '/' no fim.
     char *d = dump_file_name[t];
     char *r = malloc(strlen(dir) + strlen(d) + 1);
     sprintf(r, "%s%s", dir, d);

@@ -63,8 +63,8 @@ int main(int argc, char *argv[]) {
     // Query 5
     printf("Query 5:\n");
     USER u2;
-    u2 = get_user_info(c, 10); 
-   printf("%ld - %s\n", get_id(u2), get_bio(u2));
+    u2 = get_user_info(c, 10);
+    printf("%ld - %s\n", get_id(u2), get_bio(u2));
 
     // Query 6
     printf("Query 6:\n");
@@ -100,7 +100,6 @@ int main(int argc, char *argv[]) {
             printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
         }
     }
-    
     // Query 9
     printf("Query 9:\n");
     LONG_list l9 = both_participated(c, 29, 7, 20);
@@ -116,14 +115,13 @@ int main(int argc, char *argv[]) {
             printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d4), get_month(d4), get_year(d4));
         }
     }
-
     // Query 10
     printf("Query 10:\n");
     long answer = -1;
     answer = better_answer(c, 2);
     if (answer == -1) {
         printf("%s\n", "Não existem respostas para esta pergunta");
-    } else { 
+    } else {
         printf("%li\n", answer);
     }
 

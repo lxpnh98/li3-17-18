@@ -16,25 +16,25 @@ Definição de funções acesso à estrutura de dados POST.
 struct post {
     /** \brief Id do post */
     long id;
-    /** \brief Tipo de pergunta (Id pergunta = 1; Id resposta = 2) */
+    /** \brief Id pergunta = 1; Id resposta = 2 */
     enum post_type type;
-    /** \brief Id da resposta aceite (-1 em caso de ser uma pergunta) */
+    /** \brief Id da resposta aceite; -1 em caso de ser uma pergunta */
     long AcceptedAnswer;
-    /** \brief Id do utilizador criador do post */
+    /** \brief Id do User criador da pergunta/resposta */
     long userId;
-    /** \brief Nome do utilizador, caso não tenho user id */
+    /** \brief Nomde do utilizador, caso não tenha user Id */
     char *userDisplayName;
-    /** \brief Título da pergunta (em caso de resposta é NULL) */
+    /** \brief Titulo da pergunta, em caso de ser resposta é NULL */
     char *title;
-    /** \brief Id do post pai de uma resposta (-1 se o post for uma pergunta) */
+    /** \brief No caso de ser resposta, id do pai, caso contrário -1 */
     long parentId;
-    /** \brief Número de respostas (caso o posts seja uma pergunta) */
+    /** \brief Número de responstas, caso seja pergunta */
     int answer_count;
-    /** \brief Lista dos ids das respostas (caso o post seja uma pergunta) */
-    LONG_list answers;     /** TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada) */
-    /** \brief Pontuação do post */
+    /** \brief Lista dos ids das respostas, caso seja pergunta */
+    LONG_list answers; // TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
+    /** \brief Score dos posts */
     long score;
-    /** \brief String da data de criação do post */
+    /** \brief String da data criação do post */
     char *CreationDate;
     /** \brief Vetor de tags do post */
     LONG_list tags;
@@ -234,7 +234,7 @@ LONG_list get_tags(POST p) {
 @returns long Número de comentários.
 */
 long get_comment_count(POST p) {
-	return p->comment_count;
+    return p->comment_count;
 }
 
 // TODO: implementar free_post()
