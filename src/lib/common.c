@@ -1,3 +1,7 @@
+/**
+@file common.c
+Funções e definições de utilidade.
+*/
 #include <common.h>
 #include <string.h>
 #include <stdlib.h>

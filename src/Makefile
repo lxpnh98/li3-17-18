@@ -25,10 +25,9 @@ clean:
 	rm obj/*.o
 	rm obj/lib/*.o
 	rm program
-	rm -rf ../doc/html ../doc/latex ../doc/Doxyfile doc
+
+clean_doc:
+	rm -rf ../doc/html ../doc/latex
 
 doc:
-	doxygen -g
-	doxygen
-	mv Doxyfile html/ latex/ ../doc/
-	touch doc
+	doxygen Doxyfile.bak
