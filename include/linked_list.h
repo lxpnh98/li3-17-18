@@ -1,3 +1,8 @@
+/**
+@file linked_list.h
+Definição de funções acesso à estrutura de dados LINKED_LIST.
+*/
+
 #ifndef __LINKED_LIST__
 #define __LINKED_LIST__
 

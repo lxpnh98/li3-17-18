@@ -1,3 +1,8 @@
+/**
+@file interface.h
+Definição de funções resposta às interrogações.
+*/
+
 #ifndef __INTERFACE__
 #define __INTERFACE__
 

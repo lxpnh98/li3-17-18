@@ -1,3 +1,8 @@
+/**
+@file pair.h
+Definição de funções de accesso a estrururas de dados dos tipos STR_pair e LONG_pair.
+*/
+
 #ifndef __PAIR_H__
 #define __PAIR_H__
 

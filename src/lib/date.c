@@ -136,7 +136,7 @@ int isBefore(Date d1, Date d2) {
 }
 
 /**
-\brief Função que verifica se uma data d1 ocorre depois da data d2.
+\brief Função que verifica se uma dada data ocorre entre duas outras datas.
 @param d Estrutura do tipo data.
 @param begin Data de início da contagem.
 @param end Data do fim da contagem.

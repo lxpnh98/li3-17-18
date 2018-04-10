@@ -1,3 +1,8 @@
+/**
+@file list.h
+Definição de funções acesso à estrutura de dados LONG_list.
+*/
+
 #ifndef __LONG_LIST__
 #define __LONG_LIST__
 

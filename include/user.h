@@ -1,3 +1,8 @@
+/**
+@file user.h
+Definição de funções acesso à estrutura de dados USER.
+*/
+
 #ifndef __USER__
 #define __USER__
 

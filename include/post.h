@@ -1,3 +1,8 @@
+/**
+@file post.h
+Definição de funções acesso à estrutura de dados POST.
+*/
+
 #ifndef __POST__
 #define __POST__
 
