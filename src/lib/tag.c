@@ -41,7 +41,7 @@ long get_tag_id(TAG t) {
 /**
 \brief Função que devolve a string do nome de uma dada tag.
 @param t Estrutura do tipo tag.
-@returns char String do nome da tag.
+@returns char* String do nome da tag.
 */
 char *get_tagName(TAG t) {
     if (t)

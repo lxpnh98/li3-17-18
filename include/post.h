@@ -11,6 +11,9 @@ Definição de funções acesso à estrutura de dados POST.
 
 typedef struct post *POST;
 
+/**
+/brief Identificador de tipo de post.
+*/
 enum post_type {
     QUESTION = 1,
     ANSWER = 2
@@ -51,5 +54,8 @@ int get_ntags(POST p);
 LONG_list get_tags(POST p);
 
 long get_comment_count(POST p);
+
+void free_post(POST p);
+void free_postv(void *p);
 
 #endif

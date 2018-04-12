@@ -19,6 +19,9 @@ Descrição da estrutura de dados e funções que respondem as queries.
 #include "common.h"
 #include "community.h"
 
+/**
+/brief Tamanho inicial das HashTables.
+*/
 enum {
     INIT_USERS = 10,
     INIT_POSTS = 10,
@@ -157,7 +160,7 @@ TAG get_tag_from_name(TAD_community com, char *name) {
 \brief Função que devolve o nome do autor de um dado post.
 @param com Estrutura onde está guardada a informação.
 @param p Post.
-@returns char String do nome do autor.
+@returns char* String do nome do autor.
 */
 char *get_author_name(TAD_community com, POST p) {
     long id = get_user_id(p);
@@ -173,7 +176,7 @@ char *get_author_name(TAD_community com, POST p) {
 \brief Função que devolve o título da pergunta de um dado post.
 @param com Estrutura onde está guardada a informação.
 @param p Post.
-@returns char String do título da pergunta.
+@returns char* String do título da pergunta.
 */
 char *get_question_title(TAD_community com, POST p) {
     char *title = get_title(p);
@@ -265,8 +268,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if ((isAfter(get_CreationDate(p), begin))
-            && (isBefore(get_CreationDate(p), end))) {
+        if (is_between(get_CreationDate(p), begin, end)) {
             if (get_type(p) == QUESTION) {
                 questions++;
             } else {
@@ -303,8 +305,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if ((isAfter(get_CreationDate(p), begin))
-            && (isBefore(get_CreationDate(p), end))) {
+        if (is_between(get_CreationDate(p), begin, end)) {
             if (get_type(p) == QUESTION && has_tag(p, tag_id)) {
                 l = add(l, p);
                 post_count++;
@@ -438,7 +439,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        if (get_type(p) == QUESTION && (isAfter(get_CreationDate(p), begin)) && (isBefore(get_CreationDate(p), end))) {
+        if (get_type(p) == QUESTION && (is_between(get_CreationDate(p), begin, end))) {
             insert_by_answer_count(com, list, p, MIN2(n, N), N);
             n++;
         }
@@ -848,8 +849,8 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
 @returns TAD_community Estrutura passada como argumento.
 */
 TAD_community clean_community(TAD_community com) {
-    free_linked_list(com->user_list);
-    free_linked_list(com->post_list);
+    free_linked_list(com->user_list, free_userv);
+    free_linked_list(com->post_list, free_postv);
     xmlHashFree(com->users, NULL);
     xmlHashFree(com->tags_from_id, NULL);
     xmlHashFree(com->tags_from_name, NULL);

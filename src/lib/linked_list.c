@@ -78,10 +78,13 @@ void *get_data(LINKED_LIST l) {
 \brief Função que liberta a memória utilizada pela estrutura de dados.
 @param l Estrutura do tipo lista ligada.
 */
-void free_linked_list(LINKED_LIST l) {
+void free_linked_list(LINKED_LIST l, void (*f)(void *)) {
     assert(l != NULL);
     LINKED_LIST n = next(l);
     if (n)
-        free_linked_list(n);
+        free_linked_list(n, f);
+    if (f != NULL) {
+        (*f)(get_data(l));
+    }
     free(l);
 }

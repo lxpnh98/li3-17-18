@@ -33,5 +33,6 @@ void set_bio(USER u, char *bio);
 void set_post_list(USER u, LONG_list l);
 
 void free_user(USER u);
+void free_userv(void *u);
 
 #endif

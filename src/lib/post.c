@@ -115,7 +115,7 @@ long get_user_id(POST p) {
 /**
 \brief Função que devolve o nome do utilizador criador do post.
 @param p Estrutura do tipo post.
-@returns char Nome do utilizador.
+@returns char* Nome do utilizador.
 */
 char *get_user_display_name(POST p) {
     return p->userDisplayName;
@@ -124,7 +124,7 @@ char *get_user_display_name(POST p) {
 /**
 \brief Função que devolve o título do post.
 @param p Estrutura do tipo post.
-@returns char Título do post.
+@returns char* Título do post.
 */
 char *get_title(POST p) {
     return p->title;
@@ -237,4 +237,18 @@ long get_comment_count(POST p) {
     return p->comment_count;
 }
 
-// TODO: implementar free_post()
+/**
+\brief Função que liberta memória alocada a um post.
+@param p Estrutura do tipo post.
+*/
+void free_post(POST p) {
+    if (p) {
+        free_list(p->answers);
+        free_list(p->tags);
+        free(p);
+    }
+}
+
+void free_postv(void *p) {
+    free_post((POST)p);
+}

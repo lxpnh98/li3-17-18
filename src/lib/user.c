@@ -57,7 +57,7 @@ long get_id(USER u) {
 /**
 \brief Função que devolve a biografia de um utilizador.
 @param u Estrutura do tipo utilizador.
-@returns char String da biografia do utilizador.
+@returns char* String da biografia do utilizador.
 */
 char *get_bio(USER u) {
     if (u)
@@ -88,7 +88,7 @@ long get_rep(USER u) {
 /**
 \brief Função que devolve o nome de um utilizador.
 @param u Estrutura do tipo utilizador.
-@returns char String do nome do utilizador.
+@returns char* String do nome do utilizador.
 */
 char *get_display_name(USER u) {
     return mystrdup(u->display_name);
@@ -158,4 +158,8 @@ void free_user(USER u) {
         free(u->bio);
         free(u);
     }
+}
+
+void free_userv(void *u) {
+    free_user((USER)u);
 }
