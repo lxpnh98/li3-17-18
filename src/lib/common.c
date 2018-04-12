@@ -9,6 +9,9 @@ Funções e definições de utilidade.
 #include <stdio.h>
 #include <math.h>
 
+/**
+/brief String do nome do dump.
+*/
 char *dump_file_name[] = {
     "Badges.xml",
     "Comments.xml",

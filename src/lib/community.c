@@ -19,6 +19,9 @@ Descrição da estrutura de dados e funções que respondem as queries.
 #include "common.h"
 #include "community.h"
 
+/**
+/brief Tamanho inicial das HashTables.
+*/
 enum {
     INIT_USERS = 10,
     INIT_POSTS = 10,
