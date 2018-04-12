@@ -44,10 +44,15 @@ char *mystrdup(const char *s) {
 @param t Tipo de ficheiro de dump (escolhido do enum Dump_type).
 @returns char* String com o path completo.
  */
-char *make_path(const char *dir, enum dump_type t) {    // TODO: fazer make_path() funcionar com um path sem '/' no fim.
+char *make_path(const char *dir, enum dump_type t) {
+    int slash = dir[strlen(dir)-1] != '/';
     char *d = dump_file_name[t];
-    char *r = malloc(strlen(dir) + strlen(d) + 1);
-    sprintf(r, "%s%s", dir, d);
+    char *r = malloc(strlen(dir) + slash + strlen(d) + 1);
+    if (slash) {
+        sprintf(r, "%s/%s", dir, d);
+    } else {
+        sprintf(r, "%s%s", dir, d);
+    }
     return r;
 }
 
