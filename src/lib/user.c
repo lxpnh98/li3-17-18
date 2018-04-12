@@ -159,3 +159,7 @@ void free_user(USER u) {
         free(u);
     }
 }
+
+void free_userv(void *u) {
+    free_user((USER)u);
+}

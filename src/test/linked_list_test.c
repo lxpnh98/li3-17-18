@@ -42,5 +42,5 @@ int main() {
 
     // libertar toda a memória ocupada pela lista (redundante neste caso devido
     // ao anterior ciclo
-    free_linked_list(l);
+    free_linked_list(l, NULL);
 }

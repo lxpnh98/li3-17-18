@@ -52,4 +52,7 @@ LONG_list get_tags(POST p);
 
 long get_comment_count(POST p);
 
+void free_post(POST p);
+void free_postv(void *p);
+
 #endif

@@ -237,4 +237,18 @@ long get_comment_count(POST p) {
     return p->comment_count;
 }
 
-// TODO: implementar free_post()
+/**
+\brief Função que liberta memória alocada a um post.
+@param p Estrutura do tipo post.
+*/
+void free_post(POST p) {
+    if (p) {
+        free_list(p->answers);
+        free_list(p->tags);
+        free(p);
+    }
+}
+
+void free_postv(void *p) {
+    free_post((POST)p);
+}

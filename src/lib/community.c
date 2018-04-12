@@ -848,8 +848,8 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
 @returns TAD_community Estrutura passada como argumento.
 */
 TAD_community clean_community(TAD_community com) {
-    free_linked_list(com->user_list);
-    free_linked_list(com->post_list);
+    free_linked_list(com->user_list, free_userv);
+    free_linked_list(com->post_list, free_postv);
     xmlHashFree(com->users, NULL);
     xmlHashFree(com->tags_from_id, NULL);
     xmlHashFree(com->tags_from_name, NULL);

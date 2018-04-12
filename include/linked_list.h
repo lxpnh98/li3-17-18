@@ -28,6 +28,6 @@ LINKED_LIST next(LINKED_LIST l);
 void *get_data(LINKED_LIST l);
 
 /** Liberta a memória alocada por todos os elementos duma lista válida. */
-void free_linked_list(LINKED_LIST l);
+void free_linked_list(LINKED_LIST l, void (*f)(void *));
 
 #endif
