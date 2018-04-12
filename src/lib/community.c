@@ -268,8 +268,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if ((isAfter(get_CreationDate(p), begin))
-            && (isBefore(get_CreationDate(p), end))) {
+        if (is_between(get_CreationDate(p), begin, end)) {
             if (get_type(p) == QUESTION) {
                 questions++;
             } else {
@@ -306,8 +305,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if ((isAfter(get_CreationDate(p), begin))
-            && (isBefore(get_CreationDate(p), end))) {
+        if (is_between(get_CreationDate(p), begin, end)) {
             if (get_type(p) == QUESTION && has_tag(p, tag_id)) {
                 l = add(l, p);
                 post_count++;
@@ -441,7 +439,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        if (get_type(p) == QUESTION && (isAfter(get_CreationDate(p), begin)) && (isBefore(get_CreationDate(p), end))) {
+        if (get_type(p) == QUESTION && (is_between(get_CreationDate(p), begin, end))) {
             insert_by_answer_count(com, list, p, MIN2(n, N), N);
             n++;
         }
