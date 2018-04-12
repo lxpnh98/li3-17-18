@@ -115,7 +115,7 @@ long get_user_id(POST p) {
 /**
 \brief Função que devolve o nome do utilizador criador do post.
 @param p Estrutura do tipo post.
-@returns char Nome do utilizador.
+@returns char* Nome do utilizador.
 */
 char *get_user_display_name(POST p) {
     return p->userDisplayName;
@@ -124,7 +124,7 @@ char *get_user_display_name(POST p) {
 /**
 \brief Função que devolve o título do post.
 @param p Estrutura do tipo post.
-@returns char Título do post.
+@returns char* Título do post.
 */
 char *get_title(POST p) {
     return p->title;
