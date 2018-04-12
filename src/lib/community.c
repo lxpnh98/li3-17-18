@@ -160,7 +160,7 @@ TAG get_tag_from_name(TAD_community com, char *name) {
 @returns char String do nome do autor.
 */
 char *get_author_name(TAD_community com, POST p) {
-    long id = get_user_id(p);   // TODO: converter todos os ids para long
+    long id = get_user_id(p);
     if (id == -1) {
         return get_user_display_name(p);
     } else {

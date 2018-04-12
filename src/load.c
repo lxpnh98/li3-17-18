@@ -16,6 +16,14 @@ Funções que carregam e processam os dados nos ficheiros XML.
 #include "linked_list.h"
 
 /**
+\brief Macro para obter valor de um atributo de um nodo.
+@param node Nodo em questão.
+@param str Nome do atributo.
+*/
+#define GET_PROP(node, str) \
+    ((char *)xmlGetProp((node), (const xmlChar *)(str)))
+
+/**
 \brief Função que inicializa uma variável do tipo TAD_community.
 @returns TAD_community Nova inicialização.
 */
@@ -33,16 +41,15 @@ void processar_users(TAD_community com, xmlDoc * doc) {
     for (node = node->children; node != NULL; node = node->next) {
         if (node->properties == NULL)
             continue;
-        long id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
+        long id = atol(GET_PROP(node, "Id"));
         if (id < 0)
             continue;
-        long reputation = atol((char *)xmlGetProp(node, (const xmlChar *)"Reputation"));
-        char *display_name = (char *)xmlGetProp(node, (const xmlChar *)"DisplayName");
-        char *short_bio = (char *)xmlGetProp(node, (const xmlChar *)"AboutMe");
+        long reputation = atol(GET_PROP(node, "Reputation"));
+        char *display_name = GET_PROP(node, "DisplayName");
+        char *short_bio = GET_PROP(node, "AboutMe");
 
         USER user = create_user(id, display_name, reputation, short_bio, NULL);
 
-        //printf("%ld %s\n", get_id(user), display_name);
         add_user(com, user);
     }
 }
@@ -55,11 +62,10 @@ void processar_users(TAD_community com, xmlDoc * doc) {
 void processar_tags(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     for (node = node->children; node != NULL; node = node->next) {
-
         if (node->properties == NULL)
             continue;
-        long tag_id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
-        char *tagName = (char *)xmlGetProp(node, (const xmlChar *)"TagName");
+        long tag_id = atol(GET_PROP(node, "Id"));
+        char *tagName = GET_PROP(node, "TagName");
 
         TAG tag = create_tag(tag_id, tagName);
 
@@ -78,6 +84,8 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
     xmlNode *node = xmlDocGetRootElement(doc);
     LINKED_LIST answers_to_add = init_linked_list();
     for (node = node->children; node != NULL; node = node->next) {
+        long id = -1;
+        enum post_type type = 0;
         long AcceptedAnswer = -1;
         long userId = -1;
         long parentId = -1;
@@ -91,37 +99,37 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
 
         if (node->properties == NULL)
             continue;
-        long id = atol((char *)xmlGetProp(node, (const xmlChar *)"Id"));
+        id = atol(GET_PROP(node, "Id"));
         if (id < 0)
             continue;
-        enum post_type type = atoi((char *)xmlGetProp(node, (const xmlChar *)"PostTypeId"));
+        type = atoi(GET_PROP(node, "PostTypeId"));
         if (type == QUESTION && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
-            AcceptedAnswer = atol((char *)xmlGetProp(node, (const xmlChar *)"AcceptedAnswerId"));
+            AcceptedAnswer = atol(GET_PROP(node, "AcceptedAnswerId"));
         }
-        if (xmlGetProp(node, (const xmlChar *)"OwnerUserId")) { // TODO: condição redundante nos ficheiros backup dos professores (fazer download)
-            userId = atol((char *)xmlGetProp(node, (const xmlChar *)"OwnerUserId"));
+        if (GET_PROP(node, "OwnerUserId")) {
+            userId = atol(GET_PROP(node, "OwnerUserId"));
         } else {
-            userDisplayName = ((char *)xmlGetProp(node, (const xmlChar *)"OwnerDisplayName"));
+            userDisplayName = GET_PROP(node, "OwnerDisplayName");
         }
         if (type == QUESTION) {
-            title = ((char *)xmlGetProp(node, (const xmlChar *)"Title"));
-            answer_count = atol((char *)xmlGetProp(node, (const xmlChar *)"AnswerCount"));
-            tags_str = ((char *)xmlGetProp(node, (const xmlChar *)"Tags"));
+            title = GET_PROP(node, "Title");
+            answer_count = atol(GET_PROP(node, "AnswerCount"));
+            tags_str = GET_PROP(node, "Tags");
             tags = processa_tags(com, tags_str);
         } else if (type == ANSWER) {
-            parentId = atol((char *)xmlGetProp(node, (const xmlChar *)"ParentId"));
+            parentId = atol(GET_PROP(node, "ParentId"));
         } else {
             // TODO: processar outros tipos de posts (3,4,5,6,7)
             continue;
         }
 
-        score = atol((char *)xmlGetProp(node, (const xmlChar *)"Score"));
-        char *CreationDate = ((char *)xmlGetProp(node, (const xmlChar *)"CreationDate"));
-        comment_count = atol((char *)xmlGetProp(node, (const xmlChar *)"CommentCount"));
+        score = atol(GET_PROP(node, "Score"));
+        char *CreationDate = GET_PROP(node, "CreationDate");
+        comment_count = atol(GET_PROP(node, "CommentCount"));
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, answer_count, score, CreationDate, tags,
-                                comment_count);
+                                title, parentId, answer_count, score, CreationDate,
+                                tags, comment_count);
         add_post(com, post, &answers_to_add);
     }
 
@@ -129,7 +137,9 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
     while(next(answers_to_add)) {
         POST p = get_data(answers_to_add);
         POST parent_post = get_post(com, get_parent_id(p));
-        add_answer(parent_post, get_post_id(p));
+        if(parent_post) {
+            add_answer(parent_post, get_post_id(p));
+        }
         answers_to_add = next(answers_to_add);
     }
 }
@@ -141,25 +151,25 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
 @returns LONG_list Lista dos ids das respetivas tags.
 */
 LONG_list processa_tags(TAD_community com, char *tags_str) {
+    int i,j;
+    int k = 0;
     int n = 0;
-    int i = 0;
-    int j, k;
     LINKED_LIST l = init_linked_list();
     char tag[1024];
-    for (j = 0; tags_str[j] != '\0'; j++) {
-        if (tags_str[j] == '<') {
-            for (k = 0; tags_str[j + 1] != '>'; k++, j++) {
-                tag[k] = tags_str[j + 1];
+    for (i = 0; tags_str[i] != '\0'; i++) {
+        if (tags_str[i] == '<') {
+            for (j = 0; tags_str[i + 1] != '>'; j++, i++) {
+                tag[j] = tags_str[i + 1];
             }
-            tag[k /*+ 1 */ ] = '\0';
+            tag[j] = '\0';
             l = add(l, tag);
             n++;
         }
     }
     LONG_list r = create_list(n);
     while (next(l)) {
-        set_list(r, i, get_tag_id(get_tag_from_name(com, get_data(l))));
-        i++;
+        set_list(r, k, get_tag_id(get_tag_from_name(com, get_data(l))));
+        k++;
         l = next(l);
     }
     return r;
