@@ -61,7 +61,7 @@ char *get_fst_str(STR_pair pair) {
 /**
 \brief Função que devolve a segunda string de um dado par de strings.
 @param pair Estrutura do tipo par de strings.
-@returns char Primeira string do par.
+@returns char* Primeira string do par.
 */
 char *get_snd_str(STR_pair pair) {
     return pair ? mystrdup(pair->snd) : NULL;

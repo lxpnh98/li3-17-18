@@ -157,7 +157,7 @@ TAG get_tag_from_name(TAD_community com, char *name) {
 \brief Função que devolve o nome do autor de um dado post.
 @param com Estrutura onde está guardada a informação.
 @param p Post.
-@returns char String do nome do autor.
+@returns char* String do nome do autor.
 */
 char *get_author_name(TAD_community com, POST p) {
     long id = get_user_id(p);   // TODO: converter todos os ids para long
@@ -173,7 +173,7 @@ char *get_author_name(TAD_community com, POST p) {
 \brief Função que devolve o título da pergunta de um dado post.
 @param com Estrutura onde está guardada a informação.
 @param p Post.
-@returns char String do título da pergunta.
+@returns char* String do título da pergunta.
 */
 char *get_question_title(TAD_community com, POST p) {
     char *title = get_title(p);

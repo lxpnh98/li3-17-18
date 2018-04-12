@@ -1,3 +1,8 @@
+/**
+@file common.h
+Funções e definições de utilidade.
+*/
+
 #ifndef __MY_COMMON__
 #define __MY_COMMON__
 
