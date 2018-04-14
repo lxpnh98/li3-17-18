@@ -119,7 +119,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         } else if (type == ANSWER) {
             parentId = atol(GET_PROP(node, "ParentId"));
         } else {
-            // TODO: processar outros tipos de posts (3,4,5,6,7)
+            // Ignorar outros tipos de posts (3,4,5,6,7).
             continue;
         }
 
@@ -137,9 +137,11 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
     while(next(answers_to_add)) {
         POST p = get_data(answers_to_add);
         POST parent_post = get_post(com, get_parent_id(p));
+
         if(parent_post) {
             add_answer(parent_post, get_post_id(p));
         }
+
         answers_to_add = next(answers_to_add);
     }
 }
