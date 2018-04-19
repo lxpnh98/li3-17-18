@@ -29,5 +29,8 @@ clean:
 clean_doc:
 	rm -rf ../doc/html ../doc/latex
 
+clean_relatorio:
+	rm ../Relatorio/relatorio.aux ../Relatorio/relatorio.log ../Relatorio/relatorio.toc ../Relatorio/relatorio.pdf 
+
 doc:
 	doxygen Doxyfile.bak
