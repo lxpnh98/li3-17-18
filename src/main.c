@@ -49,6 +49,7 @@ int main(int argc, char *argv[]) {
             STR_pair pair = info_from_post(c, i);
             if (pair)
                 printf("%s %s\n", get_fst_str(pair), get_snd_str(pair));
+            free_str_pair(pair);
         }
     )
 
@@ -60,6 +61,7 @@ int main(int argc, char *argv[]) {
             USER u = get_user(c, get_list(most_active, i));
             printf("%s - %d\n", get_display_name(u), get_post_count(u));
         }
+        free_list(most_active);
     )
 
     // Query 3
@@ -67,9 +69,9 @@ int main(int argc, char *argv[]) {
     Date d1 = createDate(1, 1, 2000);
     Date d2 = createDate(1, 1, 2028);
     TIME(
-        LONG_pair l;
-        l = (total_posts(c, d1, d2));
+        LONG_pair l = total_posts(c, d1, d2);
         printf("%li %li\n", get_fst_long(l), get_snd_long(l));
+        free_long_pair(l);
     )
 
     // Query 4
@@ -113,11 +115,12 @@ int main(int argc, char *argv[]) {
                 printf("%ld - %s\n", get_post_id(p), get_title(p));
             }
         }
+        free_list(ll);
     )
 
     // Query 8
     printf("Query 8:\n");
-    Date d3;
+    Date d3 = NULL;
     TIME(
         LONG_list l8 = contains_word(c, "Java", 20);
         if (l8 != NULL) {
@@ -132,11 +135,14 @@ int main(int argc, char *argv[]) {
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
             }
         }
+        free_list(l8);
     )
+    if (d3) free_date(d3);
 
     // Query 9
     printf("Query 9:\n");
     TIME(
+        Date d4 = NULL;
         LONG_list l9 = both_participated(c, 29, 7, 20);
         if (l9 != NULL) {
             for (i = 0; i < get_list_size(l9); i++) {
@@ -146,11 +152,13 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 POST p = get_post(c, post_id);
-                Date d4 = get_CreationDate(p);
+                d4 = get_CreationDate(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d4), get_month(d4), get_year(d4));
             }
         }
+        free_list(l9);
     )
+    if (d4) free_date(d4);
 
     // Query 10
     printf("Query 10:\n");
@@ -179,8 +187,11 @@ int main(int argc, char *argv[]) {
                 printf("%ld - %s\n", get_tag_id(t), get_tagName(t));
             }
         }
+        free_list(l11);
     )
 
+    free_date(d1);
+    free_date(d2);
     clean(c);
 
     return 0;

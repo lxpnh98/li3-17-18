@@ -127,7 +127,7 @@ char *get_user_display_name(POST p) {
 @returns char* Título do post.
 */
 char *get_title(POST p) {
-    return p->title;
+    return mystrdup(p->title);
 }
 
 /**

@@ -48,8 +48,9 @@ void processar_users(TAD_community com, xmlDoc * doc) {
         char *display_name = GET_PROP(node, "DisplayName");
         char *short_bio = GET_PROP(node, "AboutMe");
 
-        USER user = create_user(id, display_name, reputation, short_bio, NULL);
-
+        USER user = create_user(id, display_name, reputation, short_bio, NULL); // TODO: retirar último argumento (nunca utilizado)
+        free(display_name);
+        free(short_bio);
         add_user(com, user);
     }
 }
@@ -144,6 +145,7 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
 
         answers_to_add = next(answers_to_add);
     }
+    free_linked_list(answers_to_add, NULL);
 }
 
 /**
@@ -192,6 +194,7 @@ TAD_community load(TAD_community com, char *dump_path) {
         fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
+    free(full_path);
     processar_users(com, doc);
     xmlFreeDoc(doc);
 
@@ -200,6 +203,7 @@ TAD_community load(TAD_community com, char *dump_path) {
         fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
+    free(full_path);
     processar_tags(com, doc);
     xmlFreeDoc(doc);
 
@@ -208,6 +212,7 @@ TAD_community load(TAD_community com, char *dump_path) {
         fprintf(stderr, "erro: não conseguiu abrir ficheiro %s\n", full_path);
         exit(-1);
     }
+    free(full_path);
     processar_posts(com, doc);
     xmlFreeDoc(doc);
 

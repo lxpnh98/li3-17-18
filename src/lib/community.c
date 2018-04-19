@@ -93,12 +93,13 @@ void add_post(TAD_community com, POST post, LINKED_LIST *answers_to_add) {
     LONG_list l;
     int user_id = get_user_id(post);
     if (user_id > 0) {
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)itoa(user_id));
+        USER u = get_user(com, user_id);
 
         // Adicionar post aos 10 últimos posts
         l = get_posts_long_list(u);
         insert_by_date(com, l, post, MIN2(get_post_count(u), 10), 10);
         set_post_list(u, l);
+        free_list(l);
 
         set_post_count(u, get_post_count(u) + 1);
 
@@ -123,7 +124,10 @@ void add_post(TAD_community com, POST post, LINKED_LIST *answers_to_add) {
 @returns USER Utilizador procurado.
 */
 USER get_user(TAD_community com, long id) {
-    return xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
+    char *id_str = ltoa(id);
+    USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)id_str);
+    free(id_str);
+    return u;
 }
 
 /**
@@ -133,7 +137,10 @@ USER get_user(TAD_community com, long id) {
 @returns POST Post procurado.
 */
 POST get_post(TAD_community com, long id) {
-    return xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
+    char *id_str = ltoa(id);
+    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)id_str);
+    free(id_str);
+    return p;
 }
 
 /**
@@ -143,7 +150,10 @@ POST get_post(TAD_community com, long id) {
 @returns TAG Tag procurada.
 */
 TAG get_tag_from_id(TAD_community com, long id) {
-    return xmlHashLookup(com->tags_from_id, (const xmlChar *)ltoa(id));
+    char *id_str = ltoa(id);
+    TAG t = (TAG)xmlHashLookup(com->tags_from_id, (const xmlChar *)id_str);
+    free(id_str);
+    return t;
 }
 
 /**
@@ -153,7 +163,7 @@ TAG get_tag_from_id(TAD_community com, long id) {
 @returns TAG Tag procurada.
 */
 TAG get_tag_from_name(TAD_community com, char *name) {
-    return xmlHashLookup(com->tags_from_name, (const xmlChar *)name);
+    return (TAG)xmlHashLookup(com->tags_from_name, (const xmlChar *)name);
 }
 
 /**
@@ -167,7 +177,7 @@ char *get_author_name(TAD_community com, POST p) {
     if (id == -1) {
         return get_user_display_name(p);
     } else {
-        USER u = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(id));
+        USER u = get_user(com, id);
         return get_display_name(u);
     }
 }
@@ -181,8 +191,8 @@ char *get_author_name(TAD_community com, POST p) {
 char *get_question_title(TAD_community com, POST p) {
     char *title = get_title(p);
     if (title == NULL) {
-        int parentId = (int)(get_parent_id(p));
-        POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)itoa(parentId));
+        long parentId = get_parent_id(p);
+        POST p = get_post(com, parentId);
         title = get_title(p);
     }
     return title;
@@ -198,10 +208,14 @@ char *get_question_title(TAD_community com, POST p) {
 @returns STR_pair Par de Stings (Título, Nome do autor).
 */
 STR_pair info_from_post(TAD_community com, long id) {
-    POST p = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(id));
+    POST p = get_post(com, id);
     if (p == NULL)              // TODO: fazer logging de erros (post == NULL, user == NULL, etc.)
         return NULL;
-    STR_pair pair = create_str_pair(get_question_title(com, p), get_author_name(com, p));
+    char *title = get_question_title(com, p);
+    char *author_name = get_author_name(com, p);
+    STR_pair pair = create_str_pair(title, author_name);
+    free(title);
+    free(author_name);
     return pair;
 }
 
@@ -216,17 +230,17 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
 @returns LONG_list Lista dos N ids dos utilizadores com maior número de posts.
 */
 LONG_list top_most_active(TAD_community com, int N) {
-    LONG_list list = create_list(N);    //TODO: melhorar nomes das variáveis
+    LONG_list most_active = create_list(N);    //TODO: melhorar nomes das variáveis
     LINKED_LIST l = com->user_list;
     USER u;
     int n = 0;
     while (next(l) != NULL) {
         u = (USER)get_data(l);
-        insert_by_post_count(com, list, u, MIN2(n, N), N);
+        insert_by_post_count(com, most_active, u, MIN2(n, N), N);
         l = next(l);
         n++;
     }
-    return list;
+    return most_active;
 }
 
 /**
@@ -242,7 +256,7 @@ void insert_by_post_count(TAD_community com, LONG_list l, USER u, int n, int max
     int post_count = get_post_count(u);
     USER u2;
     for (i = 0; i < n; i++) {
-        u2 = (USER)xmlHashLookup(com->users, (const xmlChar *)ltoa(get_list(l, i)));
+        u2 = get_user(com, get_list(l, i));
         if (get_post_count(u2) < post_count) {
             break;
         }
@@ -305,23 +319,27 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if (is_between(get_CreationDate(p), begin, end)) {
+        Date post_date = get_CreationDate(p);
+        if (is_between(post_date, begin, end)) {
             if (get_type(p) == QUESTION && has_tag(p, tag_id)) {
                 l = add(l, p);
                 post_count++;
             }
         }
+        free_date(post_date);
         x = next(x);
     }
 
     LONG_list r = create_list(post_count);
     int n = 0;
-    while (next(l) != NULL) {
-        p = (POST)get_data(l);
+    LINKED_LIST tmp = l;
+    while (next(tmp) != NULL) {
+        p = (POST)get_data(tmp);
         insert_by_date(com, r, p, MIN2(n, post_count), post_count);
-        l = next(l);
+        tmp = next(tmp);
         n++;
     }
+    free_linked_list(l, NULL);
     return r;
 }
 
@@ -338,11 +356,12 @@ void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     Date post_date = get_CreationDate(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = get_post(com, get_list(l, i));
         if (isBefore(get_CreationDate(p2), post_date)) {
             break;
         }
     }
+    free_date(post_date);
     if (i < max_n)
         push_insert(l, i, get_post_id(p));
 }
@@ -411,7 +430,7 @@ void insert_by_score(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int post_score = get_score(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = get_post(com, get_list(l, i));
         if (post_score > get_score(p2)) {
             break;
         }
@@ -461,7 +480,7 @@ void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int m
     int post_count = get_answer_count(p);
     POST p2;
     for (i = 0; i < n; i++) {
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(get_list(l, i)));
+        p2 = get_post(com, get_list(l, i));
         if (get_answer_count(p2) > post_count) {
             break;
         }
@@ -484,7 +503,7 @@ int find_word(LINKED_LIST title, char *word);
 @returns LONG_list Lista com os ids das N perguntas cujo título contem a palavra.
 */
 LONG_list contains_word(TAD_community com, char *word, int N) {
-    LINKED_LIST titulo = init_linked_list();
+    LINKED_LIST titulo;
     LINKED_LIST x = com->post_list;
     LONG_list r = create_list(N);
     int i;
@@ -495,15 +514,17 @@ LONG_list contains_word(TAD_community com, char *word, int N) {
     while (next(x) != NULL) {
         p = (POST)get_data(x);
         if (get_type(p) == QUESTION) {
-            titulo = separate_title(get_title(p));
+            char *title = get_title(p);
+            titulo = separate_title(title);
+            free(title);
             if (find_word(titulo, word)) {
                 insert_by_date(com, r, p, MIN2(n, N), N);
                 n++;
             }
+            free_linked_list(titulo, free);
         }
         x = next(x);
     }
-
     return r;
 }
 
@@ -609,7 +630,7 @@ int both_users_participate(TAD_community com, POST p, long id1, long id2) {
         long post_id = get_list(answer_ids, i);
         if (post_id < 0)        // Nem todas as questões estão a ser introduzidas na lista, assim os ids não são de nenhum utilizador.
             continue;
-        p2 = (POST)xmlHashLookup(com->posts, (const xmlChar *)ltoa(post_id));
+        p2 = get_post(com, post_id);
         if (p2 != NULL) {
             int user_id = get_user_id(p2);
             if (user_id == id1)
@@ -772,15 +793,17 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
             LONG_list tags = get_tags(p);
             TAG_COUNT t;
             for (i = 0; i < ntags; i++) {
-                t = (TAG_COUNT)xmlHashLookup(tag_count_hash, (const xmlChar *)ltoa(get_list(tags, i)));
+                char *id_str = ltoa(get_list(tags, i));
+                t = (TAG_COUNT)xmlHashLookup(tag_count_hash, (const xmlChar *)id_str);
                 if (t == NULL) {
                     t = malloc(sizeof(struct tag_count));
                     t->id = get_list(tags, i);
                     t->name = mystrdup(get_tagName(get_tag_from_id(com, get_list(tags, i))));
                     t->count = 0;
-                    xmlHashAddEntry(tag_count_hash, (const xmlChar *)ltoa(get_list(tags, i)), t);
+                    xmlHashAddEntry(tag_count_hash, (const xmlChar *)id_str, t);
                     tag_count_list = add(tag_count_list, t);
                 }
+                free(id_str);
                 t->count++;
             }
         }
@@ -833,7 +856,9 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
     int count = t->count;
     TAG_COUNT t2;
     for (i = 0; i < n; i++) {
-        t2 = xmlHashLookup(tag_count_hash, (const xmlChar *)ltoa(get_list(l, i)));
+        char *id_str = ltoa(get_list(l, i));
+        t2 = xmlHashLookup(tag_count_hash, (const xmlChar *)id_str);
+        free(id_str);
         if (t2->count > count) {
             break;
         }
@@ -855,5 +880,6 @@ TAD_community clean_community(TAD_community com) {
     xmlHashFree(com->tags_from_id, NULL);
     xmlHashFree(com->tags_from_name, NULL);
     xmlHashFree(com->posts, NULL);
+    free(com);
     return com;
 }
