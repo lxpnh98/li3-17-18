@@ -41,10 +41,14 @@ void processar_users(TAD_community com, xmlDoc * doc) {
     for (node = node->children; node != NULL; node = node->next) {
         if (node->properties == NULL)
             continue;
-        long id = atol(GET_PROP(node, "Id"));
+        char *id_str = GET_PROP(node, "Id");
+        long id = atol(id_str);
+        free(id_str);
         if (id < 0)
             continue;
-        long reputation = atol(GET_PROP(node, "Reputation"));
+        char *rep_str = GET_PROP(node, "Reputation");
+        long reputation = atol(rep_str);
+        free(rep_str);
         char *display_name = GET_PROP(node, "DisplayName");
         char *short_bio = GET_PROP(node, "AboutMe");
 
@@ -65,12 +69,14 @@ void processar_tags(TAD_community com, xmlDoc * doc) {
     for (node = node->children; node != NULL; node = node->next) {
         if (node->properties == NULL)
             continue;
-        long tag_id = atol(GET_PROP(node, "Id"));
-        char *tagName = GET_PROP(node, "TagName");
+        char* tag_id_str = GET_PROP(node, "Id");
+        long tag_id = atol(tag_id_str);
+        char *tag_name = GET_PROP(node, "TagName");
 
-        TAG tag = create_tag(tag_id, tagName);
-
+        TAG tag = create_tag(tag_id, tag_name);
         add_tag(com, tag);
+        free(tag_id_str);
+        free(tag_name);
     }
 }
 
@@ -100,37 +106,58 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
 
         if (node->properties == NULL)
             continue;
-        id = atol(GET_PROP(node, "Id"));
+        char *id_str = GET_PROP(node, "Id");
+        id = atol(id_str);
+        free(id_str);
         if (id < 0)
             continue;
-        type = atoi(GET_PROP(node, "PostTypeId"));
+        char *type_str = GET_PROP(node, "PostTypeId");
+        type = atoi(type_str);
+        free(type_str);
         if (type == QUESTION && xmlHasProp(node, (const xmlChar *)"AcceptedAnswer")) {
-            AcceptedAnswer = atol(GET_PROP(node, "AcceptedAnswerId"));
+            char *accepted_answer_str = GET_PROP(node, "AcceptedAnswerId");
+            AcceptedAnswer = atol(accepted_answer_str);
+            free(accepted_answer_str);
         }
-        if (GET_PROP(node, "OwnerUserId")) {
-            userId = atol(GET_PROP(node, "OwnerUserId"));
+        char *user_id_str = GET_PROP(node, "OwnerUserId");
+        if (user_id_str) {
+            userId = atol(user_id_str);
+            free(user_id_str);
         } else {
             userDisplayName = GET_PROP(node, "OwnerDisplayName");
         }
         if (type == QUESTION) {
             title = GET_PROP(node, "Title");
-            answer_count = atol(GET_PROP(node, "AnswerCount"));
+            char *answer_count_str = GET_PROP(node, "AnswerCount");
+            answer_count = atol(answer_count_str);
+            free(answer_count_str);
             tags_str = GET_PROP(node, "Tags");
             tags = processa_tags(com, tags_str);
+            free(tags_str);
         } else if (type == ANSWER) {
-            parentId = atol(GET_PROP(node, "ParentId"));
+            char *parent_id_str = GET_PROP(node, "ParentId");
+            parentId = atol(parent_id_str);
+            free(parent_id_str);
         } else {
             // Ignorar outros tipos de posts (3,4,5,6,7).
             continue;
         }
 
-        score = atol(GET_PROP(node, "Score"));
+        char *score_str = GET_PROP(node, "Score");
+        score = atol(score_str);
+        free(score_str);
         char *CreationDate = GET_PROP(node, "CreationDate");
-        comment_count = atol(GET_PROP(node, "CommentCount"));
+        char *comment_count_str = GET_PROP(node, "CommentCount");
+        comment_count = atol(comment_count_str);
+        free(comment_count_str);
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
                                 title, parentId, answer_count, score, CreationDate,
                                 tags, comment_count);
+        if (title) free(title);
+        if (userDisplayName) free(userDisplayName);
+        if (tags) free_list(tags);
+        free(CreationDate);
         add_post(com, post, &answers_to_add);
     }
 

@@ -114,6 +114,7 @@ LONG_list get_posts_long_list(USER u) {
     long *posts = get_10_latest_posts(u);
     for (i = 0; i < 10; i++)
         set_list(l, i, posts[i]);
+    free(posts);
     return l;
 }
 
@@ -155,6 +156,7 @@ void set_post_list(USER u, LONG_list l) {
 */
 void free_user(USER u) {
     if (u) {
+        free(u->display_name);
         free(u->bio);
         free(u);
     }

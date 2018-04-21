@@ -47,8 +47,13 @@ int main(int argc, char *argv[]) {
     TIME(
         for (i = 1; i < 20; i++) {
             STR_pair pair = info_from_post(c, i);
-            if (pair)
-                printf("%s %s\n", get_fst_str(pair), get_snd_str(pair));
+            if (pair) {
+                char *fst = get_fst_str(pair);
+                char *snd = get_snd_str(pair);
+                printf("%s %s\n", fst, snd);
+                free(fst);
+                free(snd);
+            }
             free_str_pair(pair);
         }
     )
@@ -59,7 +64,9 @@ int main(int argc, char *argv[]) {
         LONG_list most_active = top_most_active(c, 15);
         for (i = 0; i < 15; i++) {
             USER u = get_user(c, get_list(most_active, i));
-            printf("%s - %d\n", get_display_name(u), get_post_count(u));
+            char *display_name = get_display_name(u);
+            printf("%s - %d\n", display_name, get_post_count(u));
+            free(display_name);
         }
         free_list(most_active);
     )
@@ -90,7 +97,10 @@ int main(int argc, char *argv[]) {
     printf("Query 5:\n");
     TIME(
         USER u2 = get_user_info(c, 10);
-        printf("%ld - %s\n", get_id(u2), get_bio(u2));
+        char *bio = get_bio(u2);
+        printf("%ld - %s\n", get_id(u2), bio);
+        free(bio);
+        free_user(u2);
     )
 
     // Query 6
@@ -102,6 +112,7 @@ int main(int argc, char *argv[]) {
                 POST p = get_post(c, get_list(ll, i));
                 printf("%ld - %ld\n", get_post_id(p), get_score(p));
             }
+            free_list(ll);
         }
     )
 
@@ -112,7 +123,9 @@ int main(int argc, char *argv[]) {
         if (ll != NULL) {           // mais que 0 elementos
             for (i = 0; i < get_list_size(ll); i++) {
                 POST p = get_post(c, get_list(ll, i));
-                printf("%ld - %s\n", get_post_id(p), get_title(p));
+                char *title = get_title(p);
+                printf("%ld - %s\n", get_post_id(p), title);
+                free(title);
             }
         }
         free_list(ll);

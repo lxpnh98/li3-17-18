@@ -45,7 +45,7 @@ long get_tag_id(TAG t) {
 */
 char *get_tagName(TAG t) {
     if (t)
-        return t->name;
+        return mystrdup(t->name);
     return NULL;
 }
 
@@ -54,6 +54,8 @@ char *get_tagName(TAG t) {
 @param t Estrutura do tipo tag.
 */
 void free_tag(TAG t) {
-    if (t)
+    if (t) {
+        free(t->name);
         free(t);
+    }
 }

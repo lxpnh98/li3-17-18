@@ -74,8 +74,12 @@ void add_user(TAD_community com, USER user) {
 @param tag Tag a adicionar.
 */
 void add_tag(TAD_community com, TAG tag) {
-    xmlHashAddEntry(com->tags_from_id, (const xmlChar *)ltoa(get_tag_id(tag)), tag);
-    xmlHashAddEntry(com->tags_from_name, (const xmlChar *)get_tagName(tag), tag);
+    char *tag_id_str = ltoa(get_tag_id(tag));
+    char *tag_name = get_tagName(tag);
+    xmlHashAddEntry(com->tags_from_id, (const xmlChar *)tag_id_str, tag);
+    xmlHashAddEntry(com->tags_from_name, (const xmlChar *)tag_name, tag);
+    free(tag_id_str);
+    free(tag_name);
 }
 
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n);
@@ -357,9 +361,11 @@ void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     POST p2;
     for (i = 0; i < n; i++) {
         p2 = get_post(com, get_list(l, i));
-        if (isBefore(get_CreationDate(p2), post_date)) {
+        Date p2_date = get_CreationDate(p2);
+        if (isBefore(p2_date, post_date)) {
             break;
         }
+        free_date(p2_date);
     }
     free_date(post_date);
     if (i < max_n)
@@ -389,6 +395,8 @@ USER get_user_info(TAD_community com, long id) {
     user = create_user(id, "", 0, bio, NULL);
     set_post_list(user, l);
 
+    free(bio);
+    free_list(l);
     return user;
 }
 
@@ -724,6 +732,7 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
     LONG_list best_rep = best_rep_users(com, N);
     LONG_list most_used = most_used_tags(com, N, best_rep, begin, end);
+    free_list(best_rep);
     return most_used;
 }
 
@@ -815,12 +824,15 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
     LONG_list r = create_list(N);
     for (i = 0; i < N; i++)
         set_list(r, i, -1);
-    while (next(tag_count_list)) {
-        TAG_COUNT t = get_data(tag_count_list);
+    LINKED_LIST x = tag_count_list;
+    while (next(x)) {
+        TAG_COUNT t = get_data(x);
         insert_by_tag_count(tag_count_hash, r, t, MIN2(n, N), N);
         n++;
-        tag_count_list = next(tag_count_list);
+        x = next(x);
     }
+    free_linked_list(tag_count_list, NULL);
+    xmlHashFree(tag_count_hash, NULL);
 
     return r;
 }

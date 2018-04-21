@@ -68,14 +68,14 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     p->AcceptedAnswer = AcceptedAnswer;
     p->userId = userId;
     p->userDisplayName = userDisplayName;
-    p->title = title;
+    p->title = mystrdup(title);
     p->parentId = parentId;
     p->answer_count = answer_count;
     p->answers = create_list(answer_count);
     for (i = 0; i < answer_count; i++)
         set_list(p->answers, i, -1);    // para não conter um id válido ao acaso
     p->score = score;
-    p->CreationDate = CreationDate;
+    p->CreationDate = mystrdup(CreationDate); // TODO: processar string e criar data aqui
     if (tags != NULL) {
         p->tags = clone_list(tags);
     } else {
@@ -243,6 +243,8 @@ long get_comment_count(POST p) {
 */
 void free_post(POST p) {
     if (p) {
+        free(p->title);
+        free(p->CreationDate);
         free_list(p->answers);
         free_list(p->tags);
         free(p);
