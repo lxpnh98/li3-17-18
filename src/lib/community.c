@@ -64,8 +64,10 @@ TAD_community init_community() {
 @param user Utilizador a adicionar.
 */
 void add_user(TAD_community com, USER user) {
-    xmlHashAddEntry(com->users, (const xmlChar *)ltoa(get_id(user)), user);
+    char *str_user_id = ltoa(get_id(user));
+    xmlHashAddEntry(com->users, (const xmlChar *)str_user_id, user);
     com->user_list = add(com->user_list, user);
+    free(str_user_id);
 }
 
 /**
@@ -117,8 +119,10 @@ void add_post(TAD_community com, POST post, LINKED_LIST *answers_to_add) {
             }
         }
     }
-    xmlHashAddEntry(com->posts, (const xmlChar *)itoa(get_post_id(post)), post);
+    char *str_post_id = itoa(get_post_id(post));
+    xmlHashAddEntry(com->posts, (const xmlChar *)str_post_id, post);
     com->post_list = add(com->post_list, post);
+    free(str_post_id);
 }
 
 /**
@@ -286,7 +290,8 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
 
     while (next(x)) {
         p = (POST)get_data(x);
-        if (is_between(get_CreationDate(p), begin, end)) {
+        Date d = get_CreationDate(p);
+        if (is_between(d, begin, end)) {
             if (get_type(p) == QUESTION) {
                 questions++;
             } else {
@@ -294,6 +299,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
             }
         }
         x = next(x);
+        free_date(d);
     }
 
     set_fst_long(l, questions);
@@ -466,11 +472,13 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        if (get_type(p) == QUESTION && (is_between(get_CreationDate(p), begin, end))) {
+        Date d = get_CreationDate(p);
+        if (get_type(p) == QUESTION && (is_between(d, begin, end))) {
             insert_by_answer_count(com, list, p, MIN2(n, N), N);
             n++;
         }
         l = next(l);
+        free_date(d);
     }
     return list;
 }
@@ -817,6 +825,7 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
             }
         }
         l = next(l);
+        free_date(creation_date);
     }
 
     // Inserir por ordem

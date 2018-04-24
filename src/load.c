@@ -69,14 +69,14 @@ void processar_tags(TAD_community com, xmlDoc * doc) {
     for (node = node->children; node != NULL; node = node->next) {
         if (node->properties == NULL)
             continue;
-        char* tag_id_str = GET_PROP(node, "Id");
+        char *tag_id_str = GET_PROP(node, "Id");
         long tag_id = atol(tag_id_str);
         char *tag_name = GET_PROP(node, "TagName");
 
         TAG tag = create_tag(tag_id, tag_name);
-        add_tag(com, tag);
         free(tag_id_str);
         free(tag_name);
+        add_tag(com, tag);
     }
 }
 
@@ -154,9 +154,9 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
                                 title, parentId, answer_count, score, CreationDate,
                                 tags, comment_count);
-        if (title) free(title);
+        if (title)           free(title);
         if (userDisplayName) free(userDisplayName);
-        if (tags) free_list(tags);
+        if (tags)            free_list(tags);
         free(CreationDate);
         add_post(com, post, &answers_to_add);
     }
@@ -203,6 +203,7 @@ LONG_list processa_tags(TAD_community com, char *tags_str) {
         k++;
         l = next(l);
     }
+    free_linked_list(l,NULL);
     return r;
 }
 
