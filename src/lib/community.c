@@ -363,17 +363,17 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 */
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int i;
-    Date post__date = get_date(p);
+    Date post_date = get_date(p);
     POST p2;
     for (i = 0; i < n; i++) {
         p2 = get_post(com, get_list(l, i));
         Date p2_date = get_date(p2);
-        if (isBefore(p2_date, post__date)) {
+        if (isBefore(p2_date, post_date)) {
             break;
         }
         free_date(p2_date);
     }
-    free_date(post__date);
+    free_date(post_date);
     if (i < max_n)
         push_insert(l, i, get_post_id(p));
 }

@@ -152,13 +152,13 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         free(comment_count_str);
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, answer_count, score, CreationDate,
-                                tags, comment_count);
+                                title, parentId, answer_count, score, CreationDate, tags,
+                                comment_count);
         if (title)           free(title);
         if (userDisplayName) free(userDisplayName);
         if (tags)            free_list(tags);
-        free(CreationDate);
         add_post(com, post, &answers_to_add);
+        free(CreationDate);
     }
 
     // adicionar respostas cuja pergunta tem um id maior que o seu

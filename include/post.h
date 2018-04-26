@@ -47,9 +47,9 @@ int has_tag(POST p, long tag_id);
 
 int get_type(POST p);
 
-Date get_date(POST p);
-
 int get_ntags(POST p);
+
+Date get_date(POST p);
 
 LONG_list get_tags(POST p);
 

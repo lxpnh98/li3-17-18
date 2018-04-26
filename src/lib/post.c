@@ -178,6 +178,7 @@ LONG_list get_answers(POST p) {
 }
 
 /**
+<<<<<<< HEAD
 \brief Função que devolve a data de criação do post.
 @param CreationDate String que contém a data.
 @returns Date Data de criação de um post.
@@ -255,7 +256,7 @@ long get_comment_count(POST p) {
 void free_post(POST p) {
     if (p) {
         free(p->title);
-        //free_date(p->creationDate);
+        free_date(p->creationDate);
         free_list(p->answers);
         free_list(p->tags);
         free(p);
