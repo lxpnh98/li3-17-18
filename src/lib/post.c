@@ -1,4 +1,4 @@
-/**
+    /**
 @file post.c
 Definição de funções acesso à estrutura de dados POST.
 */
@@ -34,13 +34,15 @@ struct post {
     LONG_list answers; // TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     /** \brief Score dos posts */
     long score;
-    /** \brief String da data criação do post */
-    char *CreationDate;
+    /** \brief Data criação do post */
+    Date creationDate;
     /** \brief Vetor de tags do post */
     LONG_list tags;
     /** \brief Número de comentários */
     long comment_count;
 };
+
+Date processa_date(char *CreationDate);
 
 /**
 \brief Função que cria um post.
@@ -53,7 +55,7 @@ struct post {
 @param parentId Id do pai do post.
 @param answer_count Número de respostas.
 @param score Pontuação do post.
-@param CreationDate String da data de criação do post.
+@param CreationDate String da data da criação do post.
 @param tags Vetor de tags do post.
 @param comment_count Número de comentários.
 @returns POST Post.
@@ -75,7 +77,7 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     for (i = 0; i < answer_count; i++)
         set_list(p->answers, i, -1);    // para não conter um id válido ao acaso
     p->score = score;
-    p->CreationDate = mystrdup(CreationDate); // TODO: processar string e criar data aqui
+    p->creationDate = processa_date(CreationDate);
     if (tags != NULL) {
         p->tags = clone_list(tags);
     } else {
@@ -177,14 +179,23 @@ LONG_list get_answers(POST p) {
 
 /**
 \brief Função que devolve a data de criação do post.
-@param p Estrutura do tipo post.
+@param CreationDate String que contém a data.
 @returns Date Data de criação de um post.
 */
-Date get_CreationDate(POST p) {
-    int dia, mes, ano;
-    char *CreationDate = p->CreationDate;
+Date processa_date(char *CreationDate) {
+    int dia,mes,ano;
     sscanf(CreationDate, "%d-%d-%d", &ano, &mes, &dia);
     Date d = createDate(dia, mes, ano);
+    return d;
+}
+
+/**
+\brief Função que devolve a data de um post.
+@param p Estrutura do tipo post.
+@returns Date data de criação.
+*/
+Date get_date(POST p) {
+    Date d = cloneDate(p->creationDate);
     return d;
 }
 
@@ -244,7 +255,7 @@ long get_comment_count(POST p) {
 void free_post(POST p) {
     if (p) {
         free(p->title);
-        free(p->CreationDate);
+        //free_date(p->creationDate);
         free_list(p->answers);
         free_list(p->tags);
         free(p);

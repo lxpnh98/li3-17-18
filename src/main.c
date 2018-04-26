@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
             for (i = 0; i < get_list_size(ll); i++) {
                 POST p = get_post(c, get_list(ll, i));
                 char *title = get_title(p);
-                char *creation_date = date_to_string(get_CreationDate(p));
+                char *creation_date = date_to_string(get_date(p));
                 printf("%ld - %s (%s)\n", get_post_id(p), title, creation_date);
                 free(title);
                 free(creation_date);
@@ -162,7 +162,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 POST p = get_post(c, post_id);
-                d3 = get_CreationDate(p);
+                d3 = get_date(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
             }
         }
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 POST p = get_post(c, post_id);
-                d4 = get_CreationDate(p);
+                d4 = get_date(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d4), get_month(d4), get_year(d4));
             }
         }

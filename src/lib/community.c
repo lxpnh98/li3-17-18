@@ -290,7 +290,7 @@ LONG_pair total_posts(TAD_community com, Date begin, Date end) {
 
     while (next(x)) {
         p = (POST)get_data(x);
-        Date d = get_CreationDate(p);
+        Date d = get_date(p);
         if (is_between(d, begin, end)) {
             if (get_type(p) == QUESTION) {
                 questions++;
@@ -329,7 +329,7 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 
     while (next(x)) {
         p = (POST)get_data(x);
-        Date post_date = get_CreationDate(p);
+        Date post_date = get_date(p);
         if (is_between(post_date, begin, end)) {
             if (get_type(p) == QUESTION && has_tag(p, tag_id)) {
                 l = add(l, p);
@@ -363,17 +363,17 @@ LONG_list questions_with_tag(TAD_community com, char *tag_name, Date begin, Date
 */
 void insert_by_date(TAD_community com, LONG_list l, POST p, int n, int max_n) {
     int i;
-    Date post_date = get_CreationDate(p);
+    Date post__date = get_date(p);
     POST p2;
     for (i = 0; i < n; i++) {
         p2 = get_post(com, get_list(l, i));
-        Date p2_date = get_CreationDate(p2);
-        if (isBefore(p2_date, post_date)) {
+        Date p2_date = get_date(p2);
+        if (isBefore(p2_date, post__date)) {
             break;
         }
         free_date(p2_date);
     }
-    free_date(post_date);
+    free_date(post__date);
     if (i < max_n)
         push_insert(l, i, get_post_id(p));
 }
@@ -472,7 +472,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        Date d = get_CreationDate(p);
+        Date d = get_date(p);
         if (get_type(p) == QUESTION && (is_between(d, begin, end))) {
             insert_by_answer_count(com, list, p, MIN2(n, N), N);
             n++;
@@ -794,7 +794,7 @@ void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
 @param begin Data de início da contagem.
 @param end Data do fim da contagem.
 @returns LONG_list Lista com os ids dos N utilizadores com melhor reputação.
-*/
+*/ 
 LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begin, Date end) {
     LINKED_LIST l = com->post_list;
     xmlHashTable *tag_count_hash = xmlHashCreate(INIT_TAGS);
@@ -804,7 +804,7 @@ LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begi
     // Contar tags
     while (next(l)) {
         POST p = get_data(l);
-        Date creation_date = get_CreationDate(p);
+        Date creation_date = get_date(p);
         if (is_between(creation_date, begin, end) && posted_by_users(p, N, best_rep)) {
             int ntags = get_ntags(p);
             LONG_list tags = get_tags(p);
