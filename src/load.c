@@ -82,6 +82,8 @@ void processar_tags(TAD_community com, xmlDoc * doc) {
 
 LONG_list processa_tags(TAD_community com, char *tags_str);
 
+Date processa_date(char *CreationDate);
+
 /**
 \brief Função que processa os dados do ficheiro Posts.xml.
 @param com Estrutura onde vai ser guardada a informação.
@@ -147,18 +149,20 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         score = atol(score_str);
         free(score_str);
         char *CreationDate = GET_PROP(node, "CreationDate");
+        Date date = processa_date(CreationDate);        
+        free(CreationDate);
         char *comment_count_str = GET_PROP(node, "CommentCount");
         comment_count = atol(comment_count_str);
         free(comment_count_str);
 
         POST post = create_post(id, type, AcceptedAnswer, userId, userDisplayName,
-                                title, parentId, answer_count, score, CreationDate,
-                                tags, comment_count);
+                                title, parentId, answer_count, score, date, tags,
+                                comment_count);
         if (title)           free(title);
         if (userDisplayName) free(userDisplayName);
         if (tags)            free_list(tags);
-        free(CreationDate);
         add_post(com, post, &answers_to_add);
+        free_date(date);
     }
 
     // adicionar respostas cuja pergunta tem um id maior que o seu
@@ -173,6 +177,18 @@ void processar_posts(TAD_community com, xmlDoc * doc) {
         answers_to_add = next(answers_to_add);
     }
     free_linked_list(answers_to_add, NULL);
+}
+
+/**
+\brief Função que devolve a data de criação do post.
+@param CreationDate String que contém a data.
+@returns Date Data de criação de um post.
+*/
+Date processa_date(char *CreationDate) {
+    int dia, mes, ano;
+    sscanf(CreationDate, "%d-%d-%d", &ano, &mes, &dia);
+    Date d = createDate(dia, mes, ano);
+    return d;
 }
 
 /**

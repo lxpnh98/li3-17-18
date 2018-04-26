@@ -21,7 +21,7 @@ enum post_type {
 
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
                  char *userDisplayName, char *title, long parentId, int answer_count,
-                 long score, char *CreationDate, LONG_list tags, long get_comment_count);
+                 long score, Date CreationDate, LONG_list tags, long get_comment_count);
 
 long get_post_id(POST p);
 
@@ -47,9 +47,9 @@ int has_tag(POST p, long tag_id);
 
 int get_type(POST p);
 
-Date get_CreationDate(POST p);
-
 int get_ntags(POST p);
+
+Date get_date(POST p);
 
 LONG_list get_tags(POST p);
 

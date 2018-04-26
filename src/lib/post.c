@@ -34,8 +34,8 @@ struct post {
     LONG_list answers; // TODO: tornar a lista de respostas numa lista ligada (e incluir tamanho na lista ligada)
     /** \brief Score dos posts */
     long score;
-    /** \brief String da data criação do post */
-    char *CreationDate;
+    /** \brief Data criação do post */
+    Date CreationDate;
     /** \brief Vetor de tags do post */
     LONG_list tags;
     /** \brief Número de comentários */
@@ -60,7 +60,7 @@ struct post {
 */
 POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
                  char *userDisplayName, char *title, long parentId, int answer_count,
-                 long score, char *CreationDate, LONG_list tags, long comment_count) {
+                 long score, Date CreationDate, LONG_list tags, long comment_count) {
     int i;
     POST p = malloc(sizeof(struct post));
     p->id = id;
@@ -75,7 +75,7 @@ POST create_post(long id, enum post_type type, long AcceptedAnswer, long userId,
     for (i = 0; i < answer_count; i++)
         set_list(p->answers, i, -1);    // para não conter um id válido ao acaso
     p->score = score;
-    p->CreationDate = mystrdup(CreationDate); // TODO: processar string e criar data aqui
+    p->CreationDate = CreationDate;
     if (tags != NULL) {
         p->tags = clone_list(tags);
     } else {
@@ -176,19 +176,6 @@ LONG_list get_answers(POST p) {
 }
 
 /**
-\brief Função que devolve a data de criação do post.
-@param p Estrutura do tipo post.
-@returns Date Data de criação de um post.
-*/
-Date get_CreationDate(POST p) {
-    int dia, mes, ano;
-    char *CreationDate = p->CreationDate;
-    sscanf(CreationDate, "%d-%d-%d", &ano, &mes, &dia);
-    Date d = createDate(dia, mes, ano);
-    return d;
-}
-
-/**
 \brief Função que verifica se um post tem uma dada tag.
 @param p Estrutura do tipo post.
 @param tag_id Id da tag.
@@ -214,6 +201,11 @@ int get_ntags(POST p) {
         return get_list_size(p->tags);
     } else
         return 0;
+}
+
+Date get_date(POST p) {
+	Date d = cloneDate(p->CreationDate);
+	return d;
 }
 
 /**

@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 POST p = get_post(c, post_id);
-                d3 = get_CreationDate(p);
+                d3 = get_date(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
             }
         }
@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 POST p = get_post(c, post_id);
-                d4 = get_CreationDate(p);
+                d4 = get_date(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d4), get_month(d4), get_year(d4));
             }
         }
