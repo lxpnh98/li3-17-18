@@ -26,4 +26,6 @@ int isAfter(Date d1, Date d2);
 
 int is_between(Date d, Date begin, Date end);
 
+char *date_to_string(Date d);
+
 #endif

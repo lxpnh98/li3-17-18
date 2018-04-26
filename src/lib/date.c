@@ -4,6 +4,7 @@ Funções que operam sobre datas.
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "date.h"
 
 /** \brief Estrutura que armazena a informação da data */
@@ -144,4 +145,10 @@ int isBefore(Date d1, Date d2) {
 */
 int is_between(Date d, Date begin, Date end) {
     return isAfter(d, begin) && isBefore(d, end);
+}
+
+char *date_to_string(Date d) {
+    char *date = malloc(sizeof(char) * 11);
+    sprintf(date, "%4d/%2d/%2d", d->year, d->month, d->day);
+    return date;
 }
