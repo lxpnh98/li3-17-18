@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
         for (i = 0; i < 10; i++) {
             USER u = get_user(c, get_list(most_active, i));
             char *display_name = get_display_name(u);
-            printf("%s - %d\n", display_name, get_post_count(u));
+            printf("%ld: %s - %d\n", get_id(u), display_name, get_post_count(u));
             free(display_name);
         }
         free_list(most_active);
@@ -90,7 +90,11 @@ int main(int argc, char *argv[]) {
         if (ll != NULL) {           // mais que 0 elementos
             for (i = 0; i < get_list_size(ll); i++) {
                 POST p = get_post(c, get_list(ll, i));
-                printf("%ld - %s\n", get_post_id(p), get_title(p));
+                char *title = get_title(p);
+                char *creation_date = date_to_string(get_CreationDate(p));
+                printf("%ld - %s (%s)\n", get_post_id(p), title, creation_date);
+                free(title);
+                free(creation_date);
             }
         }
     )
@@ -101,10 +105,12 @@ int main(int argc, char *argv[]) {
     printf("Query 5:\n");
     TIME(
         USER u2 = get_user_info(c, 314961);
-        char *bio = get_bio(u2);
-        printf("%ld - %s\n", get_id(u2), bio);
-        free(bio);
-        free_user(u2);
+        if (u2) {
+            char *bio = get_bio(u2);
+            printf("%ld - %s\n", get_id(u2), bio);
+            free(bio);
+            free_user(u2);
+        }
     )
 
     // Query 6
