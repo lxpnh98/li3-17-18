@@ -477,7 +477,7 @@ LONG_list most_answered_questions(TAD_community com, int N, Date begin, Date end
         p = (POST)get_data(l);
         Date d = get_date(p);
         if (get_type(p) == QUESTION && (is_between(d, begin, end))) {
-            insert_by_answer_count(com, list, p, MIN2(n, N), N);
+            insert_by_answer_count(com, list, p, MIN2(n, N), N); // TODO: contar respostas que estão dentro do intervalo de tempo
             n++;
         }
         l = next(l);
@@ -562,7 +562,7 @@ LINKED_LIST separate_title(char *title) {
         if (title[i] == ' ' || title[i] == '.' || title[i] == ',' ||
             title[i] == '!' || title[i] == '?' || title[i] == ';' || title[i] == ';' || title[i] == ':' || title[i] == '\0') {
             word[r] = '\0';
-            titulo = add(titulo, mystrdup(word));
+            titulo = add(titulo, to_lower(word));
             i++;
             r = 0;
         } else {
@@ -581,10 +581,11 @@ LINKED_LIST separate_title(char *title) {
 @returns int Inteiro com valor boleano.
 */
 int find_word(LINKED_LIST title, char *word) {
-    char *titulo;
+    char *no_titulo;
     while (next(title)) {
-        titulo = get_data(title);
-        if (strcmp(titulo, word) == 0) {
+        no_titulo = get_data(title);
+        if (strcmp(no_titulo, word) == 0) {
+            //printf("%s\n", no_titulo);
             return 1;
         } else {
             title = next(title);
@@ -742,6 +743,11 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
 */
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
     LONG_list best_rep = best_rep_users(com, N);
+    int i;
+    for (i = 0; i < get_list_size(best_rep); i++) {
+        printf("%ld,", get_list(best_rep, i));
+    }
+    printf("\n");
     LONG_list most_used = most_used_tags(com, N, best_rep, begin, end);
     free_list(best_rep);
     return most_used;
@@ -780,7 +786,7 @@ void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
     USER u2;
     for (i = 0; i < n; i++) {
         u2 = get_user(com, get_list(l, i));
-        if (get_rep(u2) > rep) {
+        if (rep > get_rep(u2)) {
             break;
         }
     }
@@ -797,7 +803,7 @@ void insert_by_rep(TAD_community com, LONG_list l, USER u, int n, int max_n) {
 @param begin Data de início da contagem.
 @param end Data do fim da contagem.
 @returns LONG_list Lista com os ids dos N utilizadores com melhor reputação.
-*/ 
+*/
 LONG_list most_used_tags(TAD_community com, int N, LONG_list best_rep, Date begin, Date end) {
     LINKED_LIST l = com->post_list;
     xmlHashTable *tag_count_hash = xmlHashCreate(INIT_TAGS);
@@ -883,7 +889,7 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
         char *id_str = ltoa(get_list(l, i));
         t2 = xmlHashLookup(tag_count_hash, (const xmlChar *)id_str);
         free(id_str);
-        if (t2->count > count) {
+        if (count > t2->count) {
             break;
         }
     }

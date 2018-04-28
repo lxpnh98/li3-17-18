@@ -214,10 +214,12 @@ int main(int argc, char *argv[]) {
 
     // Query 11
     printf("Query 11:\n");
-    Date d11 = createDate(1, 11, 2013);
-    Date d12 = createDate(30, 11, 2013);
+    //Date d11 = createDate(1, 11, 2013); // tag counts todos iguais a 1, e mais de 5 tags, assim não dá a mesma lista
+    //Date d12 = createDate(30, 11, 2013);
+    Date d11 = createDate(1, 1, 2014); // tags com mesma contagem não aparecem na ordem dos stores, perguntar o que fazer
+    Date d12 = createDate(31, 12, 2014);
     TIME(
-        LONG_list l11 = most_used_best_rep(c, 5, d11, d12);
+        LONG_list l11 = most_used_best_rep(c, 10, d11, d12);
         if (l11 != NULL) {
             for (i = 0; i < get_list_size(l11); i++) {
                 long tag_id = get_list(l11, i);

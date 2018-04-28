@@ -38,4 +38,6 @@ char *itoa(int x);
 
 char *ltoa(long x);
 
+char *to_lower(char *str);
+
 #endif

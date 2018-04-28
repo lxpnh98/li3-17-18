@@ -5,6 +5,7 @@ Funções e definições de utilidade.
 
 #include <common.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -78,4 +79,19 @@ char *ltoa(long x) {
     char *str = malloc(sizeof(char) * (len + 1));
     sprintf(str, "%ld", x);
     return str;
+}
+
+/*
+\brief Função que converte um string para letras minúsculas.
+@param str String a converter.
+@returns char* Novo string
+*/
+char *to_lower(char *str) {
+    int i;
+    char *new = malloc(sizeof(char *) * (strlen(str) + 1));
+    for (i = 0; str[i] != '\0'; i++) {
+        new[i] = tolower(str[i]);
+    }
+    new[i] = '\0';
+    return new;
 }
