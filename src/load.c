@@ -193,17 +193,18 @@ LONG_list processa_tags(TAD_community com, char *tags_str) {
                 tag[j] = tags_str[i + 1];
             }
             tag[j] = '\0';
-            l = add(l, tag);
+            l = add(l, mystrdup(tag));
             n++;
         }
     }
     LONG_list r = create_list(n);
-    while (next(l)) {
-        set_list(r, k, get_tag_id(get_tag_from_name(com, get_data(l))));
+    LINKED_LIST x = l;
+    while (next(x)) {
+        set_list(r, k, get_tag_id(get_tag_from_name(com, get_data(x))));
         k++;
-        l = next(l);
+        x = next(x);
     }
-    free_linked_list(l,NULL);
+    free_linked_list(l, free);
     return r;
 }
 

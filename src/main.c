@@ -11,6 +11,7 @@ Função main() do programa.
 #include "pair.h"
 #include "list.h"
 #include "date.h"
+#include "common.h"
 #include "community.h"
 
 /**
@@ -104,10 +105,18 @@ int main(int argc, char *argv[]) {
     // Query 5
     printf("Query 5:\n");
     TIME(
-        USER u2 = get_user_info(c, 314961);
+        USER u2 = get_user_info(c, 15811);
         if (u2) {
             char *bio = get_bio(u2);
             printf("%ld - %s\n", get_id(u2), bio);
+            long *last_10_posts = get_10_latest_posts(u2);
+            for (i = 0; i < 10; i++) {
+                char *id_str = itoa(last_10_posts[i]);
+                printf("%s;", id_str);
+                free(id_str);
+            }
+            printf("\n");
+            free(last_10_posts);
             free(bio);
             free_user(u2);
         }
@@ -143,8 +152,8 @@ int main(int argc, char *argv[]) {
                 printf("%ld - %s\n", get_post_id(p), title);
                 free(title);
             }
+            free_list(ll);
         }
-        free_list(ll);
     )
     free_date(d9);
     free_date(d10);
@@ -165,8 +174,8 @@ int main(int argc, char *argv[]) {
                 d3 = get_date(p);
                 printf("%ld - %d/%d/%d\n", get_post_id(p), get_day(d3), get_month(d3), get_year(d3));
             }
+            free_list(l8);
         }
-        free_list(l8);
     )
     if (d3) free_date(d3);
 
