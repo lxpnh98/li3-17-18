@@ -29,20 +29,59 @@ Neste relatório apresentamos a descrição do problema a resolver, assim como e
 \tab O projeto está dividido em duas fases, sendo o objetivo desta primeira fase responsde às onze interrogações utilizando a linguagem de progamação \textit{C}. Para responder às onze interrogações foi necessário a escrita de várias funções, fazendo com que o projeto seja maioritariamente escrita de código, sendo também necessário ter conhecimentos de debugging, algoritmos de procura e biblioteca XML.
 Em cada interrogação são pretendidos resultados distintos. Utilizando os tipos já disponibilizados pelos professores tivemos de implementar as funções de resposta, assim como as funções auxiliares para cada interrogação.
 
-\iffalse
 \chapter{Conceção da Solução}
 \section{Tipos concretos de dados}
 
 \section{Estruturas de dados usadas}
 
-\section{Modulação funcional}
+\tab Nesta fase do projeto utilizamos várias estruturas de dados para conseguir um melhor desempenho. As estruturas utilizadas são:
 
-\section{Abstração de dados}
+Struct TCD\_community, estrutura com a informação das tabelas de hash e das listas onde estão armazenados os diferentes tipos de dados.
 
+Struct tag\_count, estrutura que tem o id da tag, o nome da tag e o número de vezes que cada foi usada.
+
+Struct date, estrutura que representa uma data, com a informação do dia, mês e ano.
+
+Struct Linked\_list, implementação de listas ligadas.
+
+Struct llist, implementação de uma lista de longs.
+
+Struct str\_pair, estrutura que representa um par de strings.
+
+Struct long\_pair, estrutura que representa um par de longs.
+
+Struct post, estrutura que armazena a infromação relevande de um post.
+
+Struct tag, estrutura que armazena a infromação relevande de uma tag.
+
+Struct user, estrutura que armazena a infromação relevande de um user.
+
+\section{Modulação funcional e Abstração de dados}
+
+\tab A modulação do código faz com que o desenvolvimento de software se faça de forma controlada e reutilizável, o que torna mais fácil a manutenção do código e a deteção de erros. Então implementamos a modulação no projeto utilizando os ficheiros do tipo \textit{header} (ficheiros *.h) e dividindo o código em vários ficheiros. Estes diferentes ficheiros criados são usados para criam "classes" e implementar a abstração de dados.
+
+O ficheiro \textit{common.h} define funções de utilidade.
+
+O ficheiro \textit{community.h} define as funções de acesso à estrutura de dados principal.
+
+O ficheiro \textit{date.h} define as funções de acesso à estrutura de dados Date.
+
+O ficheiro \textit{interface.h}, tal como o nome indica, implementa a interface.
+
+O ficheiro \textit{linked\_list.h} define as funções de acesso à estrutura de dados LINKED\_LIST.
+
+O ficheiro \textit{list.h} define as funções de acesso à estrutura de dados LONG\_list.
+
+O ficheiro \textit{pair.h} define as funções de accesso a estrururas de dados dos tipos STR\_pair e LONG\_pair.
+
+O ficheiro \textit{post.h} define as funções acesso à estrutura de dados POST.
+
+O ficheiro \textit{tag.h} define as funções acesso à estrutura de dados TAG.
+
+O ficheiro \textit{user.h} define as funções acesso à estrutura de dados USER.
 \section{Estratégias seguidas em cada uma das interrogações}
 
 \section{Estratégias para melhoramento de desempenho}
-\fi
 
 \chapter{Conclusão}
 \label{sec:conclusao}

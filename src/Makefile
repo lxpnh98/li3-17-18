@@ -34,3 +34,6 @@ clean_relatorio:
 
 doc:
 	doxygen Doxyfile.bak
+
+relatorio:
+	pdflatex ../Relatorio/relatorio.tex -output-directory ../Relatorio/relatorio.tex
