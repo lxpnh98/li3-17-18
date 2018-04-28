@@ -424,9 +424,12 @@ LONG_list most_voted_answers(TAD_community com, int N, Date begin, Date end) {
     int n = 0;
     while (next(l) != NULL) {
         p = (POST)get_data(l);
-        insert_by_score(com, list, p, MIN2(n, N), N);
+        Date date = get_date(p);
+        if (get_type(p) == ANSWER && is_between(date, begin, end)) {
+            insert_by_score(com, list, p, MIN2(n, N), N);
+            n++;
+        }
         l = next(l);
-        n++;
     }
     return list;
 }
