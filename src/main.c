@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
             for (i = 0; i < get_list_size(ll); i++) {
                 POST p = get_post(c, get_list(ll, i));
                 char *title = get_title(p);
-                printf("%ld - %s\n", get_post_id(p), title);
+                printf("%ld - %s (%d)\n", get_post_id(p), title, get_answer_count(p));
                 free(title);
             }
             free_list(ll);

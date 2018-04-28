@@ -500,7 +500,7 @@ void insert_by_answer_count(TAD_community com, LONG_list l, POST p, int n, int m
     POST p2;
     for (i = 0; i < n; i++) {
         p2 = get_post(com, get_list(l, i));
-        if (get_answer_count(p2) > post_count) {
+        if (post_count > get_answer_count(p2)) {
             break;
         }
     }
