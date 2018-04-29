@@ -398,7 +398,7 @@ USER get_user_info(TAD_community com, long id) {
     bio = get_bio(u);
     l = get_posts_long_list(u);
 
-    user = create_user(id, "", 0, bio, NULL);
+    user = create_user(id, "", 0, bio);
     set_post_list(user, l);
 
     free(bio);

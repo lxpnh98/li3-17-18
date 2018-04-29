@@ -52,7 +52,7 @@ void processar_users(TAD_community com, xmlDoc * doc) {
         char *display_name = GET_PROP(node, "DisplayName");
         char *short_bio = GET_PROP(node, "AboutMe");
 
-        USER user = create_user(id, display_name, reputation, short_bio, NULL); // TODO: retirar último argumento (nunca utilizado)
+        USER user = create_user(id, display_name, reputation, short_bio);
         free(display_name);
         free(short_bio);
         add_user(com, user);

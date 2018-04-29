@@ -34,14 +34,13 @@ struct user {
 @param post_history Histórico dos ids dos posts do utilizador.
 @returns USER Utilizador.
 */
-USER create_user(long id, char *display_name, long rep, char *bio, long *post_history) {
+USER create_user(long id, char *display_name, long rep, char *bio) {
     USER u = malloc(sizeof(struct user));
     u->id = id;
     u->rep = rep;
     u->display_name = mystrdup(display_name);
     u->bio = mystrdup(bio);
     u->post_count = 0;
-    //memcpy(u->posts, post_history, sizeof(long) * 10);
     return u;
 }
 

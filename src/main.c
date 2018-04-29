@@ -230,8 +230,8 @@ int main(int argc, char *argv[]) {
                 TAG t = get_tag_from_id(c, tag_id);
                 printf("%ld - %s\n", get_tag_id(t), get_tagName(t));
             }
+            free_list(l11);
         }
-        free_list(l11);
     )
     free_date(d11);
     free_date(d12);
