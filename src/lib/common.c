@@ -81,17 +81,3 @@ char *ltoa(long x) {
     return str;
 }
 
-/*
-\brief Função que converte um string para letras minúsculas.
-@param str String a converter.
-@returns char* Novo string
-*/
-char *to_lower(char *str) {
-    int i;
-    char *new = malloc(sizeof(char *) * (strlen(str) + 1));
-    for (i = 0; str[i] != '\0'; i++) {
-        new[i] = tolower(str[i]);
-    }
-    new[i] = '\0';
-    return new;
-}

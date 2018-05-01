@@ -522,7 +522,6 @@ int find_word(LINKED_LIST title, char *word);
 @returns LONG_list Lista com os ids das N perguntas cujo título contem a palavra.
 */
 LONG_list contains_word(TAD_community com, char *word, int N) {
-    LINKED_LIST titulo;
     LINKED_LIST x = com->post_list;
     LONG_list r = create_list(N);
     int i;
@@ -534,64 +533,14 @@ LONG_list contains_word(TAD_community com, char *word, int N) {
         p = (POST)get_data(x);
         if (get_type(p) == QUESTION) {
             char *title = get_title(p);
-            titulo = separate_title(title);
-            free(title);
-            if (find_word(titulo, word)) {
+            if (strstr(title, word)) {
                 insert_by_date(com, r, p, MIN2(n, N), N);
                 n++;
             }
-            free_linked_list(titulo, free);
         }
         x = next(x);
     }
     return r;
-}
-
-/**
-\brief Função que separa a String do título numa lista ligada.
-@param title Título de uma pergunta.
-@returns LINKED_LIST Lista ligada com os caracteres do título passado como argumento.
-*/
-LINKED_LIST separate_title(char *title) {
-    int i = 0;
-    int r = 0;
-    int tam = strlen(title);
-    char word[1024];
-    LINKED_LIST titulo = init_linked_list();
-    while (i <= tam) {
-        if (title[i] == ' ' || title[i] == '.' || title[i] == ',' ||
-            title[i] == '!' || title[i] == '?' || title[i] == ';' || title[i] == ';' || title[i] == ':' || title[i] == '\0') {
-            word[r] = '\0';
-            titulo = add(titulo, to_lower(word));
-            i++;
-            r = 0;
-        } else {
-            word[r] = title[i];
-            r++;
-            i++;
-        }
-    }
-    return titulo;
-}
-
-/**
-\brief Função que separa a String do título numa lista ligada.
-@param LINKED_LIST Lista ligada com o título de uma pergunta.
-@param word Palavra a procurar.
-@returns int Inteiro com valor boleano.
-*/
-int find_word(LINKED_LIST title, char *word) {
-    char *no_titulo;
-    while (next(title)) {
-        no_titulo = get_data(title);
-        if (strcmp(no_titulo, word) == 0) {
-            //printf("%s\n", no_titulo);
-            return 1;
-        } else {
-            title = next(title);
-        }
-    }
-    return 0;
 }
 
 int both_users_participate(TAD_community com, POST p, long id1, long id2);
