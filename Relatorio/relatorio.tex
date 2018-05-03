@@ -82,6 +82,28 @@ O ficheiro \textit{user.h} define as funções acesso à estrutura de dados USER
 
 \section{Estratégias seguidas em cada uma das interrogações}
 
+Na interrogação 1, o utlizador pretendido é acedido através da tabela de hash, e é retornado um par de strings que contém o título do post e o nome do autor do mesmo (acedido através do id do utilizador, guardado na estrutura do post).
+
+Na interrogação 2, cada utilizador é inserido numa LONG\_list de tamanho N, ordenadamente (algoritmo de inserção do 'insertion sort') em função do número de posts (descendente).
+
+Na interrogação 3, é iterada a lista de posts, mantendo a contagem do número de perguntas e respostas feitas num dado intervalo de tempo. No final, é retornado o par de longs destas contagens.
+
+Na interrogação 4, é iterada a lista de posts, e para cada post, verifica que foi criado dentro do intervalo de tempo dado, que é questão, e que contêm a tag especificada. Caso se verifique, adiciona o post a um lista ligada (e incrementado um contador do seu tamanho). Cada post dentro desta lista é inserido ordenadamente numa lista de longs do tamanho da lista ligada por ordem cronológica inversa.
+
+Na interrogação 5, é criado um utilizador 'dummy' para conter a informação de perfil e os IDs dos últimos 10 posts (guardados na estrutura do utilizador) do utlizador em questão.
+
+Na interrogação 6, é iterada a lista de posts, e para cada post, é verificado se é resposta e se foi criado dentro do intervalo de tempo dado. Se sim, é adicionado o respetivo id por ordem decrescente de pontuação (campo \textit{Score}) num lista de longs com N elementos.
+
+Na interrogação 7, é iterada a lista de posts, e para cada post, é verificado se é uma pergunta e se foi criado no intervalo de tempo dado. Nesse caso, é inserido o seu id por ordem decrescente do número de respostas num lista de longs com N elementos.
+
+Na interrogação 8, para cada questão dentro da lista de posts, é testado se o seu título contém a sequência de carateres dada como argumentos. Caso contenha, o respetivo id é inserido por cronologia inversa, numa lista de longs e N elementos no máximo.
+
+Na interrogação 9, são inseridos os ids dos posts em que participaram ambos os utilizadores dados numa lista de longs com N elementos ordenado por cronologia inversa. Para determinar se ambos os utilizadores participaram num post, é iterada a lista dos posts, e para cada pergunta, é verificado se, um deles é autor da pergunta e outro de uma resposta ou se ambos são autores de pelo menos uma resposta.
+
+Na interrogação 10, é percorrida a lista dos ids das respostas da pergunta e, para cada resposta, é calculado a média ponderada, especificada no enunciado, e depois retornado o id da resposta com a média mais alta.
+
+Na interrogação 11, primeiro é calculada a lista dos ids dos N utilizadores com melhor reputação, e a partir dessa lista, é calculada a lista dos ids das N tags mais utlizadas por estes utilizadores dentro de um determinado intervalo de tempo. Para calcular a primeira lista, é iterada a lista de utilizadores e inserido numa lista de N longs o id de cada utilizador em função da sua reputação (ordem decrescente). Na segunda fase, é iterada a lista de posts, e contada a frequência absoluta da ocorrência de cada tag (através da estrutura \textit{TAG\_COUNT}), excluindo posts que não foram criados dentro do intervalo de tempo dado ou que não foram postados pelos N utilizadores com melhor reputação. Por fim, para cada tag contabilizada, é inserido o seu id por ordem decrescente da contagem da sua ocorrência.
+
 \section{Estratégias para melhoramento de desempenho}
 
 \chapter{Conclusão}

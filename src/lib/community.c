@@ -692,11 +692,6 @@ void insert_by_tag_count(xmlHashTable *tag_count_hash, LONG_list l, TAG_COUNT t,
 */
 LONG_list most_used_best_rep(TAD_community com, int N, Date begin, Date end) {
     LONG_list best_rep = best_rep_users(com, N);
-    int i;
-    for (i = 0; i < get_list_size(best_rep); i++) {
-        printf("%ld,", get_list(best_rep, i));
-    }
-    printf("\n");
     LONG_list most_used = most_used_tags(com, N, best_rep, begin, end);
     free_list(best_rep);
     return most_used;
