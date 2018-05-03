@@ -30,10 +30,10 @@ clean_doc:
 	rm -rf ../doc/html ../doc/latex
 
 clean_relatorio:
-	rm ../Relatorio/relatorio.aux ../Relatorio/relatorio.log ../Relatorio/relatorio.toc ../Relatorio/relatorio.pdf 
+	rm relatorio.aux relatorio.log relatorio.toc ../Relatorio/relatorio.pdf 
 
 doc:
 	doxygen Doxyfile.bak
 
 relatorio:
-	pdflatex ../Relatorio/relatorio.tex -output-directory ../Relatorio/relatorio.tex
+	pdflatex ../Relatorio/relatorio.tex && mv relatorio.pdf ../Relatorio
