@@ -26,23 +26,23 @@ Neste relatório apresentamos a descrição do problema a resolver, assim como e
 \chapter{Descrição do Problema}
 \label{sec:problema}
 
-\tab O projeto está dividido em duas fases, sendo o objetivo desta primeira fase responsde às onze interrogações utilizando a linguagem de progamação \textit{C}. Para responder às onze interrogações foi necessário a escrita de várias funções, fazendo com que o projeto seja maioritariamente escrita de código, sendo também necessário ter conhecimentos de debugging, algoritmos de procura e biblioteca XML.
-Em cada interrogação são pretendidos resultados distintos. Utilizando os tipos já disponibilizados pelos professores tivemos de implementar as funções de resposta, assim como as funções auxiliares para cada interrogação.
+\tab O projeto está dividido em duas fases, sendo o objetivo desta primeira fase responsde às onze interrogações utilizando a linguagem de progamação \textit{C}. Para responder às onze interrogações foi necessário a escrita de várias funções, sendo também necessário fazer o debugging, e ter conhecimentos de algoritmos de procura e da biblioteca de parsing de ficheiros XML.
+
+Em cada interrogação são pretendidos resultados distintos. Utilizando os tipos já disponibilizados pelos professores implementamos as funções de resposta, assim como as funções auxiliares para cada interrogação.
 
 \chapter{Conceção da Solução}
-\section{Tipos concretos de dados}
 
 \section{Estruturas de dados usadas}
 
-\tab Nesta fase do projeto utilizamos várias estruturas de dados para conseguir um melhor desempenho. As estruturas utilizadas são:
+\tab Nesta fase do projeto utilizamos várias estruturas de dados para conseguir um melhor desempenho:
 
 Struct TCD\_community, estrutura com a informação das tabelas de hash e das listas onde estão armazenados os diferentes tipos de dados.
 
-Struct tag\_count, estrutura que tem o id da tag, o nome da tag e o número de vezes que cada foi usada.
+Struct tag\_count, estrutura que tem o id da tag, o nome da tag e o número de vezes que foi usada.
 
 Struct date, estrutura que representa uma data, com a informação do dia, mês e ano.
 
-Struct Linked\_list, implementação de listas ligadas.
+Struct linked\_list, implementação de listas ligadas.
 
 Struct llist, implementação de uma lista de longs.
 
@@ -50,19 +50,19 @@ Struct str\_pair, estrutura que representa um par de strings.
 
 Struct long\_pair, estrutura que representa um par de longs.
 
-Struct post, estrutura que armazena a infromação relevande de um post.
+Struct post, estrutura que armazena a informação relevante de um post.
 
-Struct tag, estrutura que armazena a infromação relevande de uma tag.
+Struct tag, estrutura que armazena a informação relevante de uma tag.
 
-Struct user, estrutura que armazena a infromação relevande de um user.
+Struct user, estrutura que armazena a infromação relevante de um user.
 
 \section{Modulação funcional e Abstração de dados}
 
-\tab A modulação do código faz com que o desenvolvimento de software se faça de forma controlada e reutilizável, tornando mais fácil a manutenção do código e a deteção de erros. Então implementamos a modulação no projeto utilizando os ficheiros do tipo \textit{header} (ficheiros *.h) e dividindo o código em vários ficheiros. Estes diferentes ficheiros criados são usados para criar "classes" e implementar a abstração de dados.
+\tab A modulação do código torna o desenvolvimento da aplicação estruturado, tornando mais fácil a manutenção e reutilização do código. Para isto, são utilizados os ficheiros \textit{header} e o código é dividido em vários ficheiros. Estes diferentes ficheiros são usados para criar 'classes' de 'objetos', assegurando a abstração de dados e o encapsulamento.
 
-O ficheiro \textit{common.h} define funções de utilidade.
+O ficheiro \textit{common.h} define funções de utilidade geral.
 
-O ficheiro \textit{community.h} define as funções de acesso à estrutura de dados principal.
+O ficheiro \textit{community.h} define as funções de acesso à estrutura de dados principal e as funções de resposta às queries.
 
 O ficheiro \textit{date.h} define as funções de acesso à estrutura de dados Date.
 
@@ -79,6 +79,7 @@ O ficheiro \textit{post.h} define as funções acesso à estrutura de dados POST
 O ficheiro \textit{tag.h} define as funções acesso à estrutura de dados TAG.
 
 O ficheiro \textit{user.h} define as funções acesso à estrutura de dados USER.
+
 \section{Estratégias seguidas em cada uma das interrogações}
 
 \section{Estratégias para melhoramento de desempenho}
