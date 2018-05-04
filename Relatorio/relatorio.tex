@@ -20,7 +20,7 @@
 
 \tab Este relatório apresenta uma explicação da primeira fase do projeto da disciplina de Laboratórios de Informática III, do 2º ano do Mestrado Integrado em Engenharia Informática da Universidade do Minho, que toma a forma de um projeto a ser desenvolvido na linguagem de programação imperativa \textit{C}.
 
-Como projeto de avaliação é nos proposto responder a onze interrogações sobre processamento de dados do Stack Overflow. Como forma de resposta desenvolvemos as estruturas de dados, tivemos em consideração a abstração e modulação dos dados e também usamos os algoritmos que nos pareceram mais adequados para conseguir um bom resultado nos tempos de resposta de cada interrogação.
+Como projeto de avaliação é nos proposto responder a onze interrogações sobre processamento de dados de comunidades do Stack Exchange. Como forma de resposta desenvolvemos as estruturas de dados, tivemos em consideração a abstração e modulação dos dados e também usamos os algoritmos que nos pareceram mais adequados para conseguir um bom resultado nos tempos de resposta de cada interrogação.
 
 Neste relatório apresentamos a descrição do problema a resolver, assim como explicamos os tipos de dados, as estruturas usadas e as estratégias de resposta e melhoria dos algoritmos de resposta às interrogações.
 \chapter{Descrição do Problema}
@@ -36,77 +36,111 @@ Em cada interrogação são pretendidos resultados distintos. Utilizando os tipo
 
 \tab Nesta fase do projeto utilizamos várias estruturas de dados para conseguir um melhor desempenho:
 
-Struct TCD\_community, estrutura com a informação das tabelas de hash e das listas onde estão armazenados os diferentes tipos de dados.
+\begin{itemize}
 
-Struct tag\_count, estrutura que tem o id da tag, o nome da tag e o número de vezes que foi usada.
+\item Struct TCD\_community, estrutura com a informação das tabelas de hash e das listas onde estão armazenados os diferentes tipos de dados.
 
-Struct date, estrutura que representa uma data, com a informação do dia, mês e ano.
+\item Struct tag\_count, estrutura que tem o id da tag, o nome da tag e o número de vezes que foi usada.
 
-Struct linked\_list, implementação de listas ligadas.
+\item Struct date, estrutura que representa uma data, com a informação do dia, mês e ano.
 
-Struct llist, implementação de uma lista de longs.
+\item Struct linked\_list, implementação de listas ligadas.
 
-Struct str\_pair, estrutura que representa um par de strings.
+\item Struct llist, implementação de uma lista de longs.
 
-Struct long\_pair, estrutura que representa um par de longs.
+\item Struct str\_pair, estrutura que representa um par de strings.
 
-Struct post, estrutura que armazena a informação relevante de um post.
+\item Struct long\_pair, estrutura que representa um par de longs.
 
-Struct tag, estrutura que armazena a informação relevante de uma tag.
+\item Struct post, estrutura que armazena a informação relevante de um post.
 
-Struct user, estrutura que armazena a infromação relevante de um user.
+\item Struct tag, estrutura que armazena a informação relevante de uma tag.
+
+\item Struct user, estrutura que armazena a infromação relevante de um user.
+
+\end{itemize}
+
+\newpage % começão secção em nova página
 
 \section{Modulação funcional e Abstração de dados}
 
 \tab A modulação do código torna o desenvolvimento da aplicação estruturado, tornando mais fácil a manutenção e reutilização do código. Para isto, são utilizados os ficheiros \textit{header} e o código é dividido em vários ficheiros. Estes diferentes ficheiros são usados para criar 'classes' de 'objetos', assegurando a abstração de dados e o encapsulamento.
 
-O ficheiro \textit{common.h} define funções de utilidade geral.
+\begin{itemize}
 
-O ficheiro \textit{community.h} define as funções de acesso à estrutura de dados principal e as funções de resposta às queries.
+\item O ficheiro \textit{common.h} define funções de utilidade geral.
 
-O ficheiro \textit{date.h} define as funções de acesso à estrutura de dados Date.
+\item O ficheiro \textit{community.h} define as funções de acesso à estrutura de dados principal e as funções de resposta às queries.
 
-O ficheiro \textit{interface.h}, tal como o nome indica, implementa a interface.
+\item O ficheiro \textit{date.h} define as funções de acesso à estrutura de dados Date.
 
-O ficheiro \textit{linked\_list.h} define as funções de acesso à estrutura de dados LINKED\_LIST.
+\item O ficheiro \textit{interface.h}, tal como o nome indica, implementa a interface.
 
-O ficheiro \textit{list.h} define as funções de acesso à estrutura de dados LONG\_list.
+\item O ficheiro \textit{linked\_list.h} define as funções de acesso à estrutura de dados LINKED\_LIST.
 
-O ficheiro \textit{pair.h} define as funções de accesso a estrururas de dados dos tipos STR\_pair e LONG\_pair.
+\item O ficheiro \textit{list.h} define as funções de acesso à estrutura de dados LONG\_list.
 
-O ficheiro \textit{post.h} define as funções acesso à estrutura de dados POST.
+\item O ficheiro \textit{pair.h} define as funções de accesso a estrururas de dados dos tipos STR\_pair e LONG\_pair.
 
-O ficheiro \textit{tag.h} define as funções acesso à estrutura de dados TAG.
+\item O ficheiro \textit{post.h} define as funções acesso à estrutura de dados POST.
 
-O ficheiro \textit{user.h} define as funções acesso à estrutura de dados USER.
+\item O ficheiro \textit{tag.h} define as funções acesso à estrutura de dados TAG.
+
+\item O ficheiro \textit{user.h} define as funções acesso à estrutura de dados USER.
+
+\end{itemize}
 
 \section{Estratégias seguidas em cada uma das interrogações}
 
-Na interrogação 1, o utlizador pretendido é acedido através da tabela de hash, e é retornado um par de strings que contém o título do post e o nome do autor do mesmo (acedido através do id do utilizador, guardado na estrutura do post).
+\subsection{Interrogação 1}
+O utlizador pretendido é acedido através da tabela de hash, e é retornado um par de strings que contém o título do post e o nome do autor do mesmo (acedido através do id do utilizador, guardado na estrutura do post).
 
-Na interrogação 2, cada utilizador é inserido numa LONG\_list de tamanho N, ordenadamente (algoritmo de inserção do 'insertion sort') em função do número de posts (descendente).
+\subsection{Interrogação 2}
+Cada utilizador é inserido numa LONG\_list de tamanho N, ordenadamente (algoritmo de inserção do 'insertion sort') em função do número de posts (descendente).
 
-Na interrogação 3, é iterada a lista de posts, mantendo a contagem do número de perguntas e respostas feitas num dado intervalo de tempo. No final, é retornado o par de longs destas contagens.
+\subsection{Interrogação 3}
+É iterada a lista de posts, mantendo a contagem do número de perguntas e respostas feitas num dado intervalo de tempo. No final, é retornado o par de longs destas contagens.
 
-Na interrogação 4, é iterada a lista de posts, e para cada post, verifica que foi criado dentro do intervalo de tempo dado, que é questão, e que contêm a tag especificada. Caso se verifique, adiciona o post a um lista ligada (e incrementado um contador do seu tamanho). Cada post dentro desta lista é inserido ordenadamente numa lista de longs do tamanho da lista ligada por ordem cronológica inversa.
+\subsection{Interrogação 4}
+É iterada a lista de posts, e para cada post, verifica que foi criado dentro do intervalo de tempo dado, que é questão, e que contêm a tag especificada. Caso se verifique, adiciona o post a um lista ligada (e incrementado um contador do seu tamanho). Cada post dentro desta lista é inserido ordenadamente numa lista de longs do tamanho da lista ligada por ordem cronológica inversa.
 
-Na interrogação 5, é criado um utilizador 'dummy' para conter a informação de perfil e os IDs dos últimos 10 posts (guardados na estrutura do utilizador) do utlizador em questão.
+\subsection{Interrogação 5}
+É criado um utilizador 'dummy' para conter a informação de perfil e os IDs dos últimos 10 posts (guardados na estrutura do utilizador) do utlizador em questão.
 
-Na interrogação 6, é iterada a lista de posts, e para cada post, é verificado se é resposta e se foi criado dentro do intervalo de tempo dado. Se sim, é adicionado o respetivo id por ordem decrescente de pontuação (campo \textit{Score}) num lista de longs com N elementos.
+\subsection{Interrogação 6}
+É iterada a lista de posts, e para cada post, é verificado se é resposta e se foi criado dentro do intervalo de tempo dado. Se sim, é adicionado o respetivo id por ordem decrescente de pontuação (campo \textit{Score}) num lista de longs com N elementos.
 
-Na interrogação 7, é iterada a lista de posts, e para cada post, é verificado se é uma pergunta e se foi criado no intervalo de tempo dado. Nesse caso, é inserido o seu id por ordem decrescente do número de respostas num lista de longs com N elementos.
+\subsection{Interrogação 7}
+É iterada a lista de posts, e para cada post, é verificado se é uma pergunta e se foi criado no intervalo de tempo dado. Nesse caso, é inserido o seu id por ordem decrescente do número de respostas num lista de longs com N elementos.
 
-Na interrogação 8, para cada questão dentro da lista de posts, é testado se o seu título contém a sequência de carateres dada como argumentos. Caso contenha, o respetivo id é inserido por cronologia inversa, numa lista de longs e N elementos no máximo.
+\subsection{Interrogação 8}
+Para cada questão dentro da lista de posts, é testado se o seu título contém a sequência de carateres dada como argumentos. Caso contenha, o respetivo id é inserido por cronologia inversa, numa lista de longs e N elementos no máximo.
 
-Na interrogação 9, são inseridos os ids dos posts em que participaram ambos os utilizadores dados numa lista de longs com N elementos ordenado por cronologia inversa. Para determinar se ambos os utilizadores participaram num post, é iterada a lista dos posts, e para cada pergunta, é verificado se, um deles é autor da pergunta e outro de uma resposta ou se ambos são autores de pelo menos uma resposta.
+\subsection{Interrogação 9}
+São inseridos os ids dos posts em que participaram ambos os utilizadores dados numa lista de longs com N elementos ordenado por cronologia inversa. Para determinar se ambos os utilizadores participaram num post, é iterada a lista dos posts, e para cada pergunta, é verificado se, um deles é autor da pergunta e outro de uma resposta ou se ambos são autores de pelo menos uma resposta.
 
-Na interrogação 10, é percorrida a lista dos ids das respostas da pergunta e, para cada resposta, é calculado a média ponderada, especificada no enunciado, e depois retornado o id da resposta com a média mais alta.
+\subsection{Interrogação 10}
+É percorrida a lista dos ids das respostas da pergunta e, para cada resposta, é calculado a média ponderada, especificada no enunciado, e depois retornado o id da resposta com a média mais alta.
 
-Na interrogação 11, primeiro é calculada a lista dos ids dos N utilizadores com melhor reputação, e a partir dessa lista, é calculada a lista dos ids das N tags mais utlizadas por estes utilizadores dentro de um determinado intervalo de tempo. Para calcular a primeira lista, é iterada a lista de utilizadores e inserido numa lista de N longs o id de cada utilizador em função da sua reputação (ordem decrescente). Na segunda fase, é iterada a lista de posts, e contada a frequência absoluta da ocorrência de cada tag (através da estrutura \textit{TAG\_COUNT}), excluindo posts que não foram criados dentro do intervalo de tempo dado ou que não foram postados pelos N utilizadores com melhor reputação. Por fim, para cada tag contabilizada, é inserido o seu id por ordem decrescente da contagem da sua ocorrência.
+\subsection{Interrogação 11}
+Primeiro é calculada a lista dos ids dos N utilizadores com melhor reputação, e a partir dessa lista, é calculada a lista dos ids das N tags mais utlizadas por estes utilizadores dentro de um determinado intervalo de tempo. Para calcular a primeira lista, é iterada a lista de utilizadores e inserido numa lista de N longs o id de cada utilizador em função da sua reputação (ordem decrescente). Na segunda fase, é iterada a lista de posts, e contada a frequência absoluta da ocorrência de cada tag (através da estrutura \textit{TAG\_COUNT}), excluindo posts que não foram criados dentro do intervalo de tempo dado ou que não foram postados pelos N utilizadores com melhor reputação. Por fim, para cada tag contabilizada, é inserido o seu id por ordem decrescente da contagem da sua ocorrência.
 
 \section{Estratégias para melhoramento de desempenho}
 
+Para inserir elementos de forma ordenada nas listas pedidas como resultado, é utilizada uma procura linear. Devido à aparente ineficiência deste processo pois é de complexidade linear, foi tentada uma implementação usando árvores de procura binária com um certo tamanho máximo (retirando o valor máximo/mínimo sempre que necessário para manter o tamanho). Teóricamente, esta alteração resultaria numa redução do tempo de execução, especialmente para inputs de tamanho maior.
+
+O que se verificou, no entanto, foi exatamente o oposto. O tempo de execução era ordens de magnitude superior ao original. Isto deve-se á forma como estão dispostos os dados: como os posts no ficheiro Posts.xml estão quase ordenados cronológicamente, a inserção numa lista por procura linear torna-se em média muito mais eficiente (tempo constante) que a inserção numa árvore binária (que se tornava muito desiquilibrada). Para além disso, existia o \textit{overhead} de manter a árvore binária com um certo número de elementos, que não existia no caso de uma simples lista.
+
 \chapter{Conclusão}
+
+Foi-nos proposto, como projeto de avaliação, fazer um programa com capacidade de responder a onze interrogações sobre dados provenientes de comunidades do Stack Exchange. A implementação foi feita na linguagem de programação C, mas utilizando conceitos de programação por objetos e garantido a abstração e dados e o encapsulamento.
+
+Este método de desenvolvimento, tal como a utilização de ferramentas Unix, foi-nos útil no raciocínio sobre as operações do programa e no debugging.
+
+Para torna o código mais sucinto e extensível era possível generalizar as funções de inserção ordenada.
+
+Uma possível otimização seria implementar uma árvore de procura binária equilibrada, garantido a inserção em tempo \textit{quasi-linear}. No entanto, é duvidoso que isto seria mais eficiente que a implementação atual devido à estrutura dos ficheiros XML do dump, como explicado antes.
+
 \label{sec:conclusao}
 
 \end{document}
