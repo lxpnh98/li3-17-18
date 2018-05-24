@@ -107,9 +107,9 @@ public class User {
 
     public String toSting(){
 
-        String listString = ""; 
+        String listString = "";
 
-        for (long l : this.posts){ 
+        for (long l : this.posts){
             listString += String.valueOf(l) + "\n";
         }
 
