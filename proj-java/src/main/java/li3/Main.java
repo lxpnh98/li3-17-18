@@ -27,10 +27,10 @@ public class Main {
             LOAD PHASE
          */
         try {
-        before = System.currentTimeMillis();
-        qe.load(args[0]);
-        after = System.currentTimeMillis();
-        logtime.writeLog("LOAD -> "+(after-before)+" ms");
+            before = System.currentTimeMillis();
+            qe.load(args[0]);
+            after = System.currentTimeMillis();
+            logtime.writeLog("LOAD -> "+(after-before)+" ms");
         } catch(IndexOutOfBoundsException e){
             System.out.println("Deve passar o caminho do dump como argumento.");
         }

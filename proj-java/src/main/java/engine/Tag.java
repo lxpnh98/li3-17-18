@@ -1,3 +1,5 @@
+package engine;
+
 public class Tag {
     private long id;
     private String name;
@@ -8,7 +10,7 @@ public class Tag {
     }
 
     public long getId() {
-        return this.is;
+        return this.id;
     }
 
     public String getName() {

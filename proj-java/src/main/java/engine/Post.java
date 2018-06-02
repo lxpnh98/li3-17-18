@@ -1,11 +1,13 @@
-public enum PostType {
-    ANSWER, QUESTION
-}
+package engine;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
 
 public class Post {
     private long id;
-    private enum PostType type;
-    private long AcceptedAnswer;
+    private PostType type;
+    private long acceptedAnswer;
     private long userId;
     private String userDisplayName;
     private String title;
@@ -16,7 +18,22 @@ public class Post {
     private List<Long> tags;
     private long commentCount;
 
-    public Post(long id, enum PostType type, long AcceptedAnswer, long userId,
+    public Post() {
+        this.id = 0;
+        this.type = PostType.OTHERS;
+        this.acceptedAnswer = 0;
+        this.userId = 0;
+        this.userDisplayName = "";
+        this.title = "";
+        this.parentId = 0;
+        this.answers = new ArrayList<Long>();
+        this.score = 0;
+        this.creationDate = new Date();
+        this.tags = new ArrayList<>();
+        this.commentCount = 0;
+    }
+
+    public Post(long id, PostType type, long acceptedAnswer, long userId,
                 String userDisplayName, String title, long parentId,
                 long score, String creationDate, List tags, long commentCount) {
         this.id = id;
@@ -28,17 +45,37 @@ public class Post {
         this.parentId = parentId;
         this.answers = new ArrayList<Long>();
         this.score = score;
-        this.creationDate = Date.fromString(creationDate);
+        this.creationDate = new Date();
+         /* Date.fromString(creationDate); Metodo fromString() Deprecated */
         this.tags = tags; // fazer clone
-        this.comment_count = comment_count;
+        this.commentCount = commentCount;
+    }
+
+    public Post(Post p) {
+        this.id = p.getId();
+        this.type = p.getType();
+        this.acceptedAnswer = p.getAcceptedAnswer();
+        this.userId = p.getUserId();
+        this.userDisplayName = p.getUserDisplayName();
+        this.title = p.getTitle();
+        this.parentId = p.getParentId();
+        this.answers = p.getAnswers();
+        this.score = p.getScore();
+        this.creationDate = p.getDate();
+        this.tags = p.getTags();
+        this.commentCount = p.getCommentCount();
     }
 
     public long getId() {
         return this.id;
     }
 
-    public enum PostType getType() {
+    public PostType getType() {
         return this.type;
+    }
+
+    public long getAcceptedAnswer() {
+        return this.acceptedAnswer;
     }
 
     public long getUserId() {
@@ -57,10 +94,6 @@ public class Post {
         return this.parentId;
     }
 
-    public long getScore() {
-        return this.score;
-    }
-
     public List getAnswers() {
         return this.answers; // fazer clone
     }
@@ -68,9 +101,13 @@ public class Post {
     public void addAnswer(long id) {
         this.answers.add(id);
     }
+    
+    public long getScore() {
+        return this.score;
+    }
 
     public Date getDate() {
-        return this.date.clone();
+        return this.creationDate; //fazer clone
     }
 
     public boolean hasTag(long tagId) {
@@ -85,4 +122,31 @@ public class Post {
         return this.commentCount;
     }
 
-};
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setType(PostType type) {
+        this.type = type;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setUserDisplayName(String userDisplayName) {
+        this.userDisplayName = userDisplayName;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setParentId(long parentId) {
+        this.parentId = parentId;
+    }
+
+    public Post clone() {
+        return new Post(this);
+    }
+}
