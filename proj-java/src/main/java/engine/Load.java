@@ -19,7 +19,7 @@ public class Load {
         try {
 
             SAXParser parser = saxParserFactory.newSAXParser();
-            postsParse handler = new postsParse();
+            PostsParse handler = new PostsParse();
             parser.parse(new File(dumpPath + "Posts.xml"), handler);
 
             List<Post> postList = handler.getPostList();

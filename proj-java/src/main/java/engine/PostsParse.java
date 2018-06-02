@@ -9,7 +9,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class postsParse extends DefaultHandler {
+public class PostsParse extends DefaultHandler {
 
     // List to hold Posts
     private List<Post> postList = null;

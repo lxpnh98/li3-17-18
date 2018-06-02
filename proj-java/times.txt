@@ -1,4 +1,4 @@
-LOAD -> 1403 ms
+LOAD -> 1367 ms
 Query 1: -> 0 ms
 Query 2 -> 0 ms
 Query 3 -> 3 ms
