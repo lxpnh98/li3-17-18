@@ -8,24 +8,25 @@ import common.Pair;
 import li3.TADCommunity;
 
 public class QueryOne {
-	private String titulo;
-	private String nome;
-	private Pair<String,String> pair;
+	
+	public static Pair<String,String> resposta(long id, List<Post> postList, List<User> userList, Pair<String,String> res){
+		String titulo = "";
+		String nome = "";
 
-	public Pair<String,String> infoFromPost(long id){
-
-		for(Post p: post){
-			if (p.getId() == id){
-				this.titulo = p.getTitle();
-				for (User u: usersHandler.getUserList()){
-					if (u.getId() == p.getUserId()){
-						this.nome = u.getDisplayName();
+		for (Post p : postList) {
+			if (p.getId() == id) {
+				titulo = p.getTitle();
+				System.out.println(titulo);
+				for (User u : userList) {
+					if (u.getId() == p.getUserId()) {
+						nome = u.getDisplayName();
 					}
 				}
 			}
 		}
-		this.pair = new Pair<>(titulo, nome);
 
-		return this.pair;
+		res.setFst(titulo);
+		res.setSecond(nome);
+		return res;
 	}
 }

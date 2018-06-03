@@ -13,7 +13,8 @@ import java.util.List;
 
 public class Load {
 
-    public static void load(String dumpPath) {
+    public static void load(String dumpPath, List<Post> postList,
+    	                     List<User> userList, List<Tag> tagList) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
         try {
@@ -23,21 +24,27 @@ public class Load {
             PostsParse postsHandler = new PostsParse();
             parserPost.parse(new File(dumpPath + "Posts.xml"), postsHandler);
 
-            List<Post> postList = postsHandler.getPostList();
+            for(Post p : postsHandler.getPostList()) {
+            	postList.add(p.clone());
+            }
 
         	// Load/Parse dos Users
             SAXParser parserUser = saxParserFactory.newSAXParser();
             UsersParse usersHandler = new UsersParse();
             parserUser.parse(new File(dumpPath + "Users.xml"), usersHandler);
 
-            List<User> userList = usersHandler.getUserList();
+            for(User u : usersHandler.getUserList()) {
+            	userList.add(u.clone());
+            }
 
         	// Load/Parse das Tags
             SAXParser parserTag = saxParserFactory.newSAXParser();
             TagsParse tagsHandler = new TagsParse();
             parserTag.parse(new File(dumpPath + "Tags.xml"), tagsHandler);
 
-            List<Tag> tagList = tagsHandler.getTagList();
+            for(Tag t : tagsHandler.getTagList()) {
+            	tagList.add(t.clone());
+            }
 
         } catch (SAXException e) {
             e.printStackTrace();

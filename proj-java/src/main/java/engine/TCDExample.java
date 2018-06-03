@@ -13,23 +13,30 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ArrayList;
 
 public class TCDExample implements TADCommunity {
 
     private MyLog qelog;
-
+    private List<Post> postList = new ArrayList<Post>();
+    private List<User> userList = new ArrayList<User>();
+    private List<Tag> tagList = new ArrayList<Tag>();
+    
     public void init() {
         this.qelog = new MyLog("queryengine");
     }
 
     public void load(String dumpPath) {
-        Load.load(dumpPath);
+        Load.load(dumpPath, this.postList, this.userList, this.tagList);
     }
 
     // Query 1
     public Pair<String,String> infoFromPost(long id) {
-        return new Pair<>("What are the actual risks of giving www-data sudo nopasswd access?", "WebNinja");
-    }
+        Pair<String,String> res = new Pair<>("","");
+        res = QueryOne.resposta(id, this.postList, this.userList, res);
+        System.out.println("Query 1: " + res); 
+        return res;   
+    } 
 
     // Query 2
     public List<Long> topMostActive(int N) {
