@@ -3,7 +3,6 @@ engine/PostsParse.class
 engine/PostType.class
 engine/TCDExample.class
 engine/Load.class
-engine/QueryOne.class
 engine/UsersParse.class
 engine/Tag.class
 engine/User.class
