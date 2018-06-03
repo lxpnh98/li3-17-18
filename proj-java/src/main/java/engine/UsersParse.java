@@ -45,11 +45,6 @@ public class UsersParse extends DefaultHandler {
             user.setBio(bio);
             //System.out.println("\nBio: " + user.getBio());
 
-            //Set
-            String bio = attributes.getValue("AboutMe");
-            user.setBio(bio);
-            //System.out.println("\nBio: " + user.getBio());
-
             if (userList == null) {
                 userList = new ArrayList<>();
                 userList.add(user);
