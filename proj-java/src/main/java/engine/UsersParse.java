@@ -29,7 +29,7 @@ public class UsersParse extends DefaultHandler {
             // Set id
             String id = attributes.getValue("Id");
             user.setId(Long.parseLong(id));
-            System.out.println("UserID: " + user.getId());
+           // System.out.println("UserID: " + user.getId());
 
             if (userList == null) {
                 userList = new ArrayList<>();

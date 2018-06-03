@@ -29,7 +29,10 @@ public class TagsParse extends DefaultHandler {
             // Set id
             String id = attributes.getValue("Id");
             tag.setId(Long.parseLong(id));
-            System.out.println("TagID: " + tag.getId());
+
+            // Set name
+            String name = attributes.getValue("TagName");
+            tag.setName(name);
 
             if (tagList == null) {
                 tagList = new ArrayList<>();

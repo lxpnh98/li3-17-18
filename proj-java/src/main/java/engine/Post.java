@@ -19,10 +19,10 @@ public class Post {
     private long commentCount;
 
     public Post() {
-        this.id = 0;
+        this.id = -1;
         this.type = PostType.OTHERS;
-        this.acceptedAnswer = 0;
-        this.userId = 0;
+        this.acceptedAnswer = -1;
+        this.userId = -1;
         this.userDisplayName = "";
         this.title = "";
         this.parentId = 0;
@@ -130,6 +130,10 @@ public class Post {
         this.type = type;
     }
 
+    public void setAcceptedAnswer(long acceptedAnswer) {
+        this.acceptedAnswer = acceptedAnswer;
+    }
+
     public void setUserId(long userId) {
         this.userId = userId;
     }
@@ -139,7 +143,7 @@ public class Post {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title;w
     }
 
     public void setParentId(long parentId) {
