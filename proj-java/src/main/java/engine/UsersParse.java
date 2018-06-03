@@ -11,7 +11,6 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class UsersParse extends DefaultHandler {
 
-    // List to hold Users
     private List<User> userList = null;
     private User user = null;
 
@@ -26,10 +25,30 @@ public class UsersParse extends DefaultHandler {
         if ("row".equalsIgnoreCase(qName)) {
             user = new User();
 
-            // Set id
+            // Set Id
             String id = attributes.getValue("Id");
             user.setId(Long.parseLong(id));
-           // System.out.println("UserID: " + user.getId());
+            // System.out.println("UserID: " + user.getId());
+
+            //Set Rep
+            String rep = attributes.getValue("Reputation");
+            user.setRep(Long.parseLong(rep));
+            //System.out.println("Reputação: " + user.getRep());
+
+            //Set Name
+            String name = attributes.getValue("DisplayName");
+            user.setDisplayName(name);
+            //System.out.println("Nome: " + user.getDisplayName());
+
+            //Set Bio
+            String bio = attributes.getValue("AboutMe");
+            user.setBio(bio);
+            //System.out.println("\nBio: " + user.getBio());
+
+            //Set
+            String bio = attributes.getValue("AboutMe");
+            user.setBio(bio);
+            //System.out.println("\nBio: " + user.getBio());
 
             if (userList == null) {
                 userList = new ArrayList<>();

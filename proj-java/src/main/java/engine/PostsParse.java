@@ -30,12 +30,12 @@ public class PostsParse extends DefaultHandler {
             // Set id
             String id = attributes.getValue("Id");
             post.setId(Long.parseLong(id));
-            System.out.println("PostID: " + post.getId());
+//            System.out.println("PostID: " + post.getId());
 
             // Set userId;
             String userId = attributes.getValue("OwnerUserId");
             post.setUserId(Long.parseLong(userId));
-            System.out.println("UserID: " + post.getUserId());
+  //          System.out.println("UserID: " + post.getUserId());
 
 
             // Set PostType
@@ -48,13 +48,13 @@ public class PostsParse extends DefaultHandler {
                 String acceptedAnswer = attributes.getValue("AcceptedAnswerId");
                 if (acceptedAnswer != null) {
                     post.setAcceptedAnswer(Long.parseLong(acceptedAnswer));
-                    System.out.println("AcceptedAnswer: " + post.getAcceptedAnswer());
+    //                System.out.println("AcceptedAnswer: " + post.getAcceptedAnswer());
                 }
 
                 // Set Title
                 String title = attributes.getValue("Title");
                 post.setTitle(title);
-                System.out.println("Title: " + post.getTitle());
+      //          System.out.println("Title: " + post.getTitle());
 
             } else if (postType == 2) {
                post.setType(PostType.ANSWER);

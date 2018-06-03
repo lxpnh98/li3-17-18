@@ -87,11 +87,11 @@ public class User {
         this.bio = bio;
     }
 
-    public void setDisplay_name(String displayName) {
+    public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    public void setPost_count(int postCount) {
+    public void setPostCount(int postCount) {
         this.postCount = postCount;
     }
 
