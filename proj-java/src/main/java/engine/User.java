@@ -1,3 +1,5 @@
+package engine;
+
 import java.util.ArrayList;
 import java.lang.String;
 
@@ -11,10 +13,10 @@ public class User {
     // Variáveis de instância
     private long id;
     private long rep;
-    private String display_name;
+    private String displayName;
     private String bio;
     private ArrayList<Long> posts;
-    private int post_count;
+    private int postCount;
 
     /**
      * Constructor for objects of class User
@@ -22,90 +24,100 @@ public class User {
     public User() {
         this.id = 0;
         this.rep = 0;
-        this.display_name = "";
+        this.displayName = "";
         this.bio = "";
-        this.post_count = 0;
+        this.postCount = 0;
         this.posts = new ArrayList<Long>();
     }
 
-    public User(long id, long rep, String display_name, String bio, int post_count, ArrayList<Long> posts) {
+    public User(long id, long rep, String displayName, String bio, int postCount, ArrayList<Long> posts) {
         this.id = id;
         this.rep = rep;
-        this.display_name = display_name;
+        this.displayName = displayName;
         this.bio = bio;
-        this.post_count = post_count;
+        this.postCount = postCount;
         this.posts = posts;
     }
 
-    public User(User umUser) {
-        this.id = umUser.getId();
-        this.rep = umUser.getRep();
-        this.display_name = umUser.getDisplay_name();
-        this.bio = umUser.getBio();
-        this.post_count = umUser.getPost_count();
-        this.posts = umUser.getPosts();
+    public User(User u) {
+        this.id = u.getId();
+        this.rep = u.getRep();
+        this.displayName = u.getDisplayName();
+        this.bio = u.getBio();
+        this.postCount = u.getPostCount();
+        this.posts = u.getPosts();
     }
 
-    public long getId(){
+    public long getId() {
         return this.id;
     }
 
-    public long getRep(){
+    public long getRep() {
         return this.rep;
     }
 
-    public String getBio(){
+    public String getBio() {
         return this.bio;
     }
 
-    public String getDisplay_name(){
-        return this.display_name;
+    public String getDisplayName() {
+        return this.displayName;
     }
 
-    public int getPost_count(){
-        return this.post_count;
+    public int getPostCount() {
+        return this.postCount;
     }
 
-    public ArrayList<Long> getPosts(){
-        ArrayList<Long> clone_posts = new ArrayList<Long>();
-        clone_posts.addAll(this.posts);
+    public ArrayList<Long> getPosts() {
+        ArrayList<Long> clonePosts = new ArrayList<Long>();
+        clonePosts.addAll(this.posts);
 
-        return clone_posts;
+        return clonePosts;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id; 
     }
 
-    public void setRep(long rep){
+    public void setRep(long rep) {
         this.rep = rep;
     }
 
-    public void setBio(String bio){
+    public void setBio(String bio) {
         this.bio = bio;
     }
 
-    public void setDisplay_name(String display_name){
-        this.display_name = display_name;
+    public void setDisplay_name(String displayName) {
+        this.displayName = displayName;
     }
 
-    public void setPost_count(int post_count){
-        this.post_count = post_count;
+    public void setPost_count(int postCount) {
+        this.postCount = postCount;
     }
 
-    public void setPosts(ArrayList<Long> new_posts){
+    public void setPosts(ArrayList<Long> newPosts) {
         this.posts.removeAll(this.posts);
-        this.posts.addAll(new_posts);
+        this.posts.addAll(newPosts);
     }
 
-    public boolean equals(Object o){
-        if (o == this) return true;
-        if ((o == null) || (o.getClass()!= this.getClass())) return false;
-        User p = (User) o;
-        return (this.id == p.getId()) && (this.rep == p.getRep()) && (this.bio == p.getBio()) && (this.display_name == p.getDisplay_name()) && (this.post_count == p.getPost_count()) && (this.posts.equals(p.getPosts()));
+    public User clone() {
+        return new User(this);
     }
 
-    public String toSting(){
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if ((o == null) || (o.getClass() != this.getClass())) {
+            return false;
+        }
+        User u = (User) o;
+        return ((this.id == u.getId()) && (this.rep == u.getRep()) &&
+                (this.bio == u.getBio()) && (this.displayName == u.getDisplayName()) &&
+                (this.postCount == u.getPostCount()) && (this.posts.equals(u.getPosts())));
+    }
+
+    public String toString() {
 
         String listString = "";
 
@@ -113,6 +125,9 @@ public class User {
             listString += String.valueOf(l) + "\n";
         }
 
-        return "Utilizador => Id: " + this.id + " Reputação: " + this.rep + " Bio: " + this.bio +  " Nome de utilizador: " + this.display_name + " Número de posts: " + this.post_count + " Lista de posts: " + listString;
+        return " Utilizador =>\n Id: " + this.id + "\n Reputação: " + this.rep + 
+               "\n Bio: " + this.bio + "\n Nome de utilizador: " + this.displayName +
+               "\n Número de posts: " + this.postCount +
+               "\n Lista de posts: " + listString;
     }
 }

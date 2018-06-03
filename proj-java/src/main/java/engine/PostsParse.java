@@ -30,7 +30,7 @@ public class PostsParse extends DefaultHandler {
             // Set id
             String id = attributes.getValue("Id");
             post.setId(Long.parseLong(id));
-            System.out.println(post.getId());
+            System.out.println("PostID:" + post.getId());
 
             // Set PostType
             int postType = Integer.parseInt(attributes.getValue("PostTypeId"));
@@ -65,10 +65,4 @@ public class PostsParse extends DefaultHandler {
             postList.add(post);
         }
     }
-
-    // Não sei ainda se isto vai ser preciso...a testar mais tarde
-    /*
-    @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
-    } */
 }

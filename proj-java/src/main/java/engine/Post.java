@@ -149,4 +149,19 @@ public class Post {
     public Post clone() {
         return new Post(this);
     }
+
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if ((o == null) || (o.getClass() != this.getClass())) {
+            return false;
+        }
+        Post p = (Post) o;
+        return (this.id == p.getId());
+    }
+
+    public String toString() {
+        return " Post =>\n Id: " + this.id;
+    }
 }
