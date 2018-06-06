@@ -101,7 +101,7 @@ public class Post {
     public void addAnswer(long id) {
         this.answers.add(id);
     }
-    
+
     public long getScore() {
         return this.score;
     }

@@ -11,19 +11,19 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class UsersParse extends DefaultHandler {
 
-    private List<User> userList = null;
-    private User user = null;
+    private TCDExample community;
 
-    public List<User> getUserList() {
-        return this.userList;
+    public UsersParse(TCDExample c) {
+        super();
+        this.community = c;
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
-        
+
         if ("row".equalsIgnoreCase(qName)) {
-            user = new User();
+            User user = new User();
 
             // Set Id
             String id = attributes.getValue("Id");
@@ -45,19 +45,7 @@ public class UsersParse extends DefaultHandler {
             user.setBio(bio);
             //System.out.println("\nBio: " + user.getBio());
 
-            if (userList == null) {
-                userList = new ArrayList<>();
-                userList.add(user);
-            } else {
-                userList.add(user);
-            } 
-        }
-    }
-
-    @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equalsIgnoreCase("users")) {
-            userList.add(user);
+            this.community.addUser(user);
         }
     }
 }

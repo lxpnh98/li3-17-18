@@ -11,20 +11,19 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class TagsParse extends DefaultHandler {
 
-    // List to hold Tags
-    private List<Tag> tagList = null;
-    private Tag tag = null;
+    private TCDExample community;
 
-    public List<Tag> getTagList() {
-        return this.tagList;
+    public TagsParse(TCDExample c) {
+        super();
+        this.community = c;
     }
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
-        
+
         if ("row".equalsIgnoreCase(qName)) {
-            tag = new Tag();
+            Tag tag = new Tag();
 
             // Set id
             String id = attributes.getValue("Id");
@@ -34,19 +33,7 @@ public class TagsParse extends DefaultHandler {
             String name = attributes.getValue("TagName");
             tag.setName(name);
 
-            if (tagList == null) {
-                tagList = new ArrayList<>();
-                tagList.add(tag);
-            } else {
-                tagList.add(tag);
-            } 
-        }
-    }
-
-    @Override
-    public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (qName.equalsIgnoreCase("tags")) {
-            tagList.add(tag);
+            this.community.addTag(tag);
         }
     }
 }

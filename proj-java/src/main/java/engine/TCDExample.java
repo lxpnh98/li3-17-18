@@ -14,29 +14,71 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Comparator;
+
+class PostsByDateComparator implements Comparator<Post> {
+    public int compare(Post p1, Post p2) {
+        return p1.getDate().compareTo(p2.getDate());
+    }
+}
 
 public class TCDExample implements TADCommunity {
 
     private MyLog qelog;
-    private List<Post> postList = new ArrayList<Post>();
-    private List<User> userList = new ArrayList<User>();
-    private List<Tag> tagList = new ArrayList<Tag>();
-    
+    private Map<Long, Post> posts;
+    private Map<Long, User> users;
+    private Map<Long, Tag> tags;
+    private Set<Post> postsByDate;
+    private Set<User> usersByRep;
+
     public void init() {
         this.qelog = new MyLog("queryengine");
+        this.posts = new HashMap<Long, Post>();
+        this.users = new HashMap<Long, User>();
+        this.tags = new HashMap<Long, Tag>();
+        this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
+        this.usersByRep = new TreeSet<User>();
+    }
+
+    public void addPost(Post p) {
+        this.posts.put(p.getId(), p.clone());
+    }
+
+    public void addUser(User u) {
+        this.users.put(u.getId(), u.clone());
+    }
+
+    public void addTag(Tag t) {
+        this.tags.put(t.getId(), t.clone());
+    }
+
+    public Post getPost(long id) {
+        return this.posts.get(id).clone();
+    }
+
+    public User getUser(long id) {
+        return this.users.get(id).clone();
+    }
+
+    public Tag getTag(long id) {
+        return this.tags.get(id).clone();
     }
 
     public void load(String dumpPath) {
-        Load.load(dumpPath, this.postList, this.userList, this.tagList);
+        this.init();
+        Load.load(this, dumpPath);
     }
 
     // Query 1
     public Pair<String,String> infoFromPost(long id) {
-        Pair<String,String> res = new Pair<>("","");
-        res = QueryOne.resposta(id, this.postList, this.userList, res);
-        System.out.println("Query 1: " + res); 
-        return res;   
-    } 
+        Pair<String,String> res = QueryOne.resposta(this, id);
+        System.out.println("Query 1: " + res);
+        return res;
+    }
 
     // Query 2
     public List<Long> topMostActive(int N) {

@@ -13,38 +13,25 @@ import java.util.List;
 
 public class Load {
 
-    public static void load(String dumpPath, List<Post> postList,
-    	                     List<User> userList, List<Tag> tagList) {
+    public static void load(TCDExample c, String dumpPath) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
         try {
 
-        	// Load/Parse dos Posts
+            // Load/Parse dos Posts
             SAXParser parserPost = saxParserFactory.newSAXParser();
-            PostsParse postsHandler = new PostsParse();
+            PostsParse postsHandler = new PostsParse(c);
             parserPost.parse(new File(dumpPath + "Posts.xml"), postsHandler);
 
-            for(Post p : postsHandler.getPostList()) {
-            	postList.add(p.clone());
-            }
-
-        	// Load/Parse dos Users
+            // Load/Parse dos Users
             SAXParser parserUser = saxParserFactory.newSAXParser();
-            UsersParse usersHandler = new UsersParse();
+            UsersParse usersHandler = new UsersParse(c);
             parserUser.parse(new File(dumpPath + "Users.xml"), usersHandler);
 
-            for(User u : usersHandler.getUserList()) {
-            	userList.add(u.clone());
-            }
-
-        	// Load/Parse das Tags
+            // Load/Parse das Tags
             SAXParser parserTag = saxParserFactory.newSAXParser();
-            TagsParse tagsHandler = new TagsParse();
+            TagsParse tagsHandler = new TagsParse(c);
             parserTag.parse(new File(dumpPath + "Tags.xml"), tagsHandler);
-
-            for(Tag t : tagsHandler.getTagList()) {
-            	tagList.add(t.clone());
-            }
 
         } catch (SAXException e) {
             e.printStackTrace();
