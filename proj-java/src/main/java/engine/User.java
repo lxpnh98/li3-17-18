@@ -15,7 +15,6 @@ public class User {
     private long rep;
     private String displayName;
     private String bio;
-    private ArrayList<Long> posts;
     private int postCount;
 
     /**
@@ -27,16 +26,14 @@ public class User {
         this.displayName = "";
         this.bio = "";
         this.postCount = 0;
-        this.posts = new ArrayList<Long>();
     }
 
-    public User(long id, long rep, String displayName, String bio, int postCount, ArrayList<Long> posts) {
+    public User(long id, long rep, String displayName, String bio, int postCount) {
         this.id = id;
         this.rep = rep;
         this.displayName = displayName;
         this.bio = bio;
         this.postCount = postCount;
-        this.posts = posts;
     }
 
     public User(User u) {
@@ -45,7 +42,6 @@ public class User {
         this.displayName = u.getDisplayName();
         this.bio = u.getBio();
         this.postCount = u.getPostCount();
-        this.posts = u.getPosts();
     }
 
     public long getId() {
@@ -68,15 +64,8 @@ public class User {
         return this.postCount;
     }
 
-    public ArrayList<Long> getPosts() {
-        ArrayList<Long> clonePosts = new ArrayList<Long>();
-        clonePosts.addAll(this.posts);
-
-        return clonePosts;
-    }
-
     public void setId(long id) {
-        this.id = id; 
+        this.id = id;
     }
 
     public void setRep(long rep) {
@@ -95,11 +84,6 @@ public class User {
         this.postCount = postCount;
     }
 
-    public void setPosts(ArrayList<Long> newPosts) {
-        this.posts.removeAll(this.posts);
-        this.posts.addAll(newPosts);
-    }
-
     public User clone() {
         return new User(this);
     }
@@ -112,22 +96,15 @@ public class User {
             return false;
         }
         User u = (User) o;
-        return ((this.id == u.getId()) && (this.rep == u.getRep()) &&
-                (this.bio == u.getBio()) && (this.displayName == u.getDisplayName()) &&
-                (this.postCount == u.getPostCount()) && (this.posts.equals(u.getPosts())));
+        return (this.id == u.getId()) && (this.rep == u.getRep()) &&
+               (this.bio == u.getBio()) && (this.displayName == u.getDisplayName()) &&
+               (this.postCount == u.getPostCount());
     }
 
     public String toString() {
 
-        String listString = "";
-
-        for (long l : this.posts){
-            listString += String.valueOf(l) + "\n";
-        }
-
-        return " Utilizador =>\n Id: " + this.id + "\n Reputação: " + this.rep + 
+        return " Utilizador =>\n Id: " + this.id + "\n Reputação: " + this.rep +
                "\n Bio: " + this.bio + "\n Nome de utilizador: " + this.displayName +
-               "\n Número de posts: " + this.postCount +
-               "\n Lista de posts: " + listString;
+               "\n Número de posts: " + this.postCount;
     }
 }
