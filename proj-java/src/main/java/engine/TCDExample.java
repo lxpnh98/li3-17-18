@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Comparator;
 import java.util.Iterator;
 
+
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
         return p1.getDate().compareTo(p2.getDate());
@@ -90,9 +91,11 @@ public class TCDExample implements TADCommunity {
 
     public List<Post> getPostsBetween(LocalDate begin, LocalDate end) {
         Post beginPost = new Post();
-        beginPost.setDate(LocalDate.MIN);
+        //beginPost.setDate(LocalDate.MIN);
+        beginPost.setDate(begin);
         Post endPost = new Post();
-        endPost.setDate(Post.randomDate());
+        //endPost.setDate(Post.randomDate());
+        endPost.setDate(end);
         Iterator<Post> it = this.postsByDate.subSet(beginPost, true, endPost, true).descendingIterator();
         List<Post> r = new ArrayList();
         while (it.hasNext()) {
