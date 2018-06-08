@@ -6,6 +6,7 @@ engine/UsersByRepComparator.class
 engine/TCDExample.class
 engine/Load.class
 engine/QueryOne.class
+engine/QueryFour.class
 engine/User.class
 engine/Tag.class
 engine/UsersParse.class

@@ -19,6 +19,7 @@ import java.util.TreeSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Comparator;
+import java.util.Iterator;
 
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
@@ -38,8 +39,9 @@ public class TCDExample implements TADCommunity {
     private Map<Long, Post> posts;
     private Map<Long, User> users;
     private Map<Long, Tag> tags;
-    private Set<Post> postsByDate;
-    private Set<User> usersByRep;
+    private Map<String, Tag> tagsFromName;
+    private TreeSet<Post> postsByDate;
+    private TreeSet<User> usersByRep;
     private Map<Long, List<Long>> postsByUser;
 
     public void init() {
@@ -47,8 +49,10 @@ public class TCDExample implements TADCommunity {
         this.posts = new HashMap<Long, Post>();
         this.users = new HashMap<Long, User>();
         this.tags = new HashMap<Long, Tag>();
+        this.tagsFromName = new HashMap<String, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
         this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
+        this.postsByUser = new HashMap<Long, List<Long>>();
     }
 
     public void addPost(Post p) {
@@ -65,6 +69,7 @@ public class TCDExample implements TADCommunity {
 
     public void addTag(Tag t) {
         this.tags.put(t.getId(), t.clone());
+        this.tagsFromName.put(t.getName(), t.clone());
     }
 
     public Post getPost(long id) {
@@ -77,6 +82,23 @@ public class TCDExample implements TADCommunity {
 
     public Tag getTag(long id) {
         return this.tags.get(id).clone();
+    }
+
+    public Tag getTag(String name) {
+        return this.tagsFromName.get(name);
+    }
+
+    public List<Post> getPostsBetween(LocalDate begin, LocalDate end) {
+        Post beginPost = new Post();
+        beginPost.setDate(LocalDate.MIN);
+        Post endPost = new Post();
+        endPost.setDate(Post.randomDate());
+        Iterator<Post> it = this.postsByDate.subSet(beginPost, true, endPost, true).descendingIterator();
+        List<Post> r = new ArrayList();
+        while (it.hasNext()) {
+            r.add(it.next().clone());
+        }
+        return r;
     }
 
     public void load(String dumpPath) {
@@ -103,11 +125,16 @@ public class TCDExample implements TADCommunity {
 
     // Query 4
     public List<Long> questionsWithTag(String tag, LocalDate begin, LocalDate end) {
+        List<Long> res = QueryFour.resposta(this, tag, begin, end);
+        System.out.println("Query 4 (comprimento): " + res.size()); // falta tratar das tags dos posts
+        return res;
+        /*
         return Arrays.asList(276174L,276029L,274462L,274324L,274316L,274141L,274100L,272937L,
                 272813L,272754L,272666L,272565L,272450L,272313L,271816L,271683L,271647L,270853L,270608L,270528L,270488L,
                 270188L,270014L,269876L,269781L,269095L,268501L,268155L,267746L,267656L,267625L,266742L,266335L,266016L,
                 265531L,265483L,265443L,265347L,265104L,265067L,265028L,264764L,264762L,264616L,264525L,264292L,263816L,
                 263740L,263460L,263405L,263378L,263253L,262733L,262574L);
+        */
     }
 
     // Query 5

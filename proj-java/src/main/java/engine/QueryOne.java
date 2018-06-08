@@ -2,8 +2,6 @@ package engine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.String;
-import java.lang.Long;
 import common.Pair;
 import li3.TADCommunity;
 

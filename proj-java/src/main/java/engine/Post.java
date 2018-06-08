@@ -2,7 +2,10 @@ package engine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.Set;
+import java.util.HashSet;
 
 public class Post {
     private long id;
@@ -14,9 +17,16 @@ public class Post {
     private long parentId;
     private List<Long> answers;
     private long score;
-    private Date creationDate;
-    private List<Long> tags;
+    private LocalDate creationDate;
+    private Set<Long> tags;
     private long commentCount;
+
+    public static LocalDate randomDate() { // temporário, só para testar enquanto não se tem datas
+        long minDay = LocalDate.MIN.toEpochDay();
+        long maxDay = LocalDate.MAX.toEpochDay();
+        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
+        return LocalDate.ofEpochDay(randomDay);
+    }
 
     public Post() {
         this.id = -1;
@@ -28,14 +38,14 @@ public class Post {
         this.parentId = 0;
         this.answers = new ArrayList<Long>();
         this.score = 0;
-        this.creationDate = new Date();
-        this.tags = new ArrayList<>();
+        this.creationDate = Post.randomDate();
+        this.tags = new HashSet<>();
         this.commentCount = 0;
     }
 
     public Post(long id, PostType type, long acceptedAnswer, long userId,
                 String userDisplayName, String title, long parentId,
-                long score, String creationDate, List tags, long commentCount) {
+                long score, String creationDate, Set<Long> tags, long commentCount) {
         this.id = id;
         this.type = type;
         this.acceptedAnswer = acceptedAnswer;
@@ -45,7 +55,7 @@ public class Post {
         this.parentId = parentId;
         this.answers = new ArrayList<Long>();
         this.score = score;
-        this.creationDate = new Date();
+        this.creationDate = Post.randomDate();
          /* Date.fromString(creationDate); Metodo fromString() Deprecated */
         this.tags = tags; // fazer clone
         this.commentCount = commentCount;
@@ -106,15 +116,20 @@ public class Post {
         return this.score;
     }
 
-    public Date getDate() {
-        return this.creationDate; //fazer clone
+    public LocalDate getDate() {
+        return this.creationDate.plusDays(0L);
+    }
+
+    public void setDate(LocalDate d) {
+        this.creationDate = d.plusDays(0L);
     }
 
     public boolean hasTag(long tagId) {
-        return this.tags.contains(tagId);
+        return true;
+        //return this.tags.contains(tagId);
     }
 
-    public List getTags() {
+    public Set<Long> getTags() {
         return this.tags; // fazer clone
     }
 
