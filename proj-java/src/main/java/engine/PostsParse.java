@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.lang.String;
 import java.lang.Long;
+import java.time.LocalDateTime;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -25,40 +26,71 @@ public class PostsParse extends DefaultHandler {
         if ("row".equalsIgnoreCase(qName)) {
             Post post = new Post();
 
-            // SET COMUNS A TODOS OS POSTS
             // Set id
             String id = attributes.getValue("Id");
             post.setId(Long.parseLong(id));
-            //System.out.println("PostID: " + post.getId());
 
-            // Set userId;
+            // Set userId
             String userId = attributes.getValue("OwnerUserId");
             post.setUserId(Long.parseLong(userId));
-            //System.out.println("UserID: " + post.getUserId());
+
+            // Set score
+            String score = attributes.getValue("Score");
+            post.setScore(Long.parseLong(score));
+
+            // Set commentCount
+            String commentCount = attributes.getValue("CommentCount");
+            post.setCommentCount(Long.parseLong(commentCount));
+
+            // Set date
+            String creationDate = attributes.getValue("CreationDate");
+            CharSequence data = creationDate;
+            LocalDateTime date = LocalDateTime.parse(data);
+            post.setCreationDate(date);
 
             // Set PostType
             int postType = Integer.parseInt(attributes.getValue("PostTypeId"));
             if (postType == 1) {
-                post.setType(PostType.QUESTION);
-
                 // Question
+	            post.setType(PostType.QUESTION);
+
                 // Set id acceptedAnswer
                 String acceptedAnswer = attributes.getValue("AcceptedAnswerId");
                 if (acceptedAnswer != null) {
                     post.setAcceptedAnswer(Long.parseLong(acceptedAnswer));
-                    //System.out.println("AcceptedAnswer: " + post.getAcceptedAnswer());
                 }
+
+                // Set userDisplayName
+                String userDisplayName = attributes.getValue("OwnerDisplayName");
+                post.setUserDisplayName(userDisplayName);
 
                 // Set Title
                 String title = attributes.getValue("Title");
                 post.setTitle(title);
-                //System.out.println("Title: " + post.getTitle());
 
+                // Set Tags
+                String tags = attributes.getValue("Tags");
+                // Tira marca inicial e final
+                StringBuilder sb = new StringBuilder(tags);
+                sb.deleteCharAt(0);
+                sb.deleteCharAt(sb.length() - 1);
+                String tagsSemMarcas = sb.toString();
+                // Faz split das tags
+                String tagsSep[] = tagsSemMarcas.split("><");
+                // Copia para arrayList 
+                ArrayList<String> arrayTags = new ArrayList<String>();
+                for(int i = 0; i < tagsSep.length && tagsSep != null; i++) {
+                	arrayTags.add(tagsSep[i]);
+                }               
+                post.setTags(arrayTags);
             } else if (postType == 2) {
                post.setType(PostType.ANSWER);
-                // TODO: aqui vao ficar os sets que apenas as respostas tem
-            } else {
-               // post.setType(PostType.OTHERS);
+			   
+			   // Set ParentID
+			   String parentID = attributes.getValue("ParentId");
+			   post.setParentId(Long.parseLong(parentID));
+			} else {
+               post.setType(PostType.OTHERS);
             }
 
             this.community.addPost(post);

@@ -3,83 +3,95 @@ package engine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Post {
     private long id;
+    private long userId;
+    private long score;    
+    private long commentCount;
+    private LocalDateTime creationDate;
     private PostType type;
     private long acceptedAnswer;
-    private long userId;
     private String userDisplayName;
     private String title;
+    private ArrayList<String> tags;
     private long parentId;
-    private List<Long> answers;
-    private long score;
-    private Date creationDate;
-    private List<Long> tags;
-    private long commentCount;
+    //private List<Long> answers;
 
     public Post() {
         this.id = -1;
+        this.userId = -1;
+        this.score = -1;        
+        this.commentCount = -1;
+        this.creationDate = LocalDateTime.now();
         this.type = PostType.OTHERS;
         this.acceptedAnswer = -1;
-        this.userId = -1;
         this.userDisplayName = "";
         this.title = "";
+        this.tags = new ArrayList<String>();
         this.parentId = 0;
-        this.answers = new ArrayList<Long>();
-        this.score = 0;
-        this.creationDate = new Date();
-        this.tags = new ArrayList<>();
-        this.commentCount = 0;
+        //this.answers = new ArrayList<Long>();
     }
 
-    public Post(long id, PostType type, long acceptedAnswer, long userId,
-                String userDisplayName, String title, long parentId,
-                long score, String creationDate, List tags, long commentCount) {
+    public Post(long id, long userId, long score, long commentCount, 
+                LocalDateTime creationDate, PostType type, long acceptedAnswer,
+                String userDisplayName, String title, ArrayList<String> tags,
+                long parentId) {
         this.id = id;
+        this.userId = userId;
+        this.score = score;
+        this.commentCount = commentCount;
+        this.creationDate = creationDate;
         this.type = type;
         this.acceptedAnswer = acceptedAnswer;
-        this.userId = userId;
         this.userDisplayName = userDisplayName;
         this.title = title;
+        this.tags = tags;
         this.parentId = parentId;
-        this.answers = new ArrayList<Long>();
-        this.score = score;
-        this.creationDate = new Date();
-         /* Date.fromString(creationDate); Metodo fromString() Deprecated */
-        this.tags = tags; // fazer clone
-        this.commentCount = commentCount;
+        //this.answers = new ArrayList<Long>();
     }
 
     public Post(Post p) {
         this.id = p.getId();
+        this.userId = p.getUserId();
+        this.score = p.getScore();
+        this.commentCount = p.getCommentCount();
+        this.creationDate = p.getCreationDate();
         this.type = p.getType();
         this.acceptedAnswer = p.getAcceptedAnswer();
-        this.userId = p.getUserId();
         this.userDisplayName = p.getUserDisplayName();
         this.title = p.getTitle();
-        this.parentId = p.getParentId();
-        this.answers = p.getAnswers();
-        this.score = p.getScore();
-        this.creationDate = p.getDate();
         this.tags = p.getTags();
-        this.commentCount = p.getCommentCount();
+        this.parentId = p.getParentId();
+        //this.answers = p.getAnswers();
     }
 
     public long getId() {
         return this.id;
     }
 
+    public long getUserId() {
+        return this.userId;
+    }
+
+    public long getScore() {
+        return this.score;
+    }
+
+    public long getCommentCount() {
+        return this.commentCount;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return this.creationDate;
+    }
     public PostType getType() {
         return this.type;
     }
 
     public long getAcceptedAnswer() {
         return this.acceptedAnswer;
-    }
-
-    public long getUserId() {
-        return this.userId;
     }
 
     public String getUserDisplayName() {
@@ -90,40 +102,41 @@ public class Post {
         return this.title;
     }
 
-    public long getParentId() {
-        return this.parentId;
-    }
-
-    public List getAnswers() {
-        return this.answers; // fazer clone
-    }
-
-    public void addAnswer(long id) {
-        this.answers.add(id);
-    }
-
-    public long getScore() {
-        return this.score;
-    }
-
-    public Date getDate() {
-        return this.creationDate; //fazer clone
-    }
-
-    public boolean hasTag(long tagId) {
-        return this.tags.contains(tagId);
-    }
-
-    public List getTags() {
+    public ArrayList<String> getTags() {
         return this.tags; // fazer clone
     }
 
-    public long getCommentCount() {
-        return this.commentCount;
+    public long getParentId() {
+        return this.parentId;
     }
-
+    /*
+    public List getAnswers() {
+        return this.answers; // fazer clone
+    }
+    public void addAnswer(long id) {
+        this.answers.add(id);
+    }
+    public boolean hasTag(long tagId) {
+        return this.tags.contains(tagId);
+    } */
     public void setId(long id) {
         this.id = id;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+
+    public void setCommentCount(long commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setType(PostType type) {
@@ -134,16 +147,18 @@ public class Post {
         this.acceptedAnswer = acceptedAnswer;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
     public void setUserDisplayName(String userDisplayName) {
         this.userDisplayName = userDisplayName;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setTags(ArrayList<String> tag) {
+        for(String s : tag) {
+            this.tags.add(s);            
+        }
     }
 
     public void setParentId(long parentId) {

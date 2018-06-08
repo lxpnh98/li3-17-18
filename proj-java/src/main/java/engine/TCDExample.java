@@ -20,9 +20,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Comparator;
 
+
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
-        return p1.getDate().compareTo(p2.getDate());
+        return p1.getCreationDate().compareTo(p2.getCreationDate());
     }
 }
 
