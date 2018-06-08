@@ -27,6 +27,12 @@ class PostsByDateComparator implements Comparator<Post> {
     }
 }
 
+class UsersByRepComparator implements Comparator<User> {
+    public int compare(User u1, User u2) {
+        return new Long(u1.getRep()).compareTo(u2.getRep());
+    }
+}
+
 public class TCDExample implements TADCommunity {
 
     private MyLog qelog;
@@ -35,6 +41,7 @@ public class TCDExample implements TADCommunity {
     private Map<Long, Tag> tags;
     private Set<Post> postsByDate;
     private Set<User> usersByRep;
+    private Map<Long, List<Long>> postsByUser;
 
     public void init() {
         this.qelog = new MyLog("queryengine");
@@ -42,15 +49,19 @@ public class TCDExample implements TADCommunity {
         this.users = new HashMap<Long, User>();
         this.tags = new HashMap<Long, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
-        this.usersByRep = new TreeSet<User>();
+        this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
     }
 
     public void addPost(Post p) {
-        this.posts.put(p.getId(), p.clone());
+        Post newPost = p.clone();
+        this.posts.put(p.getId(), newPost);
+        this.postsByDate.add(newPost);
     }
 
     public void addUser(User u) {
-        this.users.put(u.getId(), u.clone());
+        User newUser = u.clone();
+        this.users.put(u.getId(), newUser);
+        this.usersByRep.add(newUser);
     }
 
     public void addTag(Tag t) {
