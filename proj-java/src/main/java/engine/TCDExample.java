@@ -222,7 +222,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 6
     public List<Long> mostVotedAnswers(int N, LocalDate begin, LocalDate end) {
-        return Arrays.asList(701775L,697197L,694560L,696641L,704208L);
+        List<Long> posts = QuerySix.answersmostvoted(this, N, begin, end);
+        System.out.println("Query 6: " + posts);
+        return posts;
     }
 
     // Query 7

@@ -1,8 +1,5 @@
-li3/TADCommunity.class
-engine/PostIdsByDateComparator.class
-engine/PostsParse.class
-engine/PostType.class
 engine/QueryFive.class
+<<<<<<< HEAD
 engine/PostsByDateComparator.class
 engine/UsersByRepComparator.class
 engine/TCDExample.class
@@ -20,3 +17,5 @@ engine/QueryThree.class
 engine/TagsParse.class
 li3/Main.class
 engine/QueryTwo.class
+=======
+>>>>>>> f0c2ecf6091ce9bc658456f7a92579c809d6aacf
