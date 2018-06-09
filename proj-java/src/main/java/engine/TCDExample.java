@@ -26,7 +26,11 @@ import java.util.stream.Collectors;
 
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
-        return p1.getCreationDate().compareTo(p2.getCreationDate());
+        int dateCmp = p1.getCreationDate().compareTo(p2.getCreationDate());
+        if (dateCmp == 0) {
+            return new Long(p1.getId()).compareTo(p2.getId());
+        }
+        return dateCmp;
     }
 }
 
@@ -87,8 +91,8 @@ public class TCDExample implements TADCommunity {
         this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
         UsersByNumberOfPostsComparator u = new UsersByNumberOfPostsComparator();
         u.setCommunity(this);
-        this.usersByPosts = new TreeSet<Long>(u); 
-        
+        this.usersByPosts = new TreeSet<Long>(u);
+
     }
 
     public void addPost(Post p) {
@@ -96,7 +100,7 @@ public class TCDExample implements TADCommunity {
         this.posts.put(p.getId(), newPost);
         this.postsByDate.add(newPost);
 
-        // Atualizar PostCount e usersByPosts        
+        // Atualizar PostCount e usersByPosts
         long userId = p.getUserId();
         this.usersByPosts.remove(userId);
 
@@ -179,7 +183,11 @@ public class TCDExample implements TADCommunity {
     // Query 2
     public List<Long> topMostActive(int N) {
         List<Long> res = QueryTwo.resposta(this, N);
+<<<<<<< HEAD
         System.out.println("Query 2: " + res);        
+=======
+        System.out.println("Query 2: " + res);
+>>>>>>> 001750da587cda60ef01157c349042e8f3c8d828
         return new ArrayList<Long>();
     }
 
@@ -195,13 +203,6 @@ public class TCDExample implements TADCommunity {
         List<Long> res = QueryFour.resposta(this, tag, begin, end);
         System.out.println("Query 4 (comprimento): " + res.size());
         return res;
-        /*
-        return Arrays.asList(276174L,276029L,274462L,274324L,274316L,274141L,274100L,272937L,
-                272813L,272754L,272666L,272565L,272450L,272313L,271816L,271683L,271647L,270853L,270608L,270528L,270488L,
-                270188L,270014L,269876L,269781L,269095L,268501L,268155L,267746L,267656L,267625L,266742L,266335L,266016L,
-                265531L,265483L,265443L,265347L,265104L,265067L,265028L,264764L,264762L,264616L,264525L,264292L,263816L,
-                263740L,263460L,263405L,263378L,263253L,262733L,262574L);
-        */
     }
 
     // Query 5
@@ -209,20 +210,11 @@ public class TCDExample implements TADCommunity {
         Pair<String, List<Long>> res = QueryFive.resposta(this, id);
         System.out.println("Query 5: bio: \"" + res.getFst() + "\", ids: " + res.getSnd());
         return res;
-        /*
-        String shortBio = "<p>Coder. JS, Perl, Python, Basic<br>Books/movies: SF+F.<br>Dead:" +
-                "dell 9300<br>Dead: dell 1720 as of may 10th 2011.</p>\n" +
-                "<p>Current system: Acer Aspire 7750G.<br>\n" +
-                "Works OOTB as of Ubuntu 12.04.<br></p>";
-        List<Long> ids = Arrays.asList(982507L,982455L,980877L,980197L,980189L,976713L,974412L,
-                974359L,973895L,973838L);
-        return new Pair<>(shortBio,ids);
-        */
     }
 
     // Query 6
     public List<Long> mostVotedAnswers(int N, LocalDate begin, LocalDate end) {
-        List<Long> posts = QuerySix.answersmostvoted(this, N, begin, end);
+        List<Long> posts = QuerySix.resposta(this, N, begin, end);
         System.out.println("Query 6: " + posts);
         return posts;
     }

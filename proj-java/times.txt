@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 LOAD -> 16429 ms
 Query 1: -> 0 ms
 Query 2 -> 24 ms
@@ -5,9 +6,18 @@ Query 3 -> 1 ms
 Query 4 -> 4 ms
 Query 5 -> 1 ms
 Query6 -> 2 ms
+=======
+LOAD -> 39550 ms
+Query 1: -> 2 ms
+Query 2 -> 60 ms
+Query 3 -> 14 ms
+Query 4 -> 21 ms
+Query 5 -> 2 ms
+Query6 -> 13 ms
+>>>>>>> 001750da587cda60ef01157c349042e8f3c8d828
 Query 7 -> 0 ms
 Query 8 -> 0 ms
-Query9 -> 0 ms
+Query9 -> 1 ms
 Query 10 -> 0 ms
 Query 11 -> 0 ms
 CLEAN -> 0 ms
