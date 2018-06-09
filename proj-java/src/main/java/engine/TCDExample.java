@@ -123,7 +123,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 3
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end) {
-        return new Pair<>(3667L,4102L);
+          Pair pair = QueryThree.answersquestions(this, begin, end);
+          System.out.println("Query 3: Existem " + pair.getFst() + " perguntas e " + pair.getSnd() + " respostas");
+          return pair;
     }
 
     // Query 4
