@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
-        return p1.getDate().compareTo(p2.getDate());
+        return p1.getCreationDate().compareTo(p2.getCreationDate());
     }
 }
 
@@ -53,7 +53,7 @@ public class TCDExample implements TADCommunity {
         this.tagsFromName = new HashMap<String, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
         this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
-        this.postsByUser = new HashMap<Long, List<Long>>();
+        this.usersByPost = new HashMap<Long, List<Long>>();
     }
 
     public void addPost(Post p) {
@@ -91,11 +91,9 @@ public class TCDExample implements TADCommunity {
 
     public List<Post> getPostsBetween(LocalDate begin, LocalDate end) {
         Post beginPost = new Post();
-        //beginPost.setDate(LocalDate.MIN);
-        beginPost.setDate(begin);
+        beginPost.setCreationDate(begin.plusDays(0L));
         Post endPost = new Post();
-        //endPost.setDate(Post.randomDate());
-        endPost.setDate(end);
+        endPost.setCreationDate(end.plusDays(0L));
         Iterator<Post> it = this.postsByDate.subSet(beginPost, true, endPost, true).descendingIterator();
         List<Post> r = new ArrayList();
         while (it.hasNext()) {
@@ -117,9 +115,12 @@ public class TCDExample implements TADCommunity {
     }
 
     // Query 2
+    /*
     public List<Long> topMostActive(int N) {
-        return Arrays.asList(15811L,449L,158442L,167850L,367165L,295286L,59676L,93977L,35795L,3940L);
-    }
+        List<Long> res = QueryTwo.resposta(this, N);
+        System.out.println("Query 2: " + res);        
+        return res;
+    } */
 
     // Query 3
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -43,10 +43,10 @@ public class PostsParse extends DefaultHandler {
             post.setCommentCount(Long.parseLong(commentCount));
 
             // Set date
-            String creationDate = attributes.getValue("CreationDate");
-            CharSequence data = creationDate;
-            LocalDateTime date = LocalDateTime.parse(data);
-            post.setDate(date.toLocalDate());
+            CharSequence creationDate = attributes.getValue("CreationDate");
+            CharSequence dataParse = creationDate.subSequence(0,10);
+            LocalDate date = LocalDate.parse(dataParse);
+            post.setCreationDate(date);
 
             // Set PostType
             int postType = Integer.parseInt(attributes.getValue("PostTypeId"));

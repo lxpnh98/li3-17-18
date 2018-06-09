@@ -10,31 +10,23 @@ import java.time.LocalDateTime;
 
 public class Post {
     private long id;
-    private long parentId;
     private long userId;
     private long score;
     private long commentCount;
+    private LocalDate creationDate;
     private PostType type;
     private long acceptedAnswer;
     private String userDisplayName;
     private String title;
     private List<Long> answers;
-    private LocalDate creationDate;
     private Set<String> tags;
-
-    public static LocalDate randomDate() { // temporário, só para testar enquanto não se tem datas
-        long minDay = LocalDate.MIN.toEpochDay();
-        long maxDay = LocalDate.MAX.toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        return LocalDate.ofEpochDay(randomDay);
-    }
+    private long parentId;
 
     public Post() {
         this.id = -1;
-        this.parentId = -1;
         this.userId = -1;
         this.score = -1;
-        this.commentCount = 0;
+        this.commentCount = -1;
         this.type = PostType.OTHERS;
         this.acceptedAnswer = -1;
         this.userDisplayName = "";
@@ -42,6 +34,7 @@ public class Post {
         this.answers = new ArrayList<>();
         this.creationDate = Post.randomDate();
         this.tags = new HashSet<>();
+        this.parentId = -1;
     }
 
     public Post(long id, long userId, long score, long commentCount,
@@ -61,8 +54,7 @@ public class Post {
         this.parentId = parentId;
         this.answers = new ArrayList<Long>();
         this.score = score;
-        this.creationDate = Post.randomDate();
-         /* Date.fromString(creationDate); Metodo fromString() Deprecated */
+        this.creationDate = creationDate;
         this.tags = tags; // fazer clone
         this.commentCount = commentCount;
     }
@@ -72,7 +64,7 @@ public class Post {
         this.userId = p.getUserId();
         this.score = p.getScore();
         this.commentCount = p.getCommentCount();
-        this.creationDate = p.getDate();
+        this.creationDate = p.getCreationDate();
         this.type = p.getType();
         this.acceptedAnswer = p.getAcceptedAnswer();
         this.userDisplayName = p.getUserDisplayName();
@@ -98,6 +90,10 @@ public class Post {
         return this.commentCount;
     }
 
+    public LocalDate getCreationDate() {
+        return this.creationDate;
+    }
+    
     public PostType getType() {
         return this.type;
     }
@@ -114,6 +110,10 @@ public class Post {
         return this.title;
     }
 
+    public Set<String> getTags() {
+        return this.tags; // fazer clone
+    }
+
     public long getParentId() {
         return this.parentId;
     }
@@ -121,26 +121,8 @@ public class Post {
     public List getAnswers() {
         return this.answers; // fazer clone
     }
-    public void addAnswer(long id) {
-        this.answers.add(id);
-    }
 
-    public LocalDate getDate() {
-        return this.creationDate.plusDays(0L);
-    }
-
-    public void setDate(LocalDate d) {
-        this.creationDate = d.plusDays(0L);
-    }
-
-    public boolean hasTag(String name) {
-        return this.tags.contains(name);
-    }
-
-    public Set<String> getTags() {
-        return this.tags; // fazer clone
-    }
-
+    //Sets
     public void setId(long id) {
         this.id = id;
     }
@@ -157,6 +139,10 @@ public class Post {
         this.commentCount = commentCount;
     }
 
+    public void setCreationDate(LocalDate d) {
+        this.creationDate = d;
+    }
+    
     public void setType(PostType type) {
         this.type = type;
     }
@@ -174,7 +160,6 @@ public class Post {
     }
 
     public void setTags(Set<String> tags) {
-        this.tags = new HashSet<String>();
         for(String s : tags) {
             this.tags.add(s);
         }
@@ -182,6 +167,21 @@ public class Post {
 
     public void setParentId(long parentId) {
         this.parentId = parentId;
+    }
+
+    public void addAnswer(long id) {
+        this.answers.add(id);
+    }
+
+    public static LocalDate randomDate() { // temporário, só para testar enquanto não se tem datas
+        long minDay = LocalDate.MIN.toEpochDay();
+        long maxDay = LocalDate.MAX.toEpochDay();
+        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
+        return LocalDate.ofEpochDay(randomDay);
+    }
+
+    public boolean hasTag(String name) {
+        return this.tags.contains(name);
     }
 
     public Post clone() {
