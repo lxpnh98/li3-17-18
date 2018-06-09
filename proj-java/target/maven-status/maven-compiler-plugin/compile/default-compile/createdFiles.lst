@@ -11,6 +11,7 @@ engine/UsersParse.class
 engine/Tag.class
 engine/User.class
 common/MyLog.class
+engine/QuerySix.class
 engine/Post.class
 common/Pair.class
 engine/QueryThree.class
