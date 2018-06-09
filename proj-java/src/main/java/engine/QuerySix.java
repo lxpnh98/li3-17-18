@@ -17,7 +17,7 @@ public class QuerySix {
 		TreeMap<Long,List<Post>> postsPorScore = new TreeMap<>();
 
 		for(Post p: c.getPostsBetween(begin, end)){
-			if (p.getType() == PostType.QUESTION){
+			if (p.getType() == PostType.ANSWER){
 				key = p.getScore();
 				if (postsPorScore.get(key) == null){
 					ArrayList<Post> posts = new ArrayList<>();

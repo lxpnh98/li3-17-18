@@ -178,7 +178,7 @@ public class TCDExample implements TADCommunity {
 
     // Query 2
     public List<Long> topMostActive(int N) {
-        List<Long> res = QueryTwo.resposta(this, 100);
+        List<Long> res = QueryTwo.resposta(this, N);
         System.out.println("Query 2: " + res);        
         return new ArrayList<Long>();
     }

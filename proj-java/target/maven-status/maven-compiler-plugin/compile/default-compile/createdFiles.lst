@@ -2,7 +2,6 @@ li3/TADCommunity.class
 engine/PostIdsByDateComparator.class
 engine/PostsParse.class
 engine/PostType.class
-engine/QuerySeven.class
 engine/QueryFive.class
 engine/PostsByDateComparator.class
 engine/TCDExample.class
