@@ -183,11 +183,8 @@ public class TCDExample implements TADCommunity {
     // Query 2
     public List<Long> topMostActive(int N) {
         List<Long> res = QueryTwo.resposta(this, N);
-<<<<<<< HEAD
+
         System.out.println("Query 2: " + res);        
-=======
-        System.out.println("Query 2: " + res);
->>>>>>> 001750da587cda60ef01157c349042e8f3c8d828
         return new ArrayList<Long>();
     }
 

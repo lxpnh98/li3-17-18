@@ -13,7 +13,6 @@ import common.Pair;
 import li3.TADCommunity;
 
 public class QuerySix {
-<<<<<<< HEAD
 
 	public static List<Long> answersmostvoted(TCDExample c, int N, LocalDate begin, LocalDate end) {
 		Long key;
@@ -49,17 +48,5 @@ public class QuerySix {
         }
 
         return postsPorScore;
-=======
-    public static List<Long> resposta(TCDExample c, int N, LocalDate begin, LocalDate end) {
-        List<Post> posts = c.getPostsBetween(begin, end);
-        Comparator<Post> byScore =
-            (Post p1, Post p2) -> new Long(p1.getScore()).compareTo(p2.getScore());
-        TreeSet<Post> postsByScore = new TreeSet<Post>(byScore);
-        posts.forEach(p -> postsByScore.add(p));
-        List<Long> postList = postsByScore.stream().map(p -> p.getId()).collect(Collectors.toList());
-        postList = postList.subList(Math.max(0, postList.size() - N), postList.size());
-        Collections.reverse(postList);
-        return postList;
->>>>>>> 001750da587cda60ef01157c349042e8f3c8d828
     }
 }
