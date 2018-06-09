@@ -104,6 +104,13 @@ public class TCDExample implements TADCommunity {
         long userId = p.getUserId();
         this.usersByPosts.remove(userId);
 
+        Post parent = this.posts.get(p.getParentId());
+        if (parent != null) {
+            parent.addAnswer(p.getId());
+        } else {
+            // TODO: tratar dos casos onde pai ainda não foi adicionado
+        }
+
         int postCount = this.users.get(p.getUserId()).getPostCount();
         this.users.get(p.getUserId()).setPostCount(postCount + 1);
 
@@ -184,7 +191,7 @@ public class TCDExample implements TADCommunity {
     public List<Long> topMostActive(int N) {
         List<Long> res = QueryTwo.resposta(this, N);
         System.out.println("Query 2: " + res);
-        return new ArrayList<Long>();
+        return res;
     }
 
     // Query 3
@@ -217,7 +224,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 7
     public List<Long> mostAnsweredQuestions(int N, LocalDate begin, LocalDate end) {
-        return Arrays.asList(505506L,508221L,506510L,508029L,506824L,505581L,505368L,509498L,509283L,508635L);
+        List<Long> res = QuerySeven.resposta(this, N, begin, end);
+        System.out.println("Query 7: " + res);
+        return res;
     }
 
     // Query 8

@@ -18,7 +18,7 @@ public class Post {
     private long acceptedAnswer;
     private String userDisplayName;
     private String title;
-    private List<Long> answers;
+    private Set<Long> answers;
     private Set<String> tags;
     private long parentId;
 
@@ -31,7 +31,7 @@ public class Post {
         this.acceptedAnswer = -1;
         this.userDisplayName = "";
         this.title = "";
-        this.answers = new ArrayList<>();
+        this.answers = new HashSet<>();
         this.creationDate = Post.randomDate();
         this.tags = new HashSet<>();
         this.parentId = -1;
@@ -52,7 +52,7 @@ public class Post {
         this.title = title;
         this.tags = tags;
         this.parentId = parentId;
-        this.answers = new ArrayList<Long>();
+        this.answers = new HashSet<Long>();
         this.score = score;
         this.creationDate = creationDate;
         this.tags = tags; // fazer clone
@@ -71,7 +71,7 @@ public class Post {
         this.title = p.getTitle();
         this.tags = p.getTags();
         this.parentId = p.getParentId();
-        //this.answers = p.getAnswers();
+        this.answers = p.getAnswers();
     }
 
     public long getId() {
@@ -93,7 +93,7 @@ public class Post {
     public LocalDate getCreationDate() {
         return this.creationDate;
     }
-    
+
     public PostType getType() {
         return this.type;
     }
@@ -118,8 +118,12 @@ public class Post {
         return this.parentId;
     }
 
-    public List getAnswers() {
+    public Set<Long> getAnswers() {
         return this.answers; // fazer clone
+    }
+
+    public int getNumAnswers() {
+        return this.answers.size();
     }
 
     //Sets
@@ -142,7 +146,7 @@ public class Post {
     public void setCreationDate(LocalDate d) {
         this.creationDate = d;
     }
-    
+
     public void setType(PostType type) {
         this.type = type;
     }
