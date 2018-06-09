@@ -20,11 +20,24 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
-        return p1.getDate().compareTo(p2.getDate());
+        return p1.getCreationDate().compareTo(p2.getCreationDate());
+    }
+}
+
+class PostIdsByDateComparator implements Comparator<Long> {
+    private TCDExample community;
+
+    public void setCommunity(TCDExample c) {
+        this.community = c;
+    }
+
+    public int compare(Long id1, Long id2) {
+        return this.community.getPost(id1).getDate().compareTo(this.community.getPost(id2).getDate());
     }
 }
 
@@ -43,7 +56,7 @@ public class TCDExample implements TADCommunity {
     private Map<String, Tag> tagsFromName;
     private TreeSet<Post> postsByDate;
     private TreeSet<User> usersByRep;
-    private Map<Long, List<Long>> postsByUser;
+    private Map<Long, TreeSet<Long>> postsByUser;
 
     public void init() {
         this.qelog = new MyLog("queryengine");
@@ -53,13 +66,21 @@ public class TCDExample implements TADCommunity {
         this.tagsFromName = new HashMap<String, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
         this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
-        this.postsByUser = new HashMap<Long, List<Long>>();
+        this.postsByUser = new HashMap<Long, TreeSet<Long>>();
     }
 
     public void addPost(Post p) {
         Post newPost = p.clone();
         this.posts.put(p.getId(), newPost);
         this.postsByDate.add(newPost);
+        TreeSet<Long> posts = this.postsByUser.get(p.getUserId());
+        if (posts == null) {
+            PostIdsByDateComparator c = new PostIdsByDateComparator();
+            c.setCommunity(this);
+            posts = new TreeSet<Long>(c);
+        }
+        posts.add(p.getId());
+        this.postsByUser.put(p.getUserId(), posts);
     }
 
     public void addUser(User u) {
@@ -91,17 +112,19 @@ public class TCDExample implements TADCommunity {
 
     public List<Post> getPostsBetween(LocalDate begin, LocalDate end) {
         Post beginPost = new Post();
-        //beginPost.setDate(LocalDate.MIN);
-        beginPost.setDate(begin);
+        beginPost.setCreationDate(begin.plusDays(0L));
         Post endPost = new Post();
-        //endPost.setDate(Post.randomDate());
-        endPost.setDate(end);
+        endPost.setCreationDate(end.plusDays(0L));
         Iterator<Post> it = this.postsByDate.subSet(beginPost, true, endPost, true).descendingIterator();
         List<Post> r = new ArrayList();
         while (it.hasNext()) {
             r.add(it.next().clone());
         }
         return r;
+    }
+
+    public List<Long> getPostIdsBy(long id) {
+        return this.postsByUser.get(id).stream().collect(Collectors.toList());
     }
 
     public void load(String dumpPath) {
@@ -117,9 +140,12 @@ public class TCDExample implements TADCommunity {
     }
 
     // Query 2
+    /*
     public List<Long> topMostActive(int N) {
-        return Arrays.asList(15811L,449L,158442L,167850L,367165L,295286L,59676L,93977L,35795L,3940L);
-    }
+        List<Long> res = QueryTwo.resposta(this, N);
+        System.out.println("Query 2: " + res);        
+        return res;
+    } */
 
     // Query 3
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end) {
@@ -131,7 +157,7 @@ public class TCDExample implements TADCommunity {
     // Query 4
     public List<Long> questionsWithTag(String tag, LocalDate begin, LocalDate end) {
         List<Long> res = QueryFour.resposta(this, tag, begin, end);
-        System.out.println("Query 4 (comprimento): " + res.size()); // falta tratar das tags dos posts
+        System.out.println("Query 4 (comprimento): " + res.size());
         return res;
         /*
         return Arrays.asList(276174L,276029L,274462L,274324L,274316L,274141L,274100L,272937L,
@@ -144,6 +170,10 @@ public class TCDExample implements TADCommunity {
 
     // Query 5
     public Pair<String, List<Long>> getUserInfo(long id) {
+        Pair<String, List<Long>> res = QueryFive.resposta(this, id);
+        System.out.println("Query 5: bio: \"" + res.getFst() + "\", ids: " + res.getSnd());
+        return res;
+        /*
         String shortBio = "<p>Coder. JS, Perl, Python, Basic<br>Books/movies: SF+F.<br>Dead:" +
                 "dell 9300<br>Dead: dell 1720 as of may 10th 2011.</p>\n" +
                 "<p>Current system: Acer Aspire 7750G.<br>\n" +
@@ -151,6 +181,7 @@ public class TCDExample implements TADCommunity {
         List<Long> ids = Arrays.asList(982507L,982455L,980877L,980197L,980189L,976713L,974412L,
                 974359L,973895L,973838L);
         return new Pair<>(shortBio,ids);
+        */
     }
 
     // Query 6
