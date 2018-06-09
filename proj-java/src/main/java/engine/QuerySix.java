@@ -17,14 +17,16 @@ public class QuerySix {
 		TreeMap<Long,List<Post>> postsPorScore = new TreeMap<>();
 
 		for(Post p: c.getPostsBetween(begin, end)){
-			key = p.getScore();
-			if (postsPorScore.get(key) == null){
-				ArrayList<Post> posts = new ArrayList<>();
-            	posts.add(p.clone());
-            	postsPorScore.put(key, posts);
-        	} else {
-            	postsPorScore.get(key).add(p.clone());
-        	}
+			if (p.getType() == PostType.QUESTION){
+				key = p.getScore();
+				if (postsPorScore.get(key) == null){
+					ArrayList<Post> posts = new ArrayList<>();
+            		posts.add(p.clone());
+            		postsPorScore.put(key, posts);
+        		} else {
+	            	postsPorScore.get(key).add(p.clone());
+    	    	}
+    	    }
     	}
 
     	ids = idsPorScore(postsPorScore,N);
