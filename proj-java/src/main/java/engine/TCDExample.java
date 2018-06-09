@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Collectors;
@@ -37,13 +38,29 @@ class PostIdsByDateComparator implements Comparator<Long> {
     }
 
     public int compare(Long id1, Long id2) {
-        return this.community.getPost(id1).getDate().compareTo(this.community.getPost(id2).getDate());
+        return this.community.getPost(id1).getCreationDate().compareTo(this.community.getPost(id2).getCreationDate());
     }
 }
 
 class UsersByRepComparator implements Comparator<User> {
     public int compare(User u1, User u2) {
         return new Long(u1.getRep()).compareTo(u2.getRep());
+    }
+}
+
+class UsersByNumberOfPostsComparator implements Comparator<Long> {
+    private TCDExample community;
+
+    public void setCommunity(TCDExample c) {
+        this.community = c;
+    }
+
+    public int compare(Long id1, Long id2) {
+        int return1 = (new Integer(this.community.getUser(id2).getPostCount())).compareTo(this.community.getUser(id1).getPostCount());
+        if (return1 == 0) {
+            return (new Long(this.community.getUser(id2).getId())).compareTo(this.community.getUser(id1).getId());
+        }
+        return return1;
     }
 }
 
@@ -55,8 +72,9 @@ public class TCDExample implements TADCommunity {
     private Map<Long, Tag> tags;
     private Map<String, Tag> tagsFromName;
     private TreeSet<Post> postsByDate;
-    private TreeSet<User> usersByRep;
     private Map<Long, TreeSet<Long>> postsByUser;
+    private TreeSet<User> usersByRep;
+    private TreeSet<Long> usersByPosts;
 
     public void init() {
         this.qelog = new MyLog("queryengine");
@@ -65,14 +83,28 @@ public class TCDExample implements TADCommunity {
         this.tags = new HashMap<Long, Tag>();
         this.tagsFromName = new HashMap<String, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
-        this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
         this.postsByUser = new HashMap<Long, TreeSet<Long>>();
+        this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
+        UsersByNumberOfPostsComparator u = new UsersByNumberOfPostsComparator();
+        u.setCommunity(this);
+        this.usersByPosts = new TreeSet<Long>(u); 
+        
     }
 
     public void addPost(Post p) {
         Post newPost = p.clone();
         this.posts.put(p.getId(), newPost);
         this.postsByDate.add(newPost);
+
+        // Atualizar PostCount e usersByPosts        
+        long userId = p.getUserId();
+        this.usersByPosts.remove(userId);
+
+        int postCount = this.users.get(p.getUserId()).getPostCount();
+        this.users.get(p.getUserId()).setPostCount(postCount + 1);
+
+        this.usersByPosts.add(userId);
+
         TreeSet<Long> posts = this.postsByUser.get(p.getUserId());
         if (posts == null) {
             PostIdsByDateComparator c = new PostIdsByDateComparator();
@@ -87,6 +119,7 @@ public class TCDExample implements TADCommunity {
         User newUser = u.clone();
         this.users.put(u.getId(), newUser);
         this.usersByRep.add(newUser);
+        this.usersByPosts.add(newUser.getId());
     }
 
     public void addTag(Tag t) {
@@ -127,6 +160,10 @@ public class TCDExample implements TADCommunity {
         return this.postsByUser.get(id).stream().collect(Collectors.toList());
     }
 
+    public List<Long> getUsersByPosts() {
+        return this.usersByPosts.stream().collect(Collectors.toList());
+    }
+
     public void load(String dumpPath) {
         this.init();
         Load.load(this, dumpPath);
@@ -140,12 +177,11 @@ public class TCDExample implements TADCommunity {
     }
 
     // Query 2
-    /*
     public List<Long> topMostActive(int N) {
-        List<Long> res = QueryTwo.resposta(this, N);
+        List<Long> res = QueryTwo.resposta(this, 100);
         System.out.println("Query 2: " + res);        
-        return res;
-    } */
+        return new ArrayList<Long>();
+    }
 
     // Query 3
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end) {

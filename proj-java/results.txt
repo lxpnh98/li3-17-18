@@ -1,5 +1,5 @@
 Query1 -> (What are the actual risks of giving www-data sudo nopasswd access?, WebNinja)
-Query 2 -> [15811, 449, 158442, 167850, 367165, 295286, 59676, 93977, 35795, 3940]
+Query 2 -> []
 Query 3 -> (11, 20)
 Query 4 -> []
 Query 5 -> (<p>Coder. JS, Perl, Python, Basic<br>Books/movies: SF+F.<br>Dead: dell 9300<br>Dead: dell 1720 as of may 10th 2011.</p>

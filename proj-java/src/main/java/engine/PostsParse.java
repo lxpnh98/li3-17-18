@@ -91,8 +91,9 @@ public class PostsParse extends DefaultHandler {
             } else {
                post.setType(PostType.OTHERS);
             }
-
-            this.community.addPost(post);
+            if(post.getType() != PostType.OTHERS) {
+                this.community.addPost(post);
+            }
         }
     }
 }

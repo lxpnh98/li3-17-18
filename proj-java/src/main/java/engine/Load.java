@@ -17,16 +17,16 @@ public class Load {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
         try {
+            
+            // Load/Parse dos Users
+            SAXParser parserUser = saxParserFactory.newSAXParser();
+            UsersParse usersHandler = new UsersParse(c);
+            parserUser.parse(new File(dumpPath + "Users.xml"), usersHandler);
 
             // Load/Parse dos Posts
             SAXParser parserPost = saxParserFactory.newSAXParser();
             PostsParse postsHandler = new PostsParse(c);
             parserPost.parse(new File(dumpPath + "Posts.xml"), postsHandler);
-
-            // Load/Parse dos Users
-            SAXParser parserUser = saxParserFactory.newSAXParser();
-            UsersParse usersHandler = new UsersParse(c);
-            parserUser.parse(new File(dumpPath + "Users.xml"), usersHandler);
 
             // Load/Parse das Tags
             SAXParser parserTag = saxParserFactory.newSAXParser();

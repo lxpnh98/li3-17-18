@@ -9,18 +9,14 @@ engine/TCDExample.class
 engine/Load.class
 engine/QueryOne.class
 engine/QueryFour.class
-<<<<<<< HEAD
 engine/UsersParse.class
 engine/User.class
+engine/UsersByNumberOfPostsComparator.class
 engine/Tag.class
-=======
-engine/User.class
-engine/Tag.class
-engine/UsersParse.class
->>>>>>> 595148d87e8b1e165916f40c888714f6e7942db2
 common/MyLog.class
 engine/Post.class
-engine/QueryThree.class
 common/Pair.class
+engine/QueryThree.class
 engine/TagsParse.class
 li3/Main.class
+engine/QueryTwo.class

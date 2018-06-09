@@ -1,8 +1,8 @@
-<<<<<<< HEAD
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/TagsParse.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/li3/TADCommunity.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/common/MyLog.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/common/Pair.java
+/home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/QueryTwo.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/Load.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/User.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/TCDExample.java
@@ -11,26 +11,8 @@
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/QueryFour.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/PostType.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/QueryThree.java
+/home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/QueryFive.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/PostsParse.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/li3/Main.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/Post.java
 /home/tiago/UMinho/2 Ano/2 Semestre/LI3/Grupo25/proj-java/src/main/java/engine/Tag.java
-=======
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/Load.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/common/MyLog.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/TagsParse.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/UsersParse.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/User.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/QueryOne.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/li3/Main.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/TCDExample.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/Tag.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/common/Pair.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/QueryFive.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/QueryThree.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/li3/TADCommunity.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/PostsParse.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/QueryFour.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/PostType.java
-/home/lxpnh98/Escola/MIEI/Ano 2/Semestre 2/Laboratórios de Informática III/Grupo25/proj-java/src/main/java/engine/Post.java
->>>>>>> 595148d87e8b1e165916f40c888714f6e7942db2

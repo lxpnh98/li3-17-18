@@ -44,8 +44,10 @@ public class UsersParse extends DefaultHandler {
             String bio = attributes.getValue("AboutMe");
             user.setBio(bio);
             //System.out.println("\nBio: " + user.getBio());
-
-            this.community.addUser(user);
+            
+            if (user.getId() != -1) {
+                this.community.addUser(user);
+            }
         }
     }
 }
