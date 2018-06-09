@@ -46,9 +46,19 @@ class PostIdsByDateComparator implements Comparator<Long> {
     }
 }
 
-class UsersByRepComparator implements Comparator<User> {
-    public int compare(User u1, User u2) {
-        return new Long(u1.getRep()).compareTo(u2.getRep());
+class UsersByRepComparator implements Comparator<Long> {
+    private TCDExample community;
+
+    public void setCommunity(TCDExample c) {
+        this.community = c;
+    }
+
+    public int compare(Long id1, Long id2) {
+        int repCmp = (new Long(this.community.getUser(id1).getRep())).compareTo(this.community.getUser(id2).getRep());
+        if (repCmp == 0) {
+            return (new Long(this.community.getUser(id1).getId())).compareTo(this.community.getUser(id2).getId());
+        }
+        return repCmp;
     }
 }
 
@@ -77,7 +87,7 @@ public class TCDExample implements TADCommunity {
     private Map<String, Tag> tagsFromName;
     private TreeSet<Post> postsByDate;
     private Map<Long, TreeSet<Long>> postsByUser;
-    private TreeSet<User> usersByRep;
+    private TreeSet<Long> usersByRep;
     private TreeSet<Long> usersByPosts;
 
     public void init() {
@@ -88,7 +98,9 @@ public class TCDExample implements TADCommunity {
         this.tagsFromName = new HashMap<String, Tag>();
         this.postsByDate = new TreeSet<Post>(new PostsByDateComparator());
         this.postsByUser = new HashMap<Long, TreeSet<Long>>();
-        this.usersByRep = new TreeSet<User>(new UsersByRepComparator());
+        UsersByRepComparator cmp = new UsersByRepComparator();
+        cmp.setCommunity(this);
+        this.usersByRep = new TreeSet<Long>(cmp);
         UsersByNumberOfPostsComparator u = new UsersByNumberOfPostsComparator();
         u.setCommunity(this);
         this.usersByPosts = new TreeSet<Long>(u);
@@ -129,7 +141,7 @@ public class TCDExample implements TADCommunity {
     public void addUser(User u) {
         User newUser = u.clone();
         this.users.put(u.getId(), newUser);
-        this.usersByRep.add(newUser);
+        this.usersByRep.add(newUser.getId());
         this.usersByPosts.add(newUser.getId());
     }
 
@@ -165,6 +177,10 @@ public class TCDExample implements TADCommunity {
             r.add(it.next().clone());
         }
         return r;
+    }
+
+    public List<Long> getUsersByRep() {
+        return this.usersByRep.stream().collect(Collectors.toList());
     }
 
     public List<Long> getPostIdsBy(long id) {
@@ -246,7 +262,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 11
     public List<Long> mostUsedBestRep(int N, LocalDate begin, LocalDate end) {
-        return Arrays.asList(6L,29L,72L,163L,587L);
+        List<Long> res = QueryEleven.resposta(this, N, begin, end);
+        System.out.println("Query 11: " + res);
+        return res;
     }
 
     public void clear(){

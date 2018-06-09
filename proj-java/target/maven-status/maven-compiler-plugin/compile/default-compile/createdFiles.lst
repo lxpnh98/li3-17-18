@@ -19,7 +19,9 @@ engine/PostsParse.class
 engine/QueryFive.class
 engine/PostsByDateComparator.class
 engine/TCDExample.class
+engine/TagCountComparator.class
 engine/QueryOne.class
 engine/QuerySix.class
 engine/Post.class
+engine/QueryEleven.class
 common/Pair.class
