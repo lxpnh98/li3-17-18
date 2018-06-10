@@ -146,7 +146,6 @@ public class Main {
         qe.clear();
         after = System.currentTimeMillis();
         logtime.writeLog("CLEAN -> "+(after-before)+" ms");
-
     }
 
 }
