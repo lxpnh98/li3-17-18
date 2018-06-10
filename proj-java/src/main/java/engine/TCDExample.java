@@ -191,8 +191,9 @@ public class TCDExample implements TADCommunity {
         return this.usersByPosts.stream().collect(Collectors.toList());
     }
 
-    public List<Post> getPostsByDate() {
-        List<Post> posts = this.postsByDate.stream().map(Post::clone).collect(Collectors.toList());
+    public List<Long> getPostsByDate(String word) {
+        List<Long> posts = this.postsByDate.stream().filter(p -> p.getType().equals(PostType.QUESTION) && p.getTitle().contains(word))
+                               .map(Post::getId).collect(Collectors.toList());
         Collections.reverse(posts);
         return posts;
     }
