@@ -191,6 +191,12 @@ public class TCDExample implements TADCommunity {
         return this.usersByPosts.stream().collect(Collectors.toList());
     }
 
+    public long getUserRep(long id) {
+        User u = this.getUser(id);
+        long res = u.getRep();
+        return res;
+    }
+
     public void load(String dumpPath) {
         this.init();
         Load.load(this, dumpPath);
@@ -257,7 +263,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 10
     public long betterAnswer(long id) {
-        return 175891;
+        long res = QueryTen.resposta(this,id);
+        System.out.println("Query 10: " + res);
+        return res;
     }
 
     // Query 11
