@@ -10,6 +10,7 @@ engine/UsersParse.class
 engine/User.class
 engine/UsersByNumberOfPostsComparator.class
 engine/Tag.class
+engine/QueryEighth.class
 common/MyLog.class
 engine/QueryThree.class
 engine/TagsParse.class

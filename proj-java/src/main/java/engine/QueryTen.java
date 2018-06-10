@@ -15,7 +15,7 @@ public class QueryTen {
 
         Post p = c.getPost(id);
         Set<Long> answers = p.getAnswers(); 
-        Iterator<Long> it = answers.iterator();
+        Iterator<Long> it = p.getAnswers().iterator();
         while(it.hasNext()) {
             answerTemp = it.next();
             Post answer = c.getPost(answerTemp);

@@ -22,7 +22,7 @@ import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.stream.Collectors;
-
+import java.util.Collections;
 
 class PostsByDateComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {
@@ -191,6 +191,12 @@ public class TCDExample implements TADCommunity {
         return this.usersByPosts.stream().collect(Collectors.toList());
     }
 
+    public List<Post> getPostsByDate() {
+        List<Post> posts = this.postsByDate.stream().map(Post::clone).collect(Collectors.toList());
+        Collections.reverse(posts);
+        return posts;
+    }
+
     public long getUserRep(long id) {
         User u = this.getUser(id);
         long res = u.getRep();
@@ -253,7 +259,9 @@ public class TCDExample implements TADCommunity {
 
     // Query 8
     public List<Long> containsWord(int N, String word) {
-        return Arrays.asList(980835L,979082L,974117L,974105L,973832L,971812L,971056L,968451L,964999L,962770L);
+        List<Long> res = QueryEighth.resposta(this, N, word);
+        System.out.println("Query 8: " + res);
+        return res;
     }
 
     // Query 9
