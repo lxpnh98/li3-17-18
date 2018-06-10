@@ -1,0 +1,148 @@
+\documentclass[10pt]{report}
+
+\usepackage[a4paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+
+\newcommand\tab[1][0.5cm]{\hspace*{#1}}
+
+
+\title{Projeto de Laboratórios de Informática III\\Grupo 25	}
+\author{Alexandre Mendonça Pinho (a82441) \and Joel Filipe Esteves Gama (a82202) \and Tiago Martins Pinheiro (a82491)}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\chapter{Introdução}
+\label{sec:intro}
+
+\tab Este relatório apresenta uma explicação da segunda fase do projeto da disciplina de Laboratórios de Informática III, do 2º ano do Mestrado Integrado em Engenharia Informática da Universidade do Minho, que toma a forma de um projeto a ser desenvolvido na linguagem de programação \textit{Java}.
+
+Como projeto de avaliação é nos proposto responder a onze interrogações sobre processamento de dados de comunidades do Stack Exchange. Grande parte desta segunda parte do projeto consistiu em "converter" o código já feito na primeira fase do projeto para a nova linguagem de programação, até porque esta foi já feita com esta possibilidade em mente, criando classes para as estruturas de dados em ficheiros separados. No entanto, a segunda fase do projeto foi também uma oportunidade de melhorar a estrutura e implementação do que nos foi pedido.
+
+Neste relatório apresentamos a descrição do problema a resolver e explicamos as estruturas utilizadas e os algoritmos de resposta às queries. Apresentamos também o raciocínio por detrás das decisões tomadas, bem como a forma como melhoramos os algoritmos.
+
+\chapter{Descrição do Problema}
+\label{sec:problema}
+
+\tab Interrogação 1: Dado o identificador de um post, a função deve retor-
+nar o título do post e o nome (não o ID) de utilizador do autor 3 . Se o post
+for uma resposta, a função deverá retornar informações (título e utilizador)
+da pergunta correspondente;
+
+ Interrogação 2: Pretende obter o top N utilizadores com maior número
+de posts de sempre. Para isto, devem ser considerados tanto perguntas
+quanto respostas dadas pelo respectivo utilizador;
+
+ Interrogação 3: Dado um intervalo de tempo 4 arbitrário, obter o número
+total de posts (identificando perguntas e respostas separadamente) neste
+período;
+
+ Interrogação 4: Dado um intervalo de tempo arbitrário, retornar todas
+as perguntas contendo uma determinada tag. O retorno da função deverá ser
+uma lista com os IDs das perguntas ordenadas em cronologia inversa 5 ;
+
+ Interrogação 5: Dado um ID de utilizador, devolver a informação do
+seu perfil (short bio) e os IDs dos seus 10 últimos posts (perguntas ou res-
+postas), ordenados por cronologia inversa;
+
+ Interrogação 6: Dado um intervalo de tempo arbitrário, devolver os
+IDs das N respostas com mais votos, em ordem decrescente do número de
+votos;
+
+ Interrogação 7: Dado um intervalo de tempo arbitrário, devolver as
+IDs das N perguntas com mais respostas, em ordem decrescente do número de
+respostas;
+
+ Interrogação 8: Dado uma palavra, devolver uma lista com os IDs de
+N perguntas cujos títulos a contenham, ordenados por cronologia inversa;
+
+ Interrogação 9: Dados os IDs de dois utilizadores, devolver as últimas
+N perguntas (cronologia inversa) em que participaram dois utilizadores es-
+pecíficos. Note que os utilizadores podem ter participado via pergunta ou
+respostas;
+
+ Interrogação 10: Dado o ID de uma pergunta, obter a melhor resposta.
+Para isso, deverá usar a função de média ponderada abaixo:
+(Scr * 0.65) + (Rep * 0.25) + (Comt * 0.1)
+onde,
+- Scr - score da resposta;
+- Rep - reputação do utilizador;
+- Comt - número de comentários recebidos pela resposta;
+
+ Interrogação 11: Dado um intervalo arbitrário de tempo, devolver os
+identificadores das N tags mais usadas pelos N utilizadores com melhor re-
+putação. Em ordem decrescente do número de vezes em que a tag foi usada.
+
+\chapter{Conceção da Solução}
+
+\section{Tipos de dados}
+
+Para representar a informação presente no ficheiros xml, foram codificadas três classes principais, cada uma com vários campos:
+
+\begin{itemize}
+
+\item User: id, reputação, nome de display, a descrição de utilizador, e o número de posts do utilizador;
+
+\item Post: id, id do post parente\footnote{Apenas utilizado se for resposta}, id do utilizador que criou o post, pontuação, número de comentários, data de criação, tipo de post (pergunta, resposta, ou outro), flag de resposta aceite\footnote{Apenas utilizado se for resposta}, nome de display do utilizador que criou o post (caso este já não exista), título\footnote{Apenas utilizado se for pergunta} e o conjunto de respostas\footnote{Apenas utilizado se for pergunta};
+
+\item Tag: id e nome
+
+\end{itemize}
+
+\section{Estruturas de dados}
+
+\tab Nesta fase do projeto utilizamos várias estruturas de dados para conseguir um melhor desempenho na reposta das queries individuais, em troca de fazer mais processamento ao fazer o parsing dos ficheiros:
+
+\begin{itemize}
+
+\item HashMap de ids de posts para posts;
+\item HashMap de ids de users para users;
+\item HashMap de nomes de tags para tags;
+\item TreeSet de posts ordenados cronologicamente;
+\item HashMap de ids de users para o set ordenado cronologicamente dos ids dos seus posts;
+\item TreeSet de users ordenados por reputação;
+\item TreeSet de users ordenados pelo número de posts.
+
+\end{itemize}
+
+\subsection{Decisões tomadas}
+
+\tab Para facilitar o processo de alterar informação dos posts ou utilizadores, se tal for necessário no futuro, verificamo-nos de que a informação esteja sempre contida dentro da estrutura principal de dados, e que seja replicada o mínimo número de vezes.
+
+Para manter a simplicidade e elegancia do código, decidimos que seria melhor não fazer uso de TreeMaps, já que as estruturas são construidas incrementalmente, pelo que seria necessário atualizar a ordem do Map quando se adicionava informação à base de dados.
+
+\section{Estratégias seguidas em cada uma das interrogações}
+
+\subsection{Interrogação 1}
+
+\subsection{Interrogação 2}
+
+\subsection{Interrogação 3}
+
+\subsection{Interrogação 4}
+
+\subsection{Interrogação 5}
+
+\subsection{Interrogação 6}
+
+\subsection{Interrogação 7}
+
+\subsection{Interrogação 8}
+
+\subsection{Interrogação 9}
+
+\subsection{Interrogação 10}
+
+\subsection{Interrogação 11}
+
+\section{Estratégias para melhoramento de desempenho}
+
+
+\chapter{Conclusão}
+
+\label{sec:conclusao}
+
+\end{document}
