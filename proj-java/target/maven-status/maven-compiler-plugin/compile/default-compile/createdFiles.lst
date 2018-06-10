@@ -6,18 +6,18 @@ engine/UsersByRepComparator.class
 engine/Load.class
 engine/PostsByNumAnswersComparator.class
 engine/QueryFour.class
-engine/UsersParse.class
 engine/User.class
 engine/UsersByNumberOfPostsComparator.class
 engine/Tag.class
+engine/UsersParse.class
 engine/QueryEighth.class
 common/MyLog.class
 engine/QueryThree.class
 engine/TagsParse.class
 li3/Main.class
 engine/QueryTwo.class
-engine/PostsParse.class
 engine/QueryTen.class
+engine/PostsParse.class
 engine/QueryFive.class
 engine/PostsByDateComparator.class
 engine/TCDExample.class
@@ -25,5 +25,5 @@ engine/TagCountComparator.class
 engine/QueryOne.class
 engine/QuerySix.class
 engine/Post.class
-common/Pair.class
 engine/QueryEleven.class
+common/Pair.class
