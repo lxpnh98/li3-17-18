@@ -13,11 +13,11 @@ import java.util.List;
 
 public class Load {
 
-    public static void load(TCDExample c, String dumpPath) {
+    public static void load(TCDExample c, String dumpPath, List<Long> addedBeforeParent) {
         SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 
         try {
-            
+
             // Load/Parse dos Users
             SAXParser parserUser = saxParserFactory.newSAXParser();
             UsersParse usersHandler = new UsersParse(c);
@@ -25,7 +25,7 @@ public class Load {
 
             // Load/Parse dos Posts
             SAXParser parserPost = saxParserFactory.newSAXParser();
-            PostsParse postsHandler = new PostsParse(c);
+            PostsParse postsHandler = new PostsParse(c, addedBeforeParent);
             parserPost.parse(new File(dumpPath + "Posts.xml"), postsHandler);
 
             // Load/Parse das Tags

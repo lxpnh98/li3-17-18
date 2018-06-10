@@ -13,10 +13,12 @@ import org.xml.sax.helpers.DefaultHandler;
 public class PostsParse extends DefaultHandler {
 
     private TCDExample community;
+    private List<Long> addedBeforeParent;
 
-    public PostsParse(TCDExample c) {
+    public PostsParse(TCDExample c, List<Long> addedBeforeParent) {
         super();
         this.community = c;
+        this.addedBeforeParent = addedBeforeParent;
     }
 
     @Override
@@ -92,7 +94,7 @@ public class PostsParse extends DefaultHandler {
                post.setType(PostType.OTHERS);
             }
             if(post.getType() != PostType.OTHERS) {
-                this.community.addPost(post);
+                this.community.addPost(post, this.addedBeforeParent);
             }
         }
     }

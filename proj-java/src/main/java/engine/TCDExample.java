@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map;
@@ -107,7 +108,7 @@ public class TCDExample implements TADCommunity {
 
     }
 
-    public void addPost(Post p) {
+    public void addPost(Post p, List<Long> addedBeforeParent) {
         Post newPost = p.clone();
         this.posts.put(p.getId(), newPost);
         this.postsByDate.add(newPost);
@@ -119,8 +120,8 @@ public class TCDExample implements TADCommunity {
         Post parent = this.posts.get(p.getParentId());
         if (parent != null) {
             parent.addAnswer(p.getId());
-        } else {
-            // TODO: tratar dos casos onde pai ainda não foi adicionado
+        } else if (p.getParentId() > p.getId()) {
+            addedBeforeParent.add(p.getId());
         }
 
         int postCount = this.users.get(p.getUserId()).getPostCount();
@@ -199,55 +200,62 @@ public class TCDExample implements TADCommunity {
 
     public void load(String dumpPath) {
         this.init();
-        Load.load(this, dumpPath);
+        List<Long> addedBeforeParent = new LinkedList<>();
+        Load.load(this, dumpPath, addedBeforeParent);
+        this.addToParents(addedBeforeParent);
+    }
+
+    private void addToParents(List<Long> addedBeforeParent) {
+        addedBeforeParent.forEach(id -> {
+            long parentId = this.posts.get(id).getParentId();
+            Post parent = this.posts.get(parentId);
+            if (parent != null) {
+                parent.addAnswer(id);
+            } else {
+                qelog.writeLog("Parent post with id " + parentId + " not added.");
+            }
+        });
     }
 
     // Query 1
     public Pair<String,String> infoFromPost(long id) {
         Pair<String,String> res = QueryOne.resposta(this, id);
-        System.out.println("Query 1: " + res);
         return res;
     }
 
     // Query 2
     public List<Long> topMostActive(int N) {
         List<Long> res = QueryTwo.resposta(this, N);
-        System.out.println("Query 2: " + res);
         return res;
     }
 
     // Query 3
     public Pair<Long,Long> totalPosts(LocalDate begin, LocalDate end) {
           Pair pair = QueryThree.answersquestions(this, begin, end);
-          System.out.println("Query 3: Existem " + pair.getFst() + " perguntas e " + pair.getSnd() + " respostas");
           return pair;
     }
 
     // Query 4
     public List<Long> questionsWithTag(String tag, LocalDate begin, LocalDate end) {
         List<Long> res = QueryFour.resposta(this, tag, begin, end);
-        System.out.println("Query 4 (comprimento): " + res.size());
         return res;
     }
 
     // Query 5
     public Pair<String, List<Long>> getUserInfo(long id) {
         Pair<String, List<Long>> res = QueryFive.resposta(this, id);
-        System.out.println("Query 5: bio: \"" + res.getFst() + "\", ids: " + res.getSnd());
         return res;
     }
 
     // Query 6
     public List<Long> mostVotedAnswers(int N, LocalDate begin, LocalDate end) {
         List<Long> posts = QuerySix.resposta(this, N, begin, end);
-        System.out.println("Query 6: " + posts);
         return posts;
     }
 
     // Query 7
     public List<Long> mostAnsweredQuestions(int N, LocalDate begin, LocalDate end) {
         List<Long> res = QuerySeven.resposta(this, N, begin, end);
-        System.out.println("Query 7: " + res);
         return res;
     }
 
@@ -264,14 +272,12 @@ public class TCDExample implements TADCommunity {
     // Query 10
     public long betterAnswer(long id) {
         long res = QueryTen.resposta(this,id);
-        System.out.println("Query 10: " + res);
         return res;
     }
 
     // Query 11
     public List<Long> mostUsedBestRep(int N, LocalDate begin, LocalDate end) {
         List<Long> res = QueryEleven.resposta(this, N, begin, end);
-        System.out.println("Query 11: " + res);
         return res;
     }
 
