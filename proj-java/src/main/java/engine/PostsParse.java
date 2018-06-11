@@ -10,17 +10,37 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * Classe responsável por fazer o parsing dos posts.
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
+ */
 public class PostsParse extends DefaultHandler {
 
+    /** Estrutura de dados principal */
     private TCDExample community;
+    /** Lista onde serão guardados dos id dos posts cujos pai ainda não foram processados. */
     private List<Long> addedBeforeParent;
 
+    /**
+     * Construtor da classe, necessário para guardar referências às estruturas de dados que a classe altera.
+     * @param c                  Estrutura de dados à qual é adicionada a informação.
+     * @param addedBeforeParent  Lista onde serão guardados dos id dos posts cujos pai ainda não foram processados.
+     */
     public PostsParse(TCDExample c, List<Long> addedBeforeParent) {
         super();
         this.community = c;
         this.addedBeforeParent = addedBeforeParent;
     }
 
+    /**
+     * Método que carrega a informação de um post para a estrutura de dados principal.
+     * @param uri        O URI do namespace, ou vazio se não existir
+     * @param localName  O nome local
+     * @param qName      O nome com prefixo
+     * @param attributes Os atributos do elemento
+     */
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes)
             throws SAXException {
