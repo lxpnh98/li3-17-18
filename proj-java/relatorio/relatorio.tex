@@ -144,7 +144,15 @@ Para manter a simplicidade e elegancia do código, decidimos que seria melhor n�
 
 \section{Estratégias para melhoramento de desempenho}
 
+Em relação à primeira fase, o desempenho das queries em si melhorou bastante, e o tempo de inicialização não sofreu penalização devido ao uso do método de parsing SAX, que reduz a quantidade de memória utilizada e é mais eficiente.
+
+Para conseguir isto, em vez de, por exemplo, ordenar os posts por data cada vez que se faz uma query, os posts são introduzidos na estrutura de dados e ordenados nesse momento. Esta antecipação permite não duplicar o esforço nas queries, não só para ordenar posts por data, mas também para os ordenar por número de respostas e para ordenar os utilizadores por número de posts e por reputação.
+
 \chapter{Conclusão}
+
+Neste projeto foi-nos pedido responder a um conjunto de interrogações acerca de comunidades do Stack Exchange a partir dos dados disponibilizdos em formato XML. Na primeira fase utilizamos a linguagem de programação \textit{C} com recurso a várias bibliotecas de código, e na segunda \textit{Java} e a sua biblioteca standard.
+
+A primeira fase do projeto foi a que demorou mais, tanto pela dificuldade de resolver o problema proposto como pela natureza da linguagem utilizada. A segunda fase foi mais simples pois já tinhamos a ideia do que fazer, apenas faltou melhorar a implementação, e a linguagem utilizada é manifestamente mais acessível. Na segunda fase, seria possível tornar o código mais idiomático, utilizando as exceções do \textit{Java}, e talvez criando subclasses distintas para perguntas e respostas.
 
 \label{sec:conclusao}
 

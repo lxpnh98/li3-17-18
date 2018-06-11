@@ -470,7 +470,8 @@ public class TCDExample implements TADCommunity {
      * @return    Lista das últimas N perguntas que em os dois utilizadores participam.
      */
     public List<Long> bothParticipated(int N, long id1, long id2) {
-        return Arrays.asList(594L);
+        List<Long> res = QueryNine.resposta(this, N, id1, id2);
+        return res;
     }
 
     /**
