@@ -11,7 +11,6 @@ import java.util.TreeSet;
 import java.util.Iterator;
 import java.util.Collections;
 import java.util.stream.Collectors;
-import java.util.LinkedHashSet;
 import common.Pair;
 import li3.TADCommunity;
 
