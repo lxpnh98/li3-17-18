@@ -1,9 +1,3 @@
-/*
- * @author Alexandre Mendonça Pinho (A82441)
-           Joel Filipe Esteves Gama (A82202)
-           Tiago Martins Pinheiro (A82491
- */
-
 package engine;
 
 import java.util.List;
@@ -20,6 +14,9 @@ import li3.TADCommunity;
 
 /**
  * Comparador de Posts por número de respostas (ordem crescente).
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491
  */
 class PostsByNumAnswersComparator implements Comparator<Post> {
     public int compare(Post p1, Post p2) {

@@ -1,13 +1,10 @@
-/*
- * @author Alexandre Mendonça Pinho (A82441)
-           Joel Filipe Esteves Gama (A82202)
-           Tiago Martins Pinheiro (A82491)
- */
-
 package engine;
 
 /**
  * Class Tag, onde se encontra toda a informação sobre a Tag.
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
  */
 public class Tag {
 

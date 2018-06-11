@@ -46,22 +46,18 @@ public class UsersParse extends DefaultHandler {
             // Set Id
             String id = attributes.getValue("Id");
             user.setId(Long.parseLong(id));
-            // System.out.println("UserID: " + user.getId());
 
             //Set Rep
             String rep = attributes.getValue("Reputation");
             user.setRep(Long.parseLong(rep));
-            //System.out.println("Reputação: " + user.getRep());
 
             //Set Name
             String name = attributes.getValue("DisplayName");
             user.setDisplayName(name);
-            //System.out.println("Nome: " + user.getDisplayName());
 
             //Set Bio
             String bio = attributes.getValue("AboutMe");
             user.setBio(bio);
-            //System.out.println("\nBio: " + user.getBio());
             
             if (user.getId() != -1) {
                 this.community.addUser(user);

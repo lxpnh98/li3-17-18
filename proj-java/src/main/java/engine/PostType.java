@@ -1,13 +1,10 @@
-/*
- * @author Alexandre Mendonça Pinho (A82441)
-           Joel Filipe Esteves Gama (A82202)
-           Tiago Martins Pinheiro (A82491)
- */
-
 package engine;
 
 /**
  * Enum para o Tipo do Post.
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
  */
 public enum PostType {
     QUESTION(1),

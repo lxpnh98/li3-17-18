@@ -1,9 +1,3 @@
-/*
- * @author Alexandre Mendonça Pinho (A82441)
-           Joel Filipe Esteves Gama (A82202)
-           Tiago Martins Pinheiro (A82491)
- */
-
 package engine;
 
 import java.util.ArrayList;
@@ -13,6 +7,9 @@ import li3.TADCommunity;
 
 /**
  * Class QueryOne.
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
  */
 public class QueryOne {
     /**
