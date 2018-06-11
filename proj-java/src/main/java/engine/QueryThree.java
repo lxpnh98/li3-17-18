@@ -19,7 +19,7 @@ public class QueryThree {
      * @param TCDExample c Estrutura de dados principal.
      * @param LocalDate Data inicial.
      * @param LocalDate Data final.
-     * @return Pair (Número de perguntas, Número de respostas)
+     * @return Pair (Número de perguntas, Número de respostas).
      */
     public static Pair<Long,Long> answersquestions(TCDExample c, LocalDate begin, LocalDate end) {
         long answers = 0, questions = 0;
@@ -33,4 +33,4 @@ public class QueryThree {
 
         return pair;
     }
-}o
+}
