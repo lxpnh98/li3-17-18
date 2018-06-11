@@ -364,7 +364,7 @@ public class TCDExample implements TADCommunity {
      * for uma resposta, a função deverá retornar informações (tı́tulo e utilizador)
      * da pergunta correspondente.
      * @param id Id do post.
-     * @return   Par (título do post, nome de utilizador do autor)
+     * @return Par (título do post, nome de utilizador do autor)
      */
     public Pair<String,String> infoFromPost(long id) {
         Pair<String,String> res = QueryOne.resposta(this, id);
