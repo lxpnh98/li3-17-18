@@ -198,8 +198,6 @@ public class TCDExample implements TADCommunity {
             parent.addAnswer(p.getId());
         } else if (p.getParentId() != -1) {
             addedBeforeParent.add(p.getId());
-        } else {
-            qelog.writeLog("Post with id " + p.getParentId() + " not added.");
         }
 
         int postCount = this.users.get(p.getUserId()).getPostCount();
