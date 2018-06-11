@@ -357,6 +357,10 @@ public class Post {
             this.parentId == p.getParentId() && this.answers.equals(p.getAnswers()));       
     }
 
+    /**
+     * Devolve toda a informação que contém o objeto Post.
+     * @return String informação do post. 
+     */
     public String toString() {
         return "\nPost =>\n Id: " + this.id + "\n UserId: " + this.userId +
                "\n Score: " + this.score + "\n Número de comentários: " + this.commentCount +
