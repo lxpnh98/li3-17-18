@@ -116,30 +116,33 @@ Para manter a simplicidade e elegancia do código, decidimos que seria melhor n�
 
 \section{Estratégias seguidas em cada uma das interrogações}
 
-\subsection{Interrogação 1}
+\begin{itemize}
 
-\subsection{Interrogação 2}
+\item Interrogação 1: acede ao post a partir da tabela de hash de posts, e extrái a informação pedida.
 
-\subsection{Interrogação 3}
+\item Interrogação 2: retorna a sublista (N primeiros elementos) da lista de utilizadores ordenados pelo número de posts, contruida a partir de um TreeSet na estrutura principal.
 
-\subsection{Interrogação 4}
+\item Interrogação 3: itera pelos posts entre as duas datas (guardados num TreeSet para uma extração eficiente da lista), e mantem uma contagem das perguntas e outra das respostas.
 
-\subsection{Interrogação 5}
+\item Interrogação 4: itera pelos posts entre as duas datas, filtra aqueles que não são perguntas ou não contém a tag especificada, e controi a lista dos restantes (ainda ordenados).
 
-\subsection{Interrogação 6}
+\item Interrogação 5: acede ao utilizador com o id especificado para extrair a short bio, e controi a lista dos últimos 10 posts a partir do TreeSet dos posts do utilizador ordenados cronologicamente.
 
-\subsection{Interrogação 7}
+\item Interrogação 6: itera pelos posts entre as duas datas, adicionando cada um a um conjunto (TreeSet) ordenando-os pela sua pontuação.
 
-\subsection{Interrogação 8}
+\item Interrogação 7: itera pelos posts entre as duas datas, filtrando os posts que não são perguntas, e adicionando cada um a um conjunto (TreeSet) ordenando-os pelo seu número de respostas.
 
-\subsection{Interrogação 9}
+\item Interrogação 8: itera por todos os posts (ordenados por data), filtra os que não são perguntas e as perguntas que não contêm a palavra especificada no título. Retorna os N mais recentes.
 
-\subsection{Interrogação 10}
+\item Interrogação 9: acede à lista de posts (ordenados por data) de cada um dos utilizadores especificados e converte cada um no id da pergunta associada (o próprio id caso seja pergunta, ou o id da sua pergunta caso seja resposta). Depois são retirados de uma lista os elementos que não pertencem à outra, e por fim são retirados os id duplicados, mantendo sempre a ordem cronológica.
 
-\subsection{Interrogação 11}
+\item Interrogação 10: acede ao post especificado pelo seu id, e itera pelas suas respostas (guardadas num conjunto), determinando qual delas tem a maior pontuação segundo a fórmula da interrogação.
+
+\item Interrogação 11: constrói a lista dos N utilizadores com maior reputação a partir de um conjunto ordenado construido anteriormente. itera pelos posts entre as duas datas, e filtra aqueles em que nenhum dos N utilizadores participou. Mantem um HashMap de ids de tags para suas contagens. Depois de contar todas as ocorrência das tags na lista de posts filtrados, adiciona cada tag no HashMap a um conjunto ordenado com base na sua contagem. Por fim, é retornada a lista das N tags mais utilizadas desse conjunto, ainda ordenadas.
+
+\end{itemize}
 
 \section{Estratégias para melhoramento de desempenho}
-
 
 \chapter{Conclusão}
 
