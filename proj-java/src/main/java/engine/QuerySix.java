@@ -1,3 +1,8 @@
+/*
+ * @author Alexandre Mendonça Pinho (A82441)
+           Joel Filipe Esteves Gama (A82202)
+           Tiago Martins Pinheiro (A82491)
+ */
 package engine;
 
 import java.util.List;
@@ -9,7 +14,18 @@ import java.util.Collections;
 import common.Pair;
 import li3.TADCommunity;
 
+/**
+ * Class QuerySix.
+ */
 public class QuerySix {
+    /**
+     * Método que responde à query 6.
+     * @param TCDExample c Estrutura de dados principal.
+     * @param int N Número de respostas a listar.
+     * @param LocalDate begin Data de início.
+     * @param LocalDate end Data de fim.
+     * @return List Lista dos ids das respostas.
+     */
     public static List<Long> resposta(TCDExample c, int N, LocalDate begin, LocalDate end) {
         List<Post> posts = c.getPostsBetween(begin, end);
         Comparator<Post> byScore =

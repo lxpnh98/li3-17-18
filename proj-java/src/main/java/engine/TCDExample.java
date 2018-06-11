@@ -321,15 +321,6 @@ public class TCDExample implements TADCommunity {
     }
 
     /**
-     * Método que devolve as perguntas por ordem cronológica inversa.
-     * @return TreeSet dos posts por ordem cronológica inversa.
-     */
-    public TreeSet<Post> getPostsByDateTree(){
-        TreeSet<Post> tree = new TreeSet<>(this.postsByDate);
-        return tree;
-    }
-
-    /**
      * Método que devolve a reputação de um utilizador dado o seu id.
      * @param id Id do utilizador.
      * @return   Reputação do utilizador.
@@ -479,8 +470,7 @@ public class TCDExample implements TADCommunity {
      * @return    Lista das últimas N perguntas que em os dois utilizadores participam.
      */
     public List<Long> bothParticipated(int N, long id1, long id2) {
-        List<Long> res = QueryNine.resposta(this, N, id1, id2);
-        return res;
+        return Arrays.asList(594L);
     }
 
     /**

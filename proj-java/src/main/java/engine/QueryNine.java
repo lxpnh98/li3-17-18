@@ -53,7 +53,7 @@ public class QueryNine {
 				}
 				else if (c.getPost(l).getType() == PostType.ANSWER){
 					id = c.getPost(l).getParentId();
-        			posts2.add(id);
+                    posts2.add(id);
 				}
 			}
     	}
