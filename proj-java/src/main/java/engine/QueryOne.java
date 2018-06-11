@@ -1,6 +1,6 @@
 /*
  * @author Alexandre Mendonça Pinho (A82441)
-           Joel Felipe Esteves Gama (A82)
+           Joel Filipe Esteves Gama (A82202)
            Tiago Martins Pinheiro (A82491)
  */
 
