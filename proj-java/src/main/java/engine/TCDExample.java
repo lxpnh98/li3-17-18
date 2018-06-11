@@ -1,9 +1,3 @@
-/*
- * @author Alexandre Mendonça Pinho (A82441)
-           Joel Filipe Esteves Gama (A82202)
-           Tiago Martins Pinheiro (A82491)
- */
-
 package engine;
 
 import common.MyLog;
@@ -33,6 +27,9 @@ import java.util.Collections;
 
 /**
  * Comparador de posts por data (ordem crescente).
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
  */
 class PostsByDateComparator implements Comparator<Post> {
     /**

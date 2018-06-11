@@ -19,6 +19,9 @@ import li3.TADCommunity;
 
 /**
  * Comparador de Tags por número de respostas (ordem crescente).
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491
  */
 class TagCountComparator implements Comparator<Long> {
     /** Map que contém o Id do user e o número de vezes que usou uma tag.*/
