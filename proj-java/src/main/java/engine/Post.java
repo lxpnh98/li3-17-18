@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 
 /**
  * Class Post, onde se encontra toda a informação sobre o post.
-  * @author Alexandre Mendonça Pinho (A82441)
-  *         Joel Filipe Esteves Gama (A82202)
-  *         Tiago Martins Pinheiro (A82491)
+ * @author Alexandre Mendonça Pinho (A82441)
+ *         Joel Filipe Esteves Gama (A82202)
+ *         Tiago Martins Pinheiro (A82491)
  */
 public class Post {
     /** Id do Post */
